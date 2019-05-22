@@ -78,7 +78,16 @@ class Register extends Component {
           }
           else if(this.state.respuestaBD != undefined){
             AsyncStorage.setItem('userToken', this.state.respuestaBD)
-            console.log("valexd: "+this.state.respuestaBD)
+            void async function main() {
+                try {
+                    console.log("valexd: "+ await AsyncStorage.getItem('userToken'))
+                }catch (e) {
+                    console.log('caught error', e);
+                }
+            }();
+
+
+
             this.props.navigation.navigate('Sidebar')
           }
         }

@@ -13,7 +13,6 @@ export const register = newUser => {
     })
     .then(response => {
       console.log("sale: "+response.data)
-      
       console.log("sale2: "+response.data)
       return response.data
     })
