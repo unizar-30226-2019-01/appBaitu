@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, View, TouchableHighlight, Text, Image, TouchableOpacity} from 'react-native';
-import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import { createStackNavigator, createDrawerNavigator, createSwitchNavigator } from 'react-navigation';
 
 import Login from '../screens/Login';
 import Register from '../screens/Register';
@@ -25,10 +25,11 @@ const DrawerScreen = createDrawerNavigator({
 
 // Barra lateral y propiedades
 const HomeNavigator = createStackNavigator({
-    DrawerStack: {screen: DrawerScreen}
+    DrawerStack: {screen: DrawerScreen},
+    Profile: {screen: Profile}
 }, {
   headerMode: 'float',
-  navigationOptions: ({navigation, login}) =>   ({
+  defaultNavigationOptions: ({navigation, login}) =>   ({
       headerStyle: {
           backgroundColor:'#B4FFAB',
           paddingLeft: 10,
@@ -71,17 +72,32 @@ const HomeNavigator = createStackNavigator({
 
 
 // Vista principal
-const AppStackNavigator = createStackNavigator({
+const AppStackNavigator = createSwitchNavigator({
     Login:{screen: Login},
     Register: {screen: Register},
-    Sidebar: {screen: HomeNavigator}
-    },
+    Sidebar: {screen: HomeNavigator}},
     {
-      headerMode: 'none',
-      navigationOptions: {
-      headerVisible: false,
-        }
+    // headerMode: 'screen',
     }
 );
 
-export default AppStackNavigator;
+
+class Navigator extends Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return <AppStackNavigator login = {
+      this.props.login
+    }
+    />;
+
+  }
+
+
+}
+
+
+export default Navigator;
