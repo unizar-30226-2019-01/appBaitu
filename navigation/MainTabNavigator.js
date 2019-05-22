@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Platform, View, TouchableHighlight, Text, Image, TouchableOpacity} from 'react-native';
 import { createStackNavigator, createDrawerNavigator, createSwitchNavigator } from 'react-navigation';
 
@@ -15,9 +15,6 @@ const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
     Perfil: {screen: Profile}
 }, {
-    drawerOpenRoute: 'DrawerOpen',
-    drawerCloseRoute: 'DrawerClose',
-    drawerToggleRoute: 'DrawerToggle',
     headerMode: 'none',
     drawerWidth: 300,
     drawerPosition: 'left'
@@ -32,8 +29,6 @@ const HomeNavigator = createStackNavigator({
   defaultNavigationOptions: ({navigation, login}) =>   ({
       headerStyle: {
           backgroundColor:'#B4FFAB',
-          paddingLeft: 10,
-          paddingRight: 10,
           textAlign: 'center',
       },
       headerTitle: <HomeButton navigation={navigation}/>,
@@ -82,22 +77,4 @@ const AppStackNavigator = createSwitchNavigator({
 );
 
 
-class Navigator extends Component {
-
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    return <AppStackNavigator login = {
-      this.props.login
-    }
-    />;
-
-  }
-
-
-}
-
-
-export default Navigator;
+export default AppStackNavigator;
