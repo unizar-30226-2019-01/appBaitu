@@ -9,13 +9,6 @@ import Login from './Login.js';
 var exito = false;
 var respuestaBD = "";
 
-const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-);
-
-
 class Register extends Component {
 	constructor() {
     super()
@@ -78,21 +71,10 @@ class Register extends Component {
           }
           else if(this.state.respuestaBD != undefined){
             AsyncStorage.setItem('userToken', this.state.respuestaBD)
-            void async function main() {
-                try {
-                    console.log("valexd: "+ await AsyncStorage.getItem('userToken'))
-                }catch (e) {
-                    console.log('caught error', e);
-                }
-            }();
-
-
-
             this.props.navigation.navigate('Sidebar')
           }
         }
         return(
-					<DismissKeyboard>
         <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <LinearGradient colors={['#B4FFAB', '#12FFF7']} style={styles.container}>
         	<Text style={styles.title}>¡EMPIEZA A COMPRAR Y VENDER!</Text>
@@ -152,7 +134,6 @@ class Register extends Component {
             </TouchableHighlight>
   		</LinearGradient>
   		</KeyboardAvoidingView>
-			</DismissKeyboard>
         )
     }
 }

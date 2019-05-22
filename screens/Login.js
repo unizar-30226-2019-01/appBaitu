@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {StyleSheet,Text,Alert,View,TextInput,TouchableOpacity,TouchableWithoutFeedback,TouchableHighlight,Image,Keyboard,KeyboardAvoidingView,BackHandler} from 'react-native';
+import {StyleSheet,AsyncStorage,Text,Alert,View,TextInput,TouchableOpacity,TouchableWithoutFeedback,TouchableHighlight,Image,Keyboard,KeyboardAvoidingView,BackHandler} from 'react-native';
 import { LinearGradient } from 'expo';
 import { StackNavigator} from 'react-navigation';
 import { login } from '../controlador/GestionUsuarios.js'
-import { loginCheck } from '../controlador/GestionUsuarios.js'
 
 
 import Register from './Register.js';
@@ -11,12 +10,6 @@ import Register from './Register.js';
 
 var exito = false;
 var respuestaBD = "";
-
-const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-);
 
 class Login extends Component {
   constructor(props) {
@@ -31,6 +24,7 @@ class Login extends Component {
   }
   componentDidMount() {
    BackHandler.addEventListener('hardwareBackPress', this.backPress)
+
  }
 
  componentWillUnmount() {
@@ -70,7 +64,7 @@ class Login extends Component {
         login: this.state.login,
         password: this.state.password
       }
-      loginCheck(user).then(data => {
+      login(user).then(data => {
         this.setState({
           respuestaBD: data
         })
@@ -83,18 +77,18 @@ class Login extends Component {
     render(){
         const { navigation } = this.props;
         if(this.state.logear) {
-          if(this.state.respuestaBD=="exito") {
-            this.props.navigation.navigate('Sidebar')
-          }
-          else if(this.state.respuestaBD=="error"){
+          if(this.state.respuestaBD=="error") {
             Alert.alert('','Login o contraseña incorrectos',[{text: 'OK'}],{cancelable: false});
             this.setState({respuestaBD:""})
             this.setState({logear: false})
           }
+          else if(this.state.respuestaBD != undefined){
+            AsyncStorage.setItem('userToken', this.state.respuestaBD)
+            this.props.navigation.navigate('Sidebar')
+          }
         }
         return(
         <LinearGradient colors={['#B4FFAB', '#12FFF7']} style={styles.container}>
-        <DismissKeyboard>
         <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
          <Image source={require('../assets/images/logo_nobg.png')} />
          <Text style={styles.title}>¡Bienvenido!</Text>
@@ -125,7 +119,6 @@ class Login extends Component {
              <Text style={styles.buttonText}>Entrar</Text>
            </TouchableOpacity>
             </KeyboardAvoidingView>
-            </DismissKeyboard>
             <TouchableHighlight onPress={() => this.props.navigation.navigate('Register')}>
              <Text style={styles.link}>Crear cuenta</Text>
              </TouchableHighlight>

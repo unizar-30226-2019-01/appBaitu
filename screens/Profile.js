@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight} from 'react-native';
+import {Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
+import jwt_decode from 'jwt-decode';
 import { infoUsuario } from '../controlador/GestionUsuarios.js'
 // import jwt_decode from 'jwt-decode'
 //import EditarPerfil from './EditProfile.js';
@@ -21,16 +22,27 @@ class Profile extends Component {
     this.props.navigation.navigate('Auth');
 }; */
 
-    componentDidMount(){
-        this.setState({
-            login: this.props.navigation.state.params.login
-        })
-        infoUsuario(this.props.navigation.state.params.login).then(data => {  //se llama a inforUsuario con el login decodificado
-            this.setState({
-                datos: data
-            })
-        })
-    }
+async componentDidMount() {
+  const token = await AsyncStorage.getItem('userToken')
+  if (token === undefined || token === null) {
+      console.log("no existe token")
+  }
+  else{
+      const decoded = jwt_decode(token)
+      const usuario = {
+          login: decoded.identity.login
+      }
+      infoUsuario(decoded.identity.login).then(data => {
+      this.setState({
+        datos: data
+      },
+      () => {
+          console.log("devuelvo")
+      })
+    })
+      //this.getAll(usuario)
+  }
+}
 
     render(){
         return(
