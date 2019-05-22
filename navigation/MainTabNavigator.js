@@ -81,4 +81,23 @@ const AppStackNavigator = createSwitchNavigator({
     }
 );
 
-export default AppStackNavigator;
+
+class Navigator extends Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return <AppStackNavigator login = {
+      this.props.login
+    }
+    />;
+
+  }
+
+
+}
+
+
+export default Navigator;
