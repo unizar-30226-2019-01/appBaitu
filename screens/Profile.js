@@ -15,6 +15,11 @@ class Profile extends Component {
             login: ''
         }
     }
+    /*
+    _signOutAsync = async () => {
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('Auth');
+}; */
 
     componentDidMount(){
         this.setState({
