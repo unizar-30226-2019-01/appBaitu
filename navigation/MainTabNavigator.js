@@ -36,12 +36,7 @@ const HomeNavigator = createStackNavigator({
       headerLeft:
           <View>
               <TouchableOpacity onPress={() => {
-                  if(navigation.state.index === 0){
-                      navigation.openDrawer();
-                  }
-                  else{
-                     navigation.closeDrawer();
-                  }
+                  navigation.toggleDrawer()
                   }}>
                   <Image
                       style={{width: 25, height: 25}}
