@@ -1,4 +1,5 @@
 import axios from 'axios'
+import AsyncStorage from 'react-native'
 
 export const register = newUser => {
   return axios.post('http://52.151.88.18:5000/register', {
@@ -11,12 +12,13 @@ export const register = newUser => {
       telefono: newUser.telefono
     })
     .then(response => {
-      //localStorage.setItem('usertoken', response.data)
-      console.log("sale: "+data)
+      console.log("sale: "+response.data)
+      
+      console.log("sale2: "+response.data)
       return response.data
     })
     .catch(err => {
-      console.log("error")
+      console.log("errorrrrrrrrrrrrrrr")
       return "error"
     })
 }
@@ -32,7 +34,14 @@ export const registerCheck = newUser => {
       telefono: newUser.telefono
     })
     .then(response => {
+      console.log("Data: "+response.data)
+      AsyncStorage.setItem('userToken', response.data)
+      console.log("Data: "+response.data)
       return response.data
+    })
+    .catch(err => {
+      console.log(err)
+      return "error"
     })
 }
 

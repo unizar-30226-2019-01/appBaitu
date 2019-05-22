@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import { StyleSheet,Text,View,Keyboard,TextInput,TouchableWithoutFeedback,TouchableOpacity,TouchableHighlight,ScrollView,KeyboardAvoidingView,Alert} from 'react-native';
+import { StyleSheet,Text, AsyncStorage, View,Keyboard,TextInput,TouchableWithoutFeedback,TouchableOpacity,TouchableHighlight,ScrollView,KeyboardAvoidingView,Alert} from 'react-native';
 import { LinearGradient } from 'expo';
 import { StackNavigator} from 'react-navigation';
-import { registerCheck } from '../controlador/GestionUsuarios';
+import { register} from '../controlador/GestionUsuarios';
 
 import Login from './Login.js';
 
@@ -56,7 +56,7 @@ class Register extends Component {
 	      email: this.state.email,
 		  	foto: this.state.foto
 	    }
-      registerCheck(newUser).then(data => {
+      register(newUser).then(data => {
         this.setState({
           respuestaBD: data
         })
@@ -76,8 +76,10 @@ class Register extends Component {
             this.setState({respuestaBD:""})
             this.setState({registrar:false})
           }
-          else if(this.state.respuestaBD=="exito"){
-            //this.props.navigation.navigate('Sidebar')
+          else if(this.state.respuestaBD != undefined){
+            AsyncStorage.setItem('userToken', this.state.respuestaBD)
+            console.log("valexd: "+this.state.respuestaBD)
+            this.props.navigation.navigate('Sidebar')
           }
         }
         return(
