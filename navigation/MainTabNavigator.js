@@ -6,6 +6,9 @@ import Login from '../screens/Login';
 import Register from '../screens/Register';
 import ProductList from '../screens/ProductList';
 import Profile from '../screens/Profile';
+import Upload from '../screens/UploadScreen';
+import Chats from '../screens/ChatsList';
+import Search from '../screens/Search';
 import HomeButton from '../components/HomeButton';
 
 
@@ -13,7 +16,9 @@ import HomeButton from '../components/HomeButton';
 // Pantallas para la barra lateral
 const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
-    Perfil: {screen: Profile}
+    Buscar: {screen: Search},
+    Chats: {screen: Chats},
+    "Subir producto":{screen: Upload}
 }, {
     headerMode: 'none',
     drawerWidth: 300,
