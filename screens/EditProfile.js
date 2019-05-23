@@ -1,11 +1,74 @@
 import React, {Component} from 'react';
-import {Title,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight} from 'react-native';
+import {Title,AsyncStorage,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight} from 'react-native';
 import { LinearGradient } from 'expo';
+import { actualizarInfo, infoUsuario } from '../controlador/GestionUsuarios';
+import jwt_decode from 'jwt-decode';
 import EditProfile from './EditProfile.js';
 
 
 
 class Profile extends Component {
+
+    constructor() {
+      super()
+      this.state = {
+        login: '',
+        nombre: '',
+        apellidos: '',
+        email: '',
+        datos: []
+      }
+      this.onChange = this.onChange.bind(this)
+      this.onSubmit = this.onSubmit.bind(this)
+    }
+
+
+    async componentDidMount() {
+      const token = await AsyncStorage.getItem('userToken')
+      if (token === undefined || token === null) {
+          console.log("no existe token")
+      }
+      else{
+          console.log("si existe token")
+          const decoded = jwt_decode(token)
+          const usuario = {
+              login: decoded.identity.login
+          }
+          console.log(usuario.login)
+          infoUsuario(decoded.identity.login).then(data => {
+          this.setState({
+              login: decoded.identity.login,
+              datos: data
+          },
+          () => {
+              console.log("devuelvo")
+          })
+        })
+          //this.getAll(usuario)
+      }
+    }
+
+    onChange(e) {
+      this.setState({ [e.target.name]: e.target.value })
+    }
+
+    onSubmit(e) {
+      const user = {
+        login: this.state.datos[0],
+        nombre: this.state.datos[1],
+        apellidos: this.state.datos[2],
+        email: this.state.datos[3],
+        telefono: this.state.datos[7]
+      }
+      actualizarInfo(user)
+      console.log('Estoy actualizando cositas')
+      this.props.navigation.navigate('Profile')
+    }
+
+    volverMenu(e) {
+      this.props.navigation.navigate('Profile')
+    }
+
     render(){
         return(
             <ScrollView>
@@ -20,21 +83,24 @@ class Profile extends Component {
                             style={styles.estrella}
                             source={require('../assets/images/estrella.png')}/>
                     </Text>
-                    <Text style={styles.title}>Cristiano Ronaldo</Text>
+                    <Text style={styles.title}>Eskere</Text>
                     <View style={styles.itemsContainer}>
                         <Text style={styles.cuerpoVerde}>Correo</Text>
                         <TextInput style={styles.inputBox}
                             keyboardType="email-address"
-                            defaultValue='cr7championsleague@gmail.com'
+                            defaultValue={this.state.datos[3]}
                             clearButtonMode='while-editing'
                             editable={true}
+                            onChangeText={this.setState(this.state.datos[3])}
+                            onChange={this.onChange}
                             />
                         <Text style={styles.cuerpoVerde}>Teléfono</Text>
                         <TextInput style={styles.inputBox}
                             keyboardType={'numeric'}
-                            defaultValue='634543856'
+                            defaultValue={this.state.datos[7]}
                             clearButtonMode='while-editing'
                             editable={true}
+                            onChange={this.onChange}
                             />
                         <Text style={styles.cuerpoVerde}>Dirección</Text>
                         <TextInput style={styles.inputBox}
@@ -44,10 +110,10 @@ class Profile extends Component {
                             />
                         <Text></Text>
                         <Text></Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={styles.button} onPress={() => {this.onSubmit()}}>
                             <Text style={styles.buttonText}>GUARDAR CAMBIOS</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={styles.button} onPress={() => {this.volverMenu}}>
                             <Text style={styles.buttonText}>DESCARTAR CAMBIOS</Text>
                         </TouchableOpacity>
                     </View>

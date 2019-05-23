@@ -36,7 +36,7 @@ const HomeNavigator = createStackNavigator({
   defaultNavigationOptions: ({navigation}) =>   ({
       headerStyle: {
           backgroundColor:'#B4FFAB',
-          textAlign: 'center',
+          textAlign: 'center'
       },
       headerTitle: <HomeButton navigation={navigation}/>,
       headerTintColor: 'black',
@@ -46,7 +46,7 @@ const HomeNavigator = createStackNavigator({
                   navigation.toggleDrawer()
                   }}>
                   <Image
-                      style={{width: 25, height: 25}}
+                      style={{width: 25, height: 25, marginLeft:10}}
                       source={require('../assets/images/MenuIcon.png')}
                   />
               </TouchableOpacity>
@@ -59,7 +59,7 @@ const HomeNavigator = createStackNavigator({
           }
           }}>
               <Image
-                  style={{width: 25, height: 25}}
+                  style={{width: 25, height: 25, marginRight:10}}
                   source={require('../assets/images/ProfileIcon.png')}
               />
           </TouchableOpacity>
