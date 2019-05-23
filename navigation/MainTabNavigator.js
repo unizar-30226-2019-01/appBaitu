@@ -10,6 +10,7 @@ import Upload from '../screens/UploadScreen';
 import EditProfile from '../screens/EditProfile';
 import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
+import Venta from '../screens/Venta';
 import HomeButton from '../components/HomeButton';
 
 
@@ -19,7 +20,8 @@ const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
     Buscar: {screen: Search},
     Chats: {screen: Chats},
-    "Subir producto":{screen: Upload}
+    "Subir producto":{screen: Upload},
+    "Venta":{screen: Venta}
 }, {
     headerMode: 'none',
     drawerWidth: 300,
@@ -30,7 +32,9 @@ const DrawerScreen = createDrawerNavigator({
 const HomeNavigator = createStackNavigator({
     DrawerStack: {screen: DrawerScreen},
     Profile: {screen: Profile},
-    EditarPerfil: {screen: EditProfile}
+    EditarPerfil: {screen: EditProfile},
+    Venta: {screen: Venta},
+    ProductList: {screen: ProductList}
 }, {
   headerMode: 'float',
   defaultNavigationOptions: ({navigation}) =>   ({

@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 5,
         marginLeft: 20,
+        marginRight: 20,
         textAlign: 'left',
         fontStyle: 'italic'
     },
