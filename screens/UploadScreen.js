@@ -1,36 +1,104 @@
 import React, {Component} from 'react';
-import {Title,Button,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker} from 'react-native';
+import {Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker} from 'react-native';
 import { LinearGradient, ImagePicker, Permissions } from 'expo';
 import EditProfile from './EditProfile.js';
 import * as firebase from 'firebase';
 import { anadirProducto, anadirSubasta } from '../controlador/GestionPublicaciones.js';
 
+
+var exito = false;
+var respuestaBD = "";
+
 class Profile extends Component {
   constructor() {
     super()
     this.state = {
-      image: null
+      nombre: '',
+      fecha: '',
+      categoria: 'fsdf',
+      descripcion: '',
+      precio: null,
+      vendedor: 'a',
+      provincia: 'adf',
+      image: null,
+      foto1: 'vacio',
+      foto2: 'vacio',
+      foto3: 'vacio'
     }
 
+    this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
+  componentDidMount() {
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    this.setState({fecha: date+"/"+month+"/"+year});
+  }
+
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
   onSubmit(e) {
-    Keyboard.dismiss
+    Keyboard.dismiss()
+    if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' &&
+       this.state.imagen != '') {
+         exito = true
+    }
+    else {
+      Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
+    }
+    if(exito) {
+      const newProducto = {
+          nombre: this.state.nombre,
+          fecha: this.state.fecha,
+          categoria: this.state.categoria,
+          descripcion: this.state.descripcion,
+          precio: this.state.precio,
+          vendedor: this.state.vendedor,
+          fotoPrincipal: this.state.image,
+          foto1: this.state.foto1,
+          foto2: this.state.foto2,
+          foto3: this.state.foto3,
+          provincia: this.state.provincia
+        }
+      console.log(newProducto)
+      anadirProducto(newProducto).then(data => {
+        this.setState({
+          respuestaBD: data
+        })
+      })
+      this.setState({crear: true})
+      exito=false
+    }
+
 
   }
 
 
     render(){
+      const { navigation } = this.props;
       let { image } = this.state;
+      if(this.state.crear) {
+        console.log("RespuestaBD: "+this.state.respuestaBD)
+        if(this.state.respuestaBD=="Error") {
+          Alert.alert('','Fallo al crear',[{text: 'OK'}],{cancelable: false});
+          this.setState({respuestaBD:""})
+          this.setState({registrar:false})
+        }
+        else if(this.state.respuestaBD=="Exito") {
+          Alert.alert('','Creado correctamente',[{text: 'OK'}],{cancelable: false});
+        }
+      }
         return(
+          <KeyboardAvoidingView behavior="padding" enabled>
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-                <KeyboardAvoidingView behavior="padding" enabled>
                     <View style={styles.itemsContainer}>
                     <Button style={styles.botonSelec} onPress={this._pickImage} title="Selecciona una foto"/>
                       <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
-                        {console.log(this.state.image)}
                             <Image style={styles.imagenProducto}
                                 source={{uri: image}}/>
                         </TouchableOpacity>
@@ -52,6 +120,8 @@ class Profile extends Component {
                           placeholder="Introduce aquí tu título..."
                           placeholderTextColor = "#BCC5D5"
                       	  autoCorrect={false}
+                          value={this.state.nombre}
+                          onChangeText={(nombre) => this.setState({nombre})}
                         />
                         <Text style={styles.cuerpoVerde}>Precio (€)</Text>
                         <TextInput style={styles.inputBox}
@@ -61,6 +131,8 @@ class Profile extends Component {
                       	  autoCorrect={false}
                           keyboardType={'numeric'}
                           type="number"
+                          value={this.state.precio}
+                          onChangeText={(precio) => this.setState({precio})}
                         />
                         <Text style={styles.cuerpoVerde}>Descripción</Text>
                         <TextInput style={styles.inputBoxDescription}
@@ -68,6 +140,8 @@ class Profile extends Component {
                           placeholder="Introduce aquí tu descripción..."
                           placeholderTextColor = "#BCC5D5"
                       	  autoCorrect={false}
+                          value={this.state.descripcion}
+                          onChangeText={(descripcion) => this.setState({descripcion})}
                         />
                         <Text></Text>
                         <Text></Text>
@@ -78,9 +152,10 @@ class Profile extends Component {
                             <Text style={styles.buttonText}>CANCELAR</Text>
                         </TouchableOpacity>
                     </View>
-                </KeyboardAvoidingView>
+
         </LinearGradient>
         </ScrollView>
+        </KeyboardAvoidingView>
         )
     }
 
@@ -96,7 +171,6 @@ class Profile extends Component {
             //mediaTypes: Images,
             aspect: [4, 3]
           });
-          console.log(result)
           //this._handleImagePicked(pickerResult);
           if (!result.cancelled) {
             this.setState({ image: result.uri });

@@ -9,15 +9,18 @@ export const anadirProducto = newProducto => {
       descripcion: newProducto.descripcion,
       precio: newProducto.precio,
       vendedor: newProducto.vendedor,
-      fotoPrincipal: newProducto.foto,
+      fotoPrincipal: newProducto.fotoPrincipal,
       foto1: newProducto.foto1,
       foto2: newProducto.foto2,
       foto3: newProducto.foto3,
       provincia: newProducto.provincia
     })
     .then(res => {
+        console.log("Respuesta pyhon bien")
         return res.data
     }).catch(err => {
+      console.log("Respuesta pyhon mal")
+      console.log(err)
       return err})
 }
 
