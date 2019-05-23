@@ -1,26 +1,38 @@
 import React, {Component} from 'react';
-import {Title,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,Picker} from 'react-native';
-import { LinearGradient } from 'expo';
+import {Title,Button,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker} from 'react-native';
+import { LinearGradient, ImagePicker, Permissions } from 'expo';
 import EditProfile from './EditProfile.js';
-
-
+import * as firebase from 'firebase';
+import { anadirProducto, anadirSubasta } from '../controlador/GestionPublicaciones.js';
 
 class Profile extends Component {
-    constructor(){
-         super();
-         this.state={
-           PickerSelectedVal : ''
-         }
-       }
+  constructor() {
+    super()
+    this.state = {
+      image: null
+    }
+
+    this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  onSubmit(e) {
+    Keyboard.dismiss
+
+  }
+
+
     render(){
+      let { image } = this.state;
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
                 <KeyboardAvoidingView behavior="padding" enabled>
                     <View style={styles.itemsContainer}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
+                    <Button style={styles.botonSelec} onPress={this._pickImage} title="Selecciona una foto"/>
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
+                        {console.log(this.state.image)}
                             <Image style={styles.imagenProducto}
-                                source={require('../assets/images/bichardo.png')}/>
+                                source={{uri: image}}/>
                         </TouchableOpacity>
                         <Text style={styles.cuerpoVerde}>Tipo de publicación</Text>
                         <Picker
@@ -59,7 +71,7 @@ class Profile extends Component {
                         />
                         <Text></Text>
                         <Text></Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.onSubmit() }>
                             <Text style={styles.buttonText}>SUBIR ARTÍCULO</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
@@ -71,10 +83,36 @@ class Profile extends Component {
         </ScrollView>
         )
     }
+
+    _pickImage = async () => {
+        const { status: cameraRollPerm } = await Permissions.askAsync(
+          Permissions.CAMERA_ROLL
+        );
+
+        // only if user allows permission to camera roll
+        if (cameraRollPerm === "granted") {
+          let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            //mediaTypes: Images,
+            aspect: [4, 3]
+          });
+          console.log(result)
+          //this._handleImagePicked(pickerResult);
+          if (!result.cancelled) {
+            this.setState({ image: result.uri });
+          }
+        }
+      };
+
 }
 
 
+
 const styles = StyleSheet.create({
+    botonSelec: {
+      color:'#B4FFAB',
+      borderRadius: 25,
+    },
     imagenProducto: {
         width: 350,
         height: 350,
