@@ -94,7 +94,7 @@ export const actualizarInfo = user => {
 
 export const deleteUser = user => {
   axios
-    .post(`delete`, {
+    .post(`http://52.151.88.18:5000/delete`, {
       login: user.login,
   })
     .then((res) => {
