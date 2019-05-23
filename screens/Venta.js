@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Dimensions,Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
-import { deleteUser, infoVenta } from '../controlador/GestionUsuarios';
-import { infoUsuario } from '../controlador/GestionUsuarios.js'
+import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
+import infoVenta from '../controlador/GestionPublicaciones';
 import * as firebase from 'firebase'
 
 const dimensions = Dimensions.get('window');
@@ -11,38 +11,45 @@ const imageWidth = dimensions.width;
 
 let foto=''
 
-class Product extends Component {
+class Venta extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            datos: [],
-			login: ''
+            datosProducto: [],
+            datosVendedor: [],
+			login: '',
         }
     }
 
-    async componentDidMount() {
+async componentDidMount() {
+    const token = await AsyncStorage.getItem('userToken')
+    if (token === undefined || token === null) {
+        console.log("no existe token")
+    }
+    else{
+        const decoded = jwt_decode(token)
+        const usuario = {
+            login: decoded.identity.login
+        }
         infoVenta('103').then(data => {
             this.setState({
-                datos: data
+                login: decoded.identity.login,
+                datosProducto: data
+            },
+            () => {
+                console.log(this.state.login)
+            })
+        })
+        infoUsuario(this.state.datosProducto[5]).then(data => {
+            this.setState({
+                datosVendedor: data
             },
             () => {
                 console.log("devuelvo")
             })
-          })
-		/*const token = await AsyncStorage.getItem('userToken')
-		if (token === undefined || token === null) {
-			console.log("no existe token")
-		}
-		else{
-            const decoded = jwt_decode(token)
-            const usuario = {
-                login: decoded.identity.login
-            }
-            infoUsuario(decoded.identity.login).then(data => {*/
-		//})
-            //this.getAll(usuario)
-        //}
-      }
+        })
+    }
+}
 
     render(){
         return(
@@ -53,15 +60,15 @@ class Product extends Component {
 						style={styles.image}
 						source={require('../assets/images/ipad.jpg')}/>
                     <Text style={styles.tipoPublicacion}>Venta</Text>
-                    <Text style={styles.title}>{this.state.datos[1]} - {this.state.datos[6]}€</Text>
+                    <Text style={styles.title}>{this.state.datosProducto[1]} - {this.state.datosProducto[6]}€</Text>
 					<View style={styles.itemsContainer}>
 						<Text style={styles.cuerpoVerde}>Descripción</Text>
-						<Text style={styles.cuerpo}>{this.state.datos[2]}</Text>
+						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
 						<Text style={styles.cuerpoVerde}>Vendedor</Text>
 						<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('Profile')}>
-							<Text style={styles.clickableText}>{this.state.datos[5]}</Text>
+							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
 						</TouchableOpacity>
-						<Text style={styles.price}>78
+						<Text style={styles.price}>{this.state.datosVendedor[6]}
 							<Image
 								style={styles.estrella}
 								source={require('../assets/images/estrella.png')}/>
@@ -183,4 +190,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Product;
+export default Venta;

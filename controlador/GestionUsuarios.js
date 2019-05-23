@@ -88,22 +88,3 @@ export const infoUsuario = login => {
         return data
 	})
 }
-
-
-export const infoVenta = id => {
-  return axios
-      .get(`http://52.151.88.18:5000/obtenerDatosVenta/${id}`, {
-
-      })
-      .then(res => {
-        var data = []
-        data[0]=res.data.id
-        data[1]=res.data.Nombre
-        data[2]=res.data.Descripcion
-        data[3]=res.data.Categoria
-        data[4]=res.data.FotoPrincipal
-        data[5]=res.data.Vendedor
-        data[6]=res.data.Precio
-        return data
-    })
-}
