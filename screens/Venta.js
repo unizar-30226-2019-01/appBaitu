@@ -17,8 +17,32 @@ class Venta extends Component {
         this.state = {
             datosProducto: [],
             datosVendedor: [],
-			login: '',
+            login: '',
+            id: ''
         }
+    }
+
+    componentWillReceiveProps(){
+        this.setState({
+            id: this.props.navigation.state.params.id
+        })
+        infoVenta(this.state.id).then(data => {
+            this.setState({
+                login: decoded.identity.login,
+                datosProducto: data
+            },
+            () => {
+                console.log(this.state.login)
+            })
+        })
+        infoUsuario(this.state.datosProducto[5]).then(data => {
+            this.setState({
+                datosVendedor: data
+            },
+            () => {
+                console.log("devuelvo")
+            })
+        })
     }
 
 async componentDidMount() {
@@ -31,7 +55,10 @@ async componentDidMount() {
         const usuario = {
             login: decoded.identity.login
         }
-        infoVenta('103').then(data => {
+        this.setState({
+            id: this.props.navigation.state.params.id
+        })
+        infoVenta(this.state.id).then(data => {
             this.setState({
                 login: decoded.identity.login,
                 datosProducto: data
@@ -58,7 +85,7 @@ async componentDidMount() {
                 <KeyboardAvoidingView behavior="padding" enabled>
                     <Image
 						style={styles.image}
-						source={require('../assets/images/ipad.jpg')}/>
+						source={{uri: this.state.datosProducto[4]}}/>
                     <Text style={styles.tipoPublicacion}>Venta</Text>
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>

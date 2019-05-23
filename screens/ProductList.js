@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions} from 'react-native';
+import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
 import { getProductos } from '../controlador/GestionPublicaciones';
+import { StackNavigator } from 'react-navigation';
 
 const numColumns = 2;
 
@@ -11,12 +12,6 @@ const venta = '8dff7f'
 const widthSubasta = 70
 const widthVenta = 60
 
-//Informacion/data
-const data = [
-  { key: 'A' }, { key: 'B' }, { key: 'C' }, { key: 'D' }, { key: 'E' }, { key: 'F' }, { key: 'G' }, { key: 'H' }, { key: 'I' }, { key: 'J' },
-  // { key: 'K' },
-  // { key: 'L' },
-];
 
 const formatData = (data, numColumns) => {
 	const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -33,7 +28,6 @@ class ProductList extends Component {
 		super(props)
 		this.state = {
 			isRefreshing: false,
-			data: [],
 			products: []
 		};
 	}
@@ -51,7 +45,6 @@ class ProductList extends Component {
             },
             () => {
 				console.log("Productos obtenidos")
-				console.log(this.state.products[0].nombre)
             })
         })
 		this.setState({refreshing:false})
@@ -62,15 +55,14 @@ class ProductList extends Component {
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
 		return (
-			<View style={styles.item}>
+			<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
 				<Image
 					style={styles.image}
 					source={{uri: item[6]}}/>
 				<Text style={styles.tipoPublicacion}>Venta</Text>
 				<Text style={styles.price}>{item[4]}€</Text>
 				<Text style={styles.title}>{item[0]}</Text>
-				<Text style={styles.itemText}>{item.key}</Text>
-			</View>
+			</TouchableOpacity>
 		);
     };
 
@@ -89,7 +81,6 @@ class ProductList extends Component {
 				style={styles.containerItem}
 				renderItem={this.renderItem}
 				numColumns={numColumns}
-
 			/>
 			</LinearGradient>
         )

@@ -46,7 +46,6 @@ async componentDidMount() {
           console.log("devuelvo")
       })
     })
-      //this.getAll(usuario)
   }
 }
 
