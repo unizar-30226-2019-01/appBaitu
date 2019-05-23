@@ -1,15 +1,24 @@
 import React, {Component} from 'react';
-import {Title,Button,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,Picker} from 'react-native';
+import {Title,Button,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker} from 'react-native';
 import { LinearGradient, ImagePicker, Permissions } from 'expo';
 import EditProfile from './EditProfile.js';
-import * as firebase from 'firebase'
+import * as firebase from 'firebase';
+import { anadirProducto, anadirSubasta } from '../controlador/GestionPublicaciones.js';
 
 class Profile extends Component {
-    state={
-      PickerSelectedVal : '',
-      image: null,
-    };
+  constructor() {
+    super()
+    this.state = {
+      image: null
+    }
 
+    this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  onSubmit(e) {
+    Keyboard.dismiss
+
+  }
 
 
     render(){
@@ -62,7 +71,7 @@ class Profile extends Component {
                         />
                         <Text></Text>
                         <Text></Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.onSubmit() }>
                             <Text style={styles.buttonText}>SUBIR ARTÍCULO</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
