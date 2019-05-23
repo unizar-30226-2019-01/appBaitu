@@ -7,3 +7,4 @@ npm install -g yarn
 npm add react-navigation@^3.0.0
 npm install firebase
 npm install jwt-decode
+npm install react-native-image-picker --save
