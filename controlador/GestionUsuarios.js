@@ -39,7 +39,7 @@ export const login = user => {
 
 export const actualizarInfo = user => {
   axios
-      .post(`updateUsuario`, {
+      .post(`http://52.151.88.18:5000/updateUsuario`, {
         login: user.login,
         nombre: user.nombre,
         apellidos: user.apellidos,
@@ -48,7 +48,8 @@ export const actualizarInfo = user => {
         biografia: user.biografia
       })
       .then(response => {
-        localStorage.setItem('usertoken', response.data)
+        console.log("vuelve al controlador")
+        AsyncStorage.setItem('userToken', response.data)
         return response.data
       })
       .catch(err => {
@@ -84,6 +85,25 @@ export const infoUsuario = login => {
         data[5]=res.data.Password
         data[6]=res.data.Puntuacion
         data[7]=res.data.Telefono
+        return data
+	})
+}
+
+
+export const infoVenta = id => {
+  return axios
+      .get(`http://52.151.88.18:5000/obtenerDatosVenta/${id}`, {
+
+      })
+      .then(res => {
+        var data = []
+        data[0]=res.data.id
+        data[1]=res.data.Nombre
+        data[2]=res.data.Descripcion
+        data[3]=res.data.Categoria
+        data[4]=res.data.FotoPrincipal
+        data[5]=res.data.Vendedor
+        data[6]=res.data.Precio
         return data
     })
 }

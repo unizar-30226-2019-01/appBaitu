@@ -10,6 +10,7 @@ import Upload from '../screens/UploadScreen';
 import EditProfile from '../screens/EditProfile';
 import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
+import Venta from '../screens/Venta';
 import HomeButton from '../components/HomeButton';
 
 
@@ -19,7 +20,8 @@ const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
     Buscar: {screen: Search},
     Chats: {screen: Chats},
-    "Subir producto":{screen: Upload}
+    "Subir producto":{screen: Upload},
+    "Venta":{screen: Venta}
 }, {
     headerMode: 'none',
     drawerWidth: 300,
@@ -30,13 +32,15 @@ const DrawerScreen = createDrawerNavigator({
 const HomeNavigator = createStackNavigator({
     DrawerStack: {screen: DrawerScreen},
     Profile: {screen: Profile},
-    EditarPerfil: {screen: EditProfile}
+    EditarPerfil: {screen: EditProfile},
+    Venta: {screen: Venta},
+    ProductList: {screen: ProductList}
 }, {
   headerMode: 'float',
   defaultNavigationOptions: ({navigation}) =>   ({
       headerStyle: {
           backgroundColor:'#B4FFAB',
-          textAlign: 'center',
+          textAlign: 'center'
       },
       headerTitle: <HomeButton navigation={navigation}/>,
       headerTintColor: 'black',
@@ -46,7 +50,7 @@ const HomeNavigator = createStackNavigator({
                   navigation.toggleDrawer()
                   }}>
                   <Image
-                      style={{width: 25, height: 25}}
+                      style={{width: 25, height: 25, marginLeft:10}}
                       source={require('../assets/images/MenuIcon.png')}
                   />
               </TouchableOpacity>
@@ -59,7 +63,7 @@ const HomeNavigator = createStackNavigator({
           }
           }}>
               <Image
-                  style={{width: 25, height: 25}}
+                  style={{width: 25, height: 25, marginRight:10}}
                   source={require('../assets/images/ProfileIcon.png')}
               />
           </TouchableOpacity>

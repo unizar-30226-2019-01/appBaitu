@@ -60,6 +60,10 @@ onDelete(e) {
  this.props.navigation.navigate('Login')
 }
 
+async cerrarSesion(e){
+    const token = await AsyncStorage.removeItem('userToken')
+    this.props.navigation.navigate('Login')
+  }
 
 
     render(){
@@ -101,13 +105,13 @@ onDelete(e) {
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
                             <Text style={styles.buttonText}>MIS PUBLICACIONES</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={styles.redbutton} onPress={() => this.cerrarSesion()}>
                             <Text style={styles.buttonText}>CERRAR SESION</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.redbutton} onPress={() => {
                            Alert.alert(
                            "Borrar cuenta",
-                           "¿Seguro que quieres borrar tu cuenta? Esto es permanente y no se puede deshacer.",
+                           "¿Seguro que desea borrar su cuenta? La cuenta no podrá ser recuperada.",
                            [
                              {
                                text: "No"
@@ -186,6 +190,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 5,
         marginLeft: 20,
+        marginRight: 20,
         textAlign: 'left',
         fontStyle: 'italic'
     },
