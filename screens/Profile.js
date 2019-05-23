@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
+import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
+import { deleteUser } from '../controlador/GestionUsuarios';
 import { infoUsuario } from '../controlador/GestionUsuarios.js'
 import EditarPerfil from './EditProfile.js';
 import * as firebase from 'firebase'
@@ -15,12 +16,16 @@ class Profile extends Component {
             datos: [],
             login: ''
         }
+        this.onDelete = this.onDelete.bind(this)
     }
+
     /*
     _signOutAsync = async () => {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
 }; */
+
+
 
 async componentDidMount() {
   const token = await AsyncStorage.getItem('userToken')
@@ -34,7 +39,8 @@ async componentDidMount() {
       }
       infoUsuario(decoded.identity.login).then(data => {
       this.setState({
-        datos: data
+          login: decoded.identity.login,
+          datos: data
       },
       () => {
           console.log("devuelvo")
@@ -43,6 +49,18 @@ async componentDidMount() {
       //this.getAll(usuario)
   }
 }
+
+onDelete(e) {
+    console.log("xdxd")
+  const user = {
+    login: this.state.login
+  }
+  console.log(user.login)
+ deleteUser(user)
+ this.props.navigation.navigate('Login')
+}
+
+
 
     render(){
       if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
@@ -55,7 +73,7 @@ async componentDidMount() {
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
                 <KeyboardAvoidingView behavior="padding" enabled>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('EditarPerfil')} >
+                        <TouchableOpacity  onPress={() => this.props.navigation.navigate('EditarPerfil')}>
                             <Text style={styles.editar}>Editar</Text>
                         </TouchableOpacity>
                     <Image
@@ -85,6 +103,22 @@ async componentDidMount() {
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Home')}>
                             <Text style={styles.buttonText}>CERRAR SESION</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.redbutton} onPress={() => {
+                           Alert.alert(
+                           "Borrar cuenta",
+                           "¿Seguro que quieres borrar tu cuenta? Esto es permanente y no se puede deshacer.",
+                           [
+                             {
+                               text: "No"
+                             },
+                             { text: "Si", onPress: () =>{this.onDelete()} }
+                           ],
+                           { cancelable: false }
+                           );
+                           return true;
+                       }}>
+                            <Text style={styles.buttonText}>BORRAR CUENTA</Text>
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>

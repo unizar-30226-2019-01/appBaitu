@@ -7,6 +7,7 @@ import Register from '../screens/Register';
 import ProductList from '../screens/ProductList';
 import Profile from '../screens/Profile';
 import Upload from '../screens/UploadScreen';
+import EditProfile from '../screens/EditProfile';
 import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
 import HomeButton from '../components/HomeButton';
@@ -28,10 +29,11 @@ const DrawerScreen = createDrawerNavigator({
 // Barra lateral y propiedades
 const HomeNavigator = createStackNavigator({
     DrawerStack: {screen: DrawerScreen},
-    Profile: {screen: Profile}
+    Profile: {screen: Profile},
+    EditarPerfil: {screen: EditProfile}
 }, {
   headerMode: 'float',
-  defaultNavigationOptions: ({navigation, login}) =>   ({
+  defaultNavigationOptions: ({navigation}) =>   ({
       headerStyle: {
           backgroundColor:'#B4FFAB',
           textAlign: 'center',
@@ -53,7 +55,7 @@ const HomeNavigator = createStackNavigator({
       <View>
       <TouchableOpacity onPress={() => {
           if(navigation.state.index === 0){
-              navigation.navigate('Profile', {login: login});
+              navigation.navigate('Profile');
           }
           }}>
               <Image
