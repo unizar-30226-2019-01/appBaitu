@@ -111,7 +111,7 @@ async cerrarSesion(e){
                         <TouchableOpacity style={styles.redbutton} onPress={() => {
                            Alert.alert(
                            "Borrar cuenta",
-                           "¿Seguro que quieres borrar tu cuenta? Esto es permanente y no se puede deshacer.",
+                           "¿Seguro que desea borrar su cuenta? La cuenta no podrá ser recuperada.",
                            [
                              {
                                text: "No"
