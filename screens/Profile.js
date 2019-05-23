@@ -4,9 +4,10 @@ import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { infoUsuario } from '../controlador/GestionUsuarios.js'
 // import jwt_decode from 'jwt-decode'
-//import EditarPerfil from './EditProfile.js';
+import EditarPerfil from './EditProfile.js';
+import * as firebase from 'firebase'
 
-
+var foto=''
 
 class Profile extends Component {
     constructor(props) {
@@ -49,13 +50,12 @@ async componentDidMount() {
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
                 <KeyboardAvoidingView behavior="padding" enabled>
-                        <TouchableOpacity /* onPress={() => this.props.navigation.navigate('EditarPerfil')} */>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('EditarPerfil')} >
                             <Text style={styles.editar}>Editar</Text>
                         </TouchableOpacity>
                     <Image
                         style={styles.imagenPerfil}
-                        /* source={this.state.datos[4]}/> */
-                        source={require('../assets/images/bichardo.png')}/>
+                        source={{uri: this.state.datos[4]}}/>
                     <Text style={styles.price}>{this.state.datos[6]}
                         <Image
                             style={styles.estrella}
@@ -78,7 +78,7 @@ async componentDidMount() {
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
                             <Text style={styles.buttonText}>MIS PUBLICACIONES</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Login')}>
+                        <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Home')}>
                             <Text style={styles.buttonText}>CERRAR SESION</Text>
                         </TouchableOpacity>
                     </View>
