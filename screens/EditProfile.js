@@ -73,20 +73,27 @@ class Profile extends Component {
     }
 
     render(){
+        if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
+            foto= 'https://image.flaticon.com/icons/png/512/64/64572.png'
+        }
+        else {
+            foto = this.state.datos[4]
+        }
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
                 <KeyboardAvoidingView behavior="padding" enabled>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
                         <Image style={styles.imagenPerfil}
-                            source={require('../assets/images/bichardo.png')}/>
+                            source={{uri: foto}}/>
                     </TouchableOpacity>
-                    <Text style={styles.price}>78
+                    <Text style={styles.price}>{this.state.datos[6]}
                         <Image
                             style={styles.estrella}
                             source={require('../assets/images/estrella.png')}/>
                     </Text>
-                    <Text style={styles.title}>Eskere</Text>
+                    <Text style={styles.title}>{this.state.login}</Text>
+                    <Text style={styles.subtitulo}>{this.state.datos[1]} {this.state.datos[2]}</Text>
                     <View style={styles.itemsContainer}>
                         <Text style={styles.cuerpoVerde}>Correo</Text>
                         <TextInput style={styles.inputBox}
@@ -134,6 +141,7 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
         borderRadius: 150/2,
+        marginTop: 10,
         alignSelf: 'center',
         overflow: 'hidden'
     },
@@ -162,13 +170,17 @@ const styles = StyleSheet.create({
     },
     itemsContainer : {
         flexGrow: 1,
-        margin: 20,
+        margin: 15,
         //justifyContent:'flex-start'
     },
     title: {
         fontSize: 25,
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    subtitulo: {
+        fontSize: 20,
+        textAlign: 'center'
     },
     correo: {
         fontSize: 20,
