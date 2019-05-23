@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
+import { getProductos } from '../controlador/GestionPublicaciones';
 
 const numColumns = 2;
+
 //Colores para subasta y venta
 const subasta = 'fea041'
 const venta = '8dff7f'
@@ -36,9 +38,22 @@ class ProductList extends Component {
 		};
 	}
 
+	async componentDidMount() {
+		this.onRefresh()
+	}
+
 	onRefresh(){
 		this.setState({refreshing:true})
 		//funcion de llamada cargar datos de nuevo
+		getProductos().then(data => {
+            this.setState({
+                products: data
+            },
+            () => {
+				console.log("Productos obtenidos")
+				console.log(this.state.products[0].nombre)
+            })
+        })
 		this.setState({refreshing:false})
 	}
 
@@ -50,10 +65,10 @@ class ProductList extends Component {
 			<View style={styles.item}>
 				<Image
 					style={styles.image}
-					source={require('../assets/images/bichardo.png')}/>
+					source={{uri: item[6]}}/>
 				<Text style={styles.tipoPublicacion}>Venta</Text>
-				<Text style={styles.price}>300€</Text>
-				<Text style={styles.title}>ipad 3</Text>
+				<Text style={styles.price}>{item[4]}€</Text>
+				<Text style={styles.title}>{item[0]}</Text>
 				<Text style={styles.itemText}>{item.key}</Text>
 			</View>
 		);
@@ -62,7 +77,7 @@ class ProductList extends Component {
 
     render(){
         return(
-			<LinearGradient colors={['#cccccc', '#cccccc']} style={styles.colorContainer} >
+			<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
 			<FlatList
 				refreshControl={
 				<RefreshControl
@@ -70,7 +85,7 @@ class ProductList extends Component {
 					onRefresh={this.onRefresh.bind(this)}
 				/>
 				}
-				data={formatData(data, numColumns)}
+				data={formatData(this.state.products, numColumns)}
 				style={styles.containerItem}
 				renderItem={this.renderItem}
 				numColumns={numColumns}
