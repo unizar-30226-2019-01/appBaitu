@@ -16,6 +16,8 @@ class Profile extends Component {
         nombre: '',
         apellidos: '',
         email: '',
+        telefono: '',
+        foto:'',
         datos: []
       }
       this.onChange = this.onChange.bind(this)
@@ -60,6 +62,7 @@ class Profile extends Component {
         email: this.state.datos[3],
         telefono: this.state.datos[7]
       }
+      console.log(user)
       actualizarInfo(user)
       console.log('Estoy actualizando cositas')
       this.props.navigation.navigate('Profile')
@@ -91,15 +94,16 @@ class Profile extends Component {
                             defaultValue={this.state.datos[3]}
                             clearButtonMode='while-editing'
                             editable={true}
-                            onChangeText={this.setState(this.state.datos[3])}
+                            onChangeText={(email) => this.setState({email})}
                             onChange={this.onChange}
                             />
                         <Text style={styles.cuerpoVerde}>Teléfono</Text>
                         <TextInput style={styles.inputBox}
                             keyboardType={'numeric'}
-                            defaultValue={this.state.datos[7]}
+                            defaultValue={String(this.state.datos[7])}
                             clearButtonMode='while-editing'
                             editable={true}
+                            onChangeText={(telefono) => this.setState({telefono})}
                             onChange={this.onChange}
                             />
                         <Text style={styles.cuerpoVerde}>Dirección</Text>

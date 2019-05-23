@@ -39,7 +39,7 @@ export const login = user => {
 
 export const actualizarInfo = user => {
   axios
-      .post('http://52.151.88.18:5000/updateUsuario', {
+      .post(`http://52.151.88.18:5000/updateUsuario`, {
         login: user.login,
         nombre: user.nombre,
         apellidos: user.apellidos,
@@ -48,6 +48,7 @@ export const actualizarInfo = user => {
         biografia: user.biografia
       })
       .then(response => {
+        console.log("vuelve al controlador")
         AsyncStorage.setItem('userToken', response.data)
         return response.data
       })

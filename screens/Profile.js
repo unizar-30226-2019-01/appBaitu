@@ -60,6 +60,10 @@ onDelete(e) {
  this.props.navigation.navigate('Login')
 }
 
+async cerrarSesion(e){
+    const token = await AsyncStorage.removeItem('userToken')
+    this.props.navigation.navigate('Login')
+  }
 
 
     render(){
@@ -101,7 +105,7 @@ onDelete(e) {
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
                             <Text style={styles.buttonText}>MIS PUBLICACIONES</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={styles.redbutton} onPress={() => this.cerrarSesion()}>
                             <Text style={styles.buttonText}>CERRAR SESION</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.redbutton} onPress={() => {
