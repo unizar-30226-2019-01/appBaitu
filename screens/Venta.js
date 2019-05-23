@@ -3,7 +3,7 @@ import {Dimensions,Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAv
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import infoVenta from '../controlador/GestionPublicaciones';
+import { infoVenta } from '../controlador/GestionPublicaciones';
 import * as firebase from 'firebase'
 
 const dimensions = Dimensions.get('window');
