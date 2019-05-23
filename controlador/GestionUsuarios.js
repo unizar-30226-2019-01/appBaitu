@@ -22,41 +22,6 @@ export const register = newUser => {
     })
 }
 
-export const registerCheck = newUser => {
-  return axios.post('http://52.151.88.18:5000/registerCheck', {
-      login: newUser.login,
-      password: newUser.password,
-      nombre: newUser.nombre,
-      apellidos: newUser.apellidos,
-      email: newUser.email,
-      foto: newUser.foto,
-      telefono: newUser.telefono
-    })
-    .then(response => {
-      console.log("Data: "+response.data)
-      AsyncStorage.setItem('userToken', response.data)
-      console.log("Data: "+response.data)
-      return response.data
-    })
-    .catch(err => {
-      console.log(err)
-      return "error"
-    })
-}
-
-export const loginCheck = user => {
-  return axios
-    .post('http://52.151.88.18:5000/loginCheck', {
-      login: user.login,
-      password: user.password
-    }).then(response => {
-      console.log(response.data)
-      return response.data
-    })
-    .catch(err => {
-      console.log("error")
-    })
-}
 
 export const login = user => {
   return axios
@@ -65,7 +30,6 @@ export const login = user => {
       password: user.password
     })
     .then(response => {
-      //localStorage.setItem('usertoken', response.data)
       return response.data
     })
     .catch(err => {
