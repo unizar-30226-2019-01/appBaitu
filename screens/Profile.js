@@ -3,11 +3,10 @@ import {Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,Touchab
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { infoUsuario } from '../controlador/GestionUsuarios.js'
-// import jwt_decode from 'jwt-decode'
 import EditarPerfil from './EditProfile.js';
 import * as firebase from 'firebase'
 
-var foto=''
+let foto=''
 
 class Profile extends Component {
     constructor(props) {
@@ -46,6 +45,12 @@ async componentDidMount() {
 }
 
     render(){
+      if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
+        foto= 'https://image.flaticon.com/icons/png/512/64/64572.png'
+      }
+      else {
+        foto = this.state.datos[4]
+      }
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
@@ -55,7 +60,7 @@ async componentDidMount() {
                         </TouchableOpacity>
                     <Image
                         style={styles.imagenPerfil}
-                        source={{uri: this.state.datos[4]}}/>
+                        source={{uri: foto}}/>
                     <Text style={styles.price}>{this.state.datos[6]}
                         <Image
                             style={styles.estrella}
