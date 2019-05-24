@@ -1,14 +1,10 @@
 import React, {Component} from 'react';
-import {Dimensions,Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
+import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoVenta, consultarFavorito } from '../controlador/GestionPublicaciones';
+import { infoVenta, consultarFavorito, crearFavorito, eliminarFavorito } from '../controlador/GestionPublicaciones';
 import * as firebase from 'firebase'
-
-const dimensions = Dimensions.get('window');
-const imageWidth = dimensions.width;
-const aux = 1;
 
 let foto=''
 
@@ -49,7 +45,10 @@ class Venta extends Component {
                         datosVendedor: data
                     })
 				})
-				consultarFavorito(this.state.login,this.state.id).then(data => {
+				const producto = {
+					usuario: decoded.identity.login
+				}
+				consultarFavorito(producto,this.props.navigation.state.params.id).then(data => {
 					this.setState({
 						esFavorito: data
 					})
@@ -75,17 +74,17 @@ class Venta extends Component {
                 this.setState({
                     login: decoded.identity.login,
                     datosProducto: data
-                },
-                () => {
-                    console.log(this.state.login)
                 })
             })
             infoUsuario(this.state.datosProducto[5]).then(data => {
                 this.setState({
                     datosVendedor: data
                 })
-            })
-			consultarFavorito(this.state.login,this.state.id).then(data => {
+			})
+			const producto = {
+				usuario: decoded.identity.login
+			}
+			consultarFavorito(producto,this.props.navigation.state.params.id).then(data => {
 				this.setState({
 					esFavorito: data
 				})
@@ -94,20 +93,32 @@ class Venta extends Component {
 	}
 	
 	botonFavorito(){
-		if (this.state.esFavorito == "Favorito no existe"){
-			return <Text style={styles.favorito}>Favorito</Text>
-		}
-		else if (this.state.esFavorito == "Favorito existe"){
+		if (this.state.esFavorito == "Favorito existe"){
 			return <Text style={styles.añadido}>Añadido</Text>
 		}
-		else if (this.state.esFavorito == ""){
-			return <Text style={styles.añadido}>VACIO</Text>
-		}
-		else if (this.state.esFavorito == undefined){
-			return <Text style={styles.añadido}>NO FUNCIONA</Text>
-		}
 		else{
-			return <Text style={styles.añadido}>NO se sabe</Text>
+			return <Text style={styles.favorito}>Favorito</Text>
+		}
+	}
+
+	cambiarFavorito(){
+		console.log("ESTOY EN CAMBIAR FAVORITO")
+		const producto = {
+			usuario: this.state.login
+		}
+		if(this.state.esFavorito == "Favorito existe"){
+			eliminarFavorito(producto,this.state.id).then(data => {})
+			console.log(producto.usuario + "	" + this.state.id)
+			this.setState({
+				esFavorito: "Favorito no existe"
+			})
+		}
+		else if(this.state.esFavorito == "Favorito no existe"){
+			crearFavorito(producto,this.state.id).then(data => {})
+			console.log(producto.usuario + "	" + this.state.id)
+			this.setState({
+				esFavorito: "Favorito existe"
+			})
 		}
 	}
 
@@ -121,7 +132,9 @@ class Venta extends Component {
 						source={{uri: this.state.datosProducto[4]}}/>
 					<View style={styles.horizontal}>
                     	<Text style={styles.tipoPublicacion}>Venta</Text>
-						{ this.botonFavorito() }
+						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
+							{ this.botonFavorito() }
+						</TouchableOpacity>
 					</View>
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
@@ -137,9 +150,6 @@ class Venta extends Component {
 								style={styles.estrella}
 								source={require('../assets/images/estrella.png')}/>
 						</Text>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList')}>
-							<Text style={styles.buttonText}>Guardar en favoritos </Text>
-						</TouchableOpacity>
 						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
 							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
 						</TouchableOpacity>

@@ -418,7 +418,7 @@ export const eliminarSubasta = subasta => {
   export const consultarFavorito = (producto, id) => {
     return axios
         .post(
-            `esFavorito/${id}`, {
+            `http://52.151.88.18:5000/esFavorito/${id}`, {
                 usuario: producto.usuario
             })
         .then((res) => {

@@ -81,6 +81,7 @@ class ProductList extends Component {
 				style={styles.containerItem}
 				renderItem={this.renderItem}
 				numColumns={numColumns}
+				keyExtractor={(item, index) => index.toString()}
 			/>
 			</LinearGradient>
         )
