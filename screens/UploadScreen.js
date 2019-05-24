@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker} from 'react-native';
+import {Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker,AsyncStorage} from 'react-native';
 import { LinearGradient, ImagePicker, Permissions } from 'expo';
 import EditProfile from './EditProfile.js';
+import jwt_decode from 'jwt-decode';
 import * as firebase from 'firebase';
 import { anadirProducto, anadirSubasta } from '../controlador/GestionPublicaciones.js';
 
-var _ = require('lodash');
+
 var exito = false;
 var respuestaBD = "";
 
@@ -24,7 +25,8 @@ class Profile extends Component {
 		image: '',
 		foto1: 'vacio',
 		foto2: 'vacio',
-		foto3: 'vacio'
+		foto3: 'vacio',
+    uploading: false
     }
 
     this.onChange = this.onChange.bind(this)
@@ -89,7 +91,6 @@ class Profile extends Component {
         foto3: this.state.foto3,
         provincia: this.state.provincia
       }
-      this.uploadImage(this.state.imagen);
       console.log(newProducto)
       anadirProducto(newProducto).then(data => {this.setState({respuestaBD: data})})
       this.setState({crear: true})
@@ -98,53 +99,52 @@ class Profile extends Component {
   }
 
   _pickImage = async () => {
-      const { status: cameraRollPerm } = await Permissions.askAsync(
-        Permissions.CAMERA_ROLL
-      );
+    const {
+      status: cameraRollPerm
+    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-      // only if user allows permission to camera roll
-      if (cameraRollPerm === "granted") {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          allowsEditing: true,
-          //mediaTypes: Images,
-          aspect: [4, 3]
+    // only if user allows permission to camera roll
+    if (cameraRollPerm === 'granted') {
+      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      this.setState({image : pickerResult.uri})
+      console.log("Tiene la imagen: "+this.state.image)
+      this._handleImagePicked(pickerResult);
+    }
+  };
+
+
+  _handleImagePicked = async pickerResult => {
+      let uploadResponse, uploadResult;
+      console.log("Entra en handle")
+      try {
+        this.setState({
+          uploading: true
         });
-        //this._handleImagePicked(pickerResult);
-        if (!result.cancelled) {
-          //this.setState({ image: result.uri });
-          this._handleImagePicked(result);
+
+        if (!pickerResult.cancelled) {
+          uploadResponse = await uploadImageAsync(pickerResult.uri);
+          uploadResult = await uploadResponse.json();
+
+          this.setState({
+            image: uploadResult.location
+          });
         }
+      } catch (e) {
+        console.log("Error en handle")
+        console.log({ uploadResponse });
+        console.log({ uploadResult });
+        console.log({ e });
+        alert('Upload failed, sorry :(');
+      } finally {
+        this.setState({
+          uploading: false
+        });
       }
-    };
-
-  uploadImage = async (uri) =>{
-    // Why are we using XMLHttpRequest? See:
-    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function(e) {
-        console.log(e);
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
-      xhr.send(null);
-    });
-
-    const ref = firebase
-      .storage()
-      .ref()
-      .child(uuid.v4());
-    const snapshot = await ref.put(blob);
-
-    // We're done with the blob, close and release it
-    blob.close();
-
-    //return await snapshot.ref.getDownloadURL();
   }
+
 
     render(){
       const { navigation } = this.props;
@@ -158,6 +158,7 @@ class Profile extends Component {
         }
         else if(this.state.respuestaBD=="Exito") {
           Alert.alert('','Creado correctamente',[{text: 'OK'}],{cancelable: false});
+          this.props.navigation.navigate('Sidebar')
         }
       }
         return(
@@ -228,6 +229,40 @@ class Profile extends Component {
     }
 }
 
+
+async function uploadImageAsync(uri) {
+  let apiUrl = 'https://file-upload-example-backend-dkhqoilqqn.now.sh/upload';
+
+  // Note:
+  // Uncomment this if you want to experiment with local server
+  //
+  // if (Constants.isDevice) {
+  //   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
+  // } else {
+  //   apiUrl = `http://localhost:3000/upload`
+  // }
+
+  let uriParts = uri.split('.');
+  let fileType = uriParts[uriParts.length - 1];
+
+  let formData = new FormData();
+  formData.append('photo', {
+    uri,
+    name: `photo.${fileType}`,
+    type: `image/${fileType}`,
+  });
+
+  let options = {
+    method: 'POST',
+    body: formData,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+
+  return fetch(apiUrl, options);
+};
 
 
 const styles = StyleSheet.create({
