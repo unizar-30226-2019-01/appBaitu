@@ -55,17 +55,18 @@ class Profile extends Component {
     }
 
     onSubmit(e) {
-      const user = {
-        login: this.state.datos[0],
-        nombre: this.state.datos[1],
-        apellidos: this.state.datos[2],
-        email: this.state.datos[3],
-        telefono: this.state.datos[7]
-      }
-      console.log(user)
-      actualizarInfo(user)
-      console.log('Estoy actualizando cositas')
-      this.props.navigation.navigate('Profile')
+        const user = {
+            login: this.state.datos[0], // No se permite cambiar
+            nombre: this.state.nombre,
+            apellidos: this.state.apellidos,
+            email: this.state.datos[3],   // No se permite cambiar
+            telefono: this.state.telefono,
+            foto: this.state.foto
+        }
+        console.log(user)
+        actualizarInfo(user)
+        console.log('Estoy actualizando cositas')
+        this.props.navigation.navigate('DrawerStack')
     }
 
     volverMenu(e) {

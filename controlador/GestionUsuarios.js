@@ -40,16 +40,22 @@ export const login = user => {
 export const actualizarInfo = user => {
   axios
       .post(`http://52.151.88.18:5000/updateUsuario`, {
-        login: user.login,
-        nombre: user.nombre,
-        apellidos: user.apellidos,
-        telefono: user.telefono,
-        email: user.email,
-        biografia: user.biografia
+          login: user.login,
+          nombre: user.nombre,
+          apellidos: user.apellidos,
+          telefono: user.telefono,
+          email: user.email,
+          foto: user.foto
       })
-      .then(response => {
+     .then(response => {
         console.log("vuelve al controlador")
-        AsyncStorage.setItem('userToken', response.data)
+        _storeData = async () => {
+            try {
+                await AsyncStorage.setItem('userToken', response.data)
+            } catch (error) {
+                console.log("Error en el setItem(nuevoToken)")
+            }
+        };
         return response.data
       })
       .catch(err => {
