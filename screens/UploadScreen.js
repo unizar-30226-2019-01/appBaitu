@@ -27,7 +27,8 @@ class Profile extends Component {
 		foto2: 'vacio',
 		foto3: 'vacio',
     uploading: false,
-    location: ''
+    location: '',
+    tipo: ''
     }
 
     this.onChange = this.onChange.bind(this)
@@ -378,10 +379,10 @@ class Profile extends Component {
 
               <Text style={styles.cuerpoVerde}>Tipo de publicación</Text>
               <Picker
-                selectedValue={this.state.category}
+                selectedValue={this.state.tipo}
                               style={styles.picker}
                               onPress={() => Keyboard.dismiss()}
-                              onValueChange={(itemValue, itemIndex) => this.setState({category: itemValue})
+                              onValueChange={(itemValue, itemIndex) => this.setState({tipo: itemValue})
                         }>
                             <Picker.Item label="Producto" value="Producto" />
                             <Picker.Item label="Subasta" value="Subasta" />
@@ -420,27 +421,27 @@ class Profile extends Component {
                         <Text style={styles.paragraph}>Ciudad: {text}</Text>
                         <Text style={styles.cuerpoVerde}>Categoría</Text>
                         <Picker
-                              selectedValue={this.state.category}
+                              selectedValue={this.state.categoria}
                               style={styles.picker}
                               onPress={() => Keyboard.dismiss()}
-                              onValueChange={(itemValue, itemIndex) => this.setState({category: itemValue})
+                              onValueChange={(itemValue, itemIndex) => this.setState({categoria: itemValue})
                         }>
-                            <Picker.Item label="Coches" value="Producto" />
-                            <Picker.Item label="Electrónica" value="Subasta" />
-                            <Picker.Item label="Telefonía" value="Subasta" />
-                            <Picker.Item label="Deporte" value="Subasta" />
-                            <Picker.Item label="Inmobiliaria" value="Subasta" />
-                            <Picker.Item label="Motos" value="Subasta" />
-                            <Picker.Item label="Bicicletas" value="Subasta" />
-                            <Picker.Item label="Videojuegos" value="Subasta" />
-                            <Picker.Item label="Hogar" value="Subasta" />
-                            <Picker.Item label="Moda" value="Subasta" />
-                            <Picker.Item label="Electrodomésticos" value="Subasta" />
-                            <Picker.Item label="Libros y Música" value="Subasta" />
-                            <Picker.Item label="Niños" value="Producto" />
-                            <Picker.Item label="Empleo" value="Producto" />
-                            <Picker.Item label="Construcción" value="Producto" />
-                            <Picker.Item label="Coleccionismo" value="Producto" />
+                            <Picker.Item label="Coches" value="Coches" />
+                            <Picker.Item label="Electrónica" value="Electrónica" />
+                            <Picker.Item label="Telefonía" value="Telefonía" />
+                            <Picker.Item label="Deporte" value="Deporte" />
+                            <Picker.Item label="Inmobiliaria" value="Inmobiliaria" />
+                            <Picker.Item label="Motos" value="Motos" />
+                            <Picker.Item label="Bicicletas" value="Bicicletas" />
+                            <Picker.Item label="Videojuegos" value="Videojuegos" />
+                            <Picker.Item label="Hogar" value="Hogar" />
+                            <Picker.Item label="Moda" value="Moda" />
+                            <Picker.Item label="Electrodomésticos" value="Electrodomésticos" />
+                            <Picker.Item label="Libros y Música" value="Libros y Música" />
+                            <Picker.Item label="Niños" value="Niños" />
+                            <Picker.Item label="Empleo" value="Empleo" />
+                            <Picker.Item label="Construcción" value="Construcción" />
+                            <Picker.Item label="Coleccionismo" value="Coleccionismo" />
                         </Picker>
                         <Text></Text>
                         <Text></Text>
