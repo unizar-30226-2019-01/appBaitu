@@ -3,7 +3,6 @@ import {Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoiding
 import { LinearGradient, ImagePicker, Permissions } from 'expo';
 import EditProfile from './EditProfile.js';
 import * as firebase from 'firebase';
-import { RNS3 } from 'react-native-aws3';
 import { anadirProducto, anadirSubasta } from '../controlador/GestionPublicaciones.js';
 
 var _ = require('lodash');

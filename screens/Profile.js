@@ -30,16 +30,14 @@ class Profile extends Component {
 				login: decoded.identity.login
 			}
 			infoUsuario(decoded.identity.login).then(data => {
-			this.setState({
-				login: decoded.identity.login,
-				datos: data
-			},
-			() => {
-				console.log("devuelvo")
-			})
-			})
-		}
+    			this.setState({
+    				login: decoded.identity.login,
+    				datos: data
+    			}
+			)
+		})
 	}
+}
     onRefresh(){
         this.setState({refreshing:true})
         //funcion de llamada cargar datos de nuevo
