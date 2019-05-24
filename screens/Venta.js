@@ -102,20 +102,17 @@ class Venta extends Component {
 	}
 
 	cambiarFavorito(){
-		console.log("ESTOY EN CAMBIAR FAVORITO")
 		const producto = {
 			usuario: this.state.login
 		}
 		if(this.state.esFavorito == "Favorito existe"){
-			eliminarFavorito(producto,this.state.id).then(data => {})
-			console.log(producto.usuario + "	" + this.state.id)
+			eliminarFavorito(producto,this.state.id)
 			this.setState({
 				esFavorito: "Favorito no existe"
 			})
 		}
 		else if(this.state.esFavorito == "Favorito no existe"){
-			crearFavorito(producto,this.state.id).then(data => {})
-			console.log(producto.usuario + "	" + this.state.id)
+			crearFavorito(producto,this.state.id)
 			this.setState({
 				esFavorito: "Favorito existe"
 			})
