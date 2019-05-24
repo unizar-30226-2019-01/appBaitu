@@ -330,10 +330,7 @@ export const eliminarSubasta = subasta => {
         .post(
             `http://52.151.88.18:5000/crearFavorito/${id}`, {
                 usuario: producto.usuario
-            })/* 
-        .then((res) => {
-            console.log(res)
-        }) */
+            })
         .catch((res) => {
             console.log(res)
         })
@@ -344,10 +341,7 @@ export const eliminarSubasta = subasta => {
         .post(
             `http://52.151.88.18:5000/eliminarFavorito/${id}`, {
                 usuario: producto.usuario
-            })/* 
-        .then((res) => {
-            console.log(res)
-        }) */
+            })
         .catch((res) => {
             console.log(res)
         })
