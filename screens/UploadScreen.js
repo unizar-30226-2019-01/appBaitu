@@ -3,9 +3,10 @@ import {Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoiding
 import { LinearGradient, ImagePicker, Permissions } from 'expo';
 import EditProfile from './EditProfile.js';
 import * as firebase from 'firebase';
+import { RNS3 } from 'react-native-aws3';
 import { anadirProducto, anadirSubasta } from '../controlador/GestionPublicaciones.js';
 
-
+var _ = require('lodash');
 var exito = false;
 var respuestaBD = "";
 
@@ -61,46 +62,90 @@ class Profile extends Component {
 		}
 	}
 
+
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value })
   }
 
   onSubmit(e) {
     Keyboard.dismiss()
-    if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' &&
-       this.state.imagen != '') {
-         exito = true
+    if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.imagen != '') {
+      exito = true
     }
     else {
       Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
     }
     if(exito) {
       const newProducto = {
-          nombre: this.state.nombre,
-          fecha: this.state.fecha,
-          categoria: this.state.categoria,
-          descripcion: this.state.descripcion,
-          precio: this.state.precio,
-          vendedor: this.state.vendedor,
-          fotoPrincipal: this.state.image,
-          foto1: this.state.foto1,
-          foto2: this.state.foto2,
-          foto3: this.state.foto3,
-          provincia: this.state.provincia
-        }
+        nombre: this.state.nombre,
+        fecha: this.state.fecha,
+        categoria: this.state.categoria,
+        descripcion: this.state.descripcion,
+        precio: this.state.precio,
+        vendedor: this.state.vendedor,
+        fotoPrincipal: this.state.image,
+        foto1: this.state.foto1,
+        foto2: this.state.foto2,
+        foto3: this.state.foto3,
+        provincia: this.state.provincia
+      }
+      this.uploadImage(this.state.imagen);
       console.log(newProducto)
-      anadirProducto(newProducto).then(data => {
-        this.setState({
-          respuestaBD: data
-        })
-      })
+      anadirProducto(newProducto).then(data => {this.setState({respuestaBD: data})})
       this.setState({crear: true})
       exito=false
     }
-
-
   }
 
+  _pickImage = async () => {
+      const { status: cameraRollPerm } = await Permissions.askAsync(
+        Permissions.CAMERA_ROLL
+      );
+
+      // only if user allows permission to camera roll
+      if (cameraRollPerm === "granted") {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          allowsEditing: true,
+          //mediaTypes: Images,
+          aspect: [4, 3]
+        });
+        //this._handleImagePicked(pickerResult);
+        if (!result.cancelled) {
+          //this.setState({ image: result.uri });
+          this._handleImagePicked(result);
+        }
+      }
+    };
+
+  uploadImage = async (uri) =>{
+    // Why are we using XMLHttpRequest? See:
+    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+
+    const ref = firebase
+      .storage()
+      .ref()
+      .child(uuid.v4());
+    const snapshot = await ref.put(blob);
+
+    // We're done with the blob, close and release it
+    blob.close();
+
+    //return await snapshot.ref.getDownloadURL();
+  }
 
     render(){
       const { navigation } = this.props;
@@ -182,26 +227,6 @@ class Profile extends Component {
         </KeyboardAvoidingView>
         )
     }
-
-    _pickImage = async () => {
-        const { status: cameraRollPerm } = await Permissions.askAsync(
-          Permissions.CAMERA_ROLL
-        );
-
-        // only if user allows permission to camera roll
-        if (cameraRollPerm === "granted") {
-          let result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
-            //mediaTypes: Images,
-            aspect: [4, 3]
-          });
-          //this._handleImagePicked(pickerResult);
-          if (!result.cancelled) {
-            this.setState({ image: result.uri });
-          }
-        }
-      };
-
 }
 
 

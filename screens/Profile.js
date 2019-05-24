@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
+import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,RefreshControl,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser } from '../controlador/GestionUsuarios';
@@ -40,6 +40,19 @@ class Profile extends Component {
 			})
 		}
 	}
+    onRefresh(){
+        this.setState({refreshing:true})
+        //funcion de llamada cargar datos de nuevo
+        getProductos().then(data => {
+            this.setState({
+                products: data
+            },
+            () => {
+                console.log("Perfil actualizado")
+            })
+        })
+        this.setState({refreshing:false})
+    }
 
 onDelete(e) {
     console.log("xdxd")

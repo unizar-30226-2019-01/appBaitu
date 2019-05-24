@@ -13,15 +13,13 @@ import Search from '../screens/Search';
 import Venta from '../screens/Venta';
 import HomeButton from '../components/HomeButton';
 
-
-
 // Pantallas para la barra lateral
 const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
     Buscar: {screen: Search},
     Chats: {screen: Chats},
     "Subir producto":{screen: Upload},
-    "Venta":{screen: Venta}
+    "Venta": {screen: Venta}
 }, {
     headerMode: 'none',
     drawerWidth: 300,
@@ -58,9 +56,7 @@ const HomeNavigator = createStackNavigator({
       headerRight:
       <View>
       <TouchableOpacity onPress={() => {
-          if(navigation.state.index === 0){
               navigation.navigate('Profile');
-          }
           }}>
               <Image
                   style={{width: 25, height: 25, marginRight:10}}
