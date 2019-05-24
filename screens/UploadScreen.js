@@ -13,29 +13,53 @@ class Profile extends Component {
   constructor() {
     super()
     this.state = {
-      nombre: '',
-      fecha: '',
-      categoria: 'fsdf',
-      descripcion: '',
-      precio: '',
-      vendedor: 'a',
-      provincia: 'adf',
-      image: '',
-      foto1: 'vacio',
-      foto2: 'vacio',
-      foto3: 'vacio'
+		login: '',
+		nombre: '',
+		fecha: '',
+		categoria: '',
+		descripcion: '',
+		precio: '',
+		vendedor: '',
+		provincia: '',
+		image: '',
+		foto1: 'vacio',
+		foto2: 'vacio',
+		foto3: 'vacio'
     }
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  componentDidMount() {
-    var date = new Date().getDate(); //Current Date
-    var month = new Date().getMonth() + 1; //Current Month
-    var year = new Date().getFullYear(); //Current Year
-    this.setState({fecha: date+"/"+month+"/"+year});
-  }
+	async componentDidMount() {
+		var date = new Date().getDate(); //Current Date
+		var month = new Date().getMonth() + 1; //Current Month
+		var year = new Date().getFullYear(); //Current Year
+		if (this.state.fecha != (date+"/"+month+"/"+year)) {
+			this.setState({fecha: date+"/"+month+"/"+year});
+		}
+	}
+
+	async componentDidMount() {
+		const token = await AsyncStorage.getItem('userToken')
+		if (token === undefined || token === null) {
+			console.log("no existe token")
+		}
+		else{
+			var date = new Date().getDate(); //Current Date
+			var month = new Date().getMonth() + 1; //Current Month
+			var year = new Date().getFullYear(); //Current Year
+			this.setState({fecha: date+"/"+month+"/"+year});
+			const decoded = jwt_decode(token)
+			const usuario = {
+				login: decoded.identity.login,
+			}
+			this.setState({
+				login: decoded.identity.login,
+				vendedor: decoded.identity.login
+			})
+		}
+	}
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value })
