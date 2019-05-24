@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker,AsyncStorage} from 'react-native';
-import { LinearGradient, ImagePicker, Permissions } from 'expo';
+import {Platform,Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker,AsyncStorage} from 'react-native';
+import { LinearGradient, ImagePicker, Permissions, Location, Constants} from 'expo';
 import EditProfile from './EditProfile.js';
 import jwt_decode from 'jwt-decode';
 import * as firebase from 'firebase';
@@ -26,11 +26,20 @@ class Profile extends Component {
 		foto1: 'vacio',
 		foto2: 'vacio',
 		foto3: 'vacio',
-    uploading: false
+    uploading: false,
+    location: ''
     }
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  componentWillMount() {
+    if (Platform.OS === 'android' && !Constants.isDevice) {
+      console.log("error calling location")
+    } else {
+      this._getLocationAsync();
+    }
   }
 
 	async componentDidMount() {
@@ -89,7 +98,7 @@ class Profile extends Component {
         foto1: this.state.foto1,
         foto2: this.state.foto2,
         foto3: this.state.foto3,
-        provincia: this.state.provincia
+        provincia: this.state.location
       }
       console.log(newProducto)
       anadirProducto(newProducto).then(data => {this.setState({respuestaBD: data})})
@@ -145,10 +154,198 @@ class Profile extends Component {
       }
   }
 
+  _pickImage1 = async () => {
+    const {
+      status: cameraRollPerm
+    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    // only if user allows permission to camera roll
+    if (cameraRollPerm === 'granted') {
+      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      this.setState({foto1 : pickerResult.uri})
+      console.log("Tiene la imagen: "+this.state.image)
+      this._handleImagePicked1(pickerResult);
+    }
+  };
+
+
+  _handleImagePicked1 = async pickerResult => {
+      let uploadResponse, uploadResult;
+      console.log("Entra en handle")
+      try {
+        this.setState({
+          uploading: true
+        });
+
+        if (!pickerResult.cancelled) {
+          uploadResponse = await uploadImageAsync(pickerResult.uri);
+          uploadResult = await uploadResponse.json();
+
+          this.setState({
+            foto1: uploadResult.location
+          });
+        }
+      } catch (e) {
+        console.log("Error en handle")
+        console.log({ uploadResponse });
+        console.log({ uploadResult });
+        console.log({ e });
+        alert('Upload failed, sorry :(');
+      } finally {
+        this.setState({
+          uploading: false
+        });
+      }
+  }
+
+  _pickImage2 = async () => {
+    const {
+      status: cameraRollPerm
+    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    // only if user allows permission to camera roll
+    if (cameraRollPerm === 'granted') {
+      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      this.setState({foto2 : pickerResult.uri})
+      console.log("Tiene la imagen: "+this.state.image)
+      this._handleImagePicked2(pickerResult);
+    }
+  };
+
+
+  _handleImagePicked2 = async pickerResult => {
+      let uploadResponse, uploadResult;
+      console.log("Entra en handle")
+      try {
+        this.setState({
+          uploading: true
+        });
+
+        if (!pickerResult.cancelled) {
+          uploadResponse = await uploadImageAsync(pickerResult.uri);
+          uploadResult = await uploadResponse.json();
+
+          this.setState({
+            foto2: uploadResult.location
+          });
+        }
+      } catch (e) {
+        console.log("Error en handle")
+        console.log({ uploadResponse });
+        console.log({ uploadResult });
+        console.log({ e });
+        alert('Upload failed, sorry :(');
+      } finally {
+        this.setState({
+          uploading: false
+        });
+      }
+  }
+
+  _pickImage3 = async () => {
+    const {
+      status: cameraRollPerm
+    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    // only if user allows permission to camera roll
+    if (cameraRollPerm === 'granted') {
+      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      this.setState({foto3 : pickerResult.uri})
+      console.log("Tiene la imagen: "+this.state.image)
+      this._handleImagePicked3(pickerResult);
+    }
+  };
+
+
+  _handleImagePicked3 = async pickerResult => {
+      let uploadResponse, uploadResult;
+      console.log("Entra en handle")
+      try {
+        this.setState({
+          uploading: true
+        });
+
+        if (!pickerResult.cancelled) {
+          uploadResponse = await uploadImageAsync(pickerResult.uri);
+          uploadResult = await uploadResponse.json();
+
+          this.setState({
+            foto3: uploadResult.location
+          });
+        }
+      } catch (e) {
+        console.log("Error en handle")
+        console.log({ uploadResponse });
+        console.log({ uploadResult });
+        console.log({ e });
+        alert('Upload failed, sorry :(');
+      } finally {
+        this.setState({
+          uploading: false
+        });
+      }
+  }
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      console.log("error location")
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    let loc = await {latitude: location.coords.latitude, longitude: location.coords.longitude};
+    let city = await Location.reverseGeocodeAsync(loc)
+    let aux = await city[0]
+    location = await aux.city
+    this.setState({ location });
+  };
+
 
     render(){
       const { navigation } = this.props;
       let { image } = this.state;
+      let text = 'Localizando..';
+      if (this.state.image === undefined || this.state.image === "") {
+        foto = 'http://geodezja-elipsa.pl/ikony/picture.png'
+      }
+      else {
+        foto = this.state.image
+      }
+
+      if (this.state.foto1 === undefined || this.state.foto1 === "") {
+        foto1 = 'http://geodezja-elipsa.pl/ikony/picture.png'
+      }
+      else {
+        foto1 = this.state.foto1
+      }
+
+      if (this.state.foto2 === undefined || this.state.foto2 === "") {
+        foto2 = 'http://geodezja-elipsa.pl/ikony/picture.png'
+      }
+      else {
+        foto2 = this.state.foto2
+      }
+
+      if (this.state.foto3 === undefined || this.state.foto3 === "") {
+        foto3 = 'http://geodezja-elipsa.pl/ikony/picture.png'
+      }
+      else {
+        foto3 = this.state.foto3
+      }
+
+      if (this.state.errorMessage) {
+        text = this.state.errorMessage;
+      } else if (this.state.location) {
+        text = JSON.stringify(this.state.location);
+      }
       if(this.state.crear) {
         console.log("RespuestaBD: "+this.state.respuestaBD)
         if(this.state.respuestaBD=="Error") {
@@ -158,22 +355,30 @@ class Profile extends Component {
         }
         else if(this.state.respuestaBD=="Exito") {
           Alert.alert('','Creado correctamente',[{text: 'OK'}],{cancelable: false});
-          this.props.navigation.navigate('Sidebar')
+          this.props.navigation.navigate('ProductList')
         }
       }
-        return(
-          <KeyboardAvoidingView behavior="padding" enabled>
-            <ScrollView>
-            <LinearGradient colors={['#ffffff', '#eeeeee']}>
-                    <View style={styles.itemsContainer}>
-                    <Button style={styles.botonSelec} onPress={this._pickImage} title="Selecciona una foto"/>
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
-                            <Image style={styles.imagenProducto}
-                                source={{uri: image}}/>
-                        </TouchableOpacity>
-                        <Text style={styles.cuerpoVerde}>Tipo de publicación</Text>
-                        <Picker
-                              selectedValue={this.state.category}
+      return(
+        <LinearGradient colors={['#ffffff', '#eeeeee']}>
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <View style={styles.itemsContainer} showsVerticalScrollIndicator={false}>
+            <ScrollView  showsVerticalScrollIndicator={false}>
+              <Button style={styles.botonSelec} onPress={this._pickImage} title="Selecciona una foto"/>
+              <Image style={styles.imagenProducto} source={{uri: foto}}/>
+
+              <Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage1} />
+              <Image style={styles.imagenProducto} source={{uri: foto1}}/>
+
+              <Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage2} />
+              <Image style={styles.imagenProducto} source={{uri: foto2}}/>
+
+              <Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage3} />
+              <Image style={styles.imagenProducto} source={{uri: foto3}}/>
+
+
+              <Text style={styles.cuerpoVerde}>Tipo de publicación</Text>
+              <Picker
+                selectedValue={this.state.category}
                               style={styles.picker}
                               onPress={() => Keyboard.dismiss()}
                               onValueChange={(itemValue, itemIndex) => this.setState({category: itemValue})
@@ -212,6 +417,31 @@ class Profile extends Component {
                           value={this.state.descripcion}
                           onChangeText={(descripcion) => this.setState({descripcion})}
                         />
+                        <Text style={styles.paragraph}>Ciudad: {text}</Text>
+                        <Text style={styles.cuerpoVerde}>Categoría</Text>
+                        <Picker
+                              selectedValue={this.state.category}
+                              style={styles.picker}
+                              onPress={() => Keyboard.dismiss()}
+                              onValueChange={(itemValue, itemIndex) => this.setState({category: itemValue})
+                        }>
+                            <Picker.Item label="Coches" value="Producto" />
+                            <Picker.Item label="Electrónica" value="Subasta" />
+                            <Picker.Item label="Telefonía" value="Subasta" />
+                            <Picker.Item label="Deporte" value="Subasta" />
+                            <Picker.Item label="Inmobiliaria" value="Subasta" />
+                            <Picker.Item label="Motos" value="Subasta" />
+                            <Picker.Item label="Bicicletas" value="Subasta" />
+                            <Picker.Item label="Videojuegos" value="Subasta" />
+                            <Picker.Item label="Hogar" value="Subasta" />
+                            <Picker.Item label="Moda" value="Subasta" />
+                            <Picker.Item label="Electrodomésticos" value="Subasta" />
+                            <Picker.Item label="Libros y Música" value="Subasta" />
+                            <Picker.Item label="Niños" value="Producto" />
+                            <Picker.Item label="Empleo" value="Producto" />
+                            <Picker.Item label="Construcción" value="Producto" />
+                            <Picker.Item label="Coleccionismo" value="Producto" />
+                        </Picker>
                         <Text></Text>
                         <Text></Text>
                         <TouchableOpacity style={styles.button} onPress={() => this.onSubmit() }>
@@ -220,11 +450,14 @@ class Profile extends Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
                             <Text style={styles.buttonText}>CANCELAR</Text>
                         </TouchableOpacity>
-                    </View>
 
-        </LinearGradient>
-        </ScrollView>
+
+          </ScrollView>
+          </View>
         </KeyboardAvoidingView>
+        </LinearGradient>
+
+
         )
     }
 }
@@ -232,15 +465,6 @@ class Profile extends Component {
 
 async function uploadImageAsync(uri) {
   let apiUrl = 'https://file-upload-example-backend-dkhqoilqqn.now.sh/upload';
-
-  // Note:
-  // Uncomment this if you want to experiment with local server
-  //
-  // if (Constants.isDevice) {
-  //   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
-  // } else {
-  //   apiUrl = `http://localhost:3000/upload`
-  // }
 
   let uriParts = uri.split('.');
   let fileType = uriParts[uriParts.length - 1];
@@ -266,6 +490,11 @@ async function uploadImageAsync(uri) {
 
 
 const styles = StyleSheet.create({
+    botonPeq: {
+      marginRight: 50,
+      margin: 20,
+      borderRightWidth: 50
+    },
     botonSelec: {
       color:'#B4FFAB',
       borderRadius: 25,
@@ -275,6 +504,8 @@ const styles = StyleSheet.create({
         height: 350,
         borderRadius: 20,
         marginVertical: 10,
+        marginLeft: 10,
+        marginRight: 10,
         alignSelf: 'center',
         overflow: 'hidden'
     },
@@ -358,7 +589,11 @@ const styles = StyleSheet.create({
       marginVertical: 10,
       alignItems: 'flex-start',
       textAlign: 'left'
-  }
+  },paragraph: {
+    margin: 24,
+    fontSize: 20,
+    textAlign: 'center',
+  },
 })
 
 export default Profile;
