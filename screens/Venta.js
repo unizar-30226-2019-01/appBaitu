@@ -3,11 +3,12 @@ import {Dimensions,Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAv
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoVenta } from '../controlador/GestionPublicaciones';
+import { infoVenta, consultarFavorito } from '../controlador/GestionPublicaciones';
 import * as firebase from 'firebase'
 
 const dimensions = Dimensions.get('window');
 const imageWidth = dimensions.width;
+const aux = 1;
 
 let foto=''
 
@@ -18,7 +19,8 @@ class Venta extends Component {
             datosProducto: [],
             datosVendedor: [],
             login: '',
-            id: ''
+			id: '',
+			esFavorito: ""
         }
     }
 
@@ -40,19 +42,18 @@ class Venta extends Component {
                     this.setState({
                         login: decoded.identity.login,
                         datosProducto: data
-                    },
-                    () => {
-                        console.log(this.state.login)
                     })
                 })
                 infoUsuario(this.state.datosProducto[5]).then(data => {
                     this.setState({
                         datosVendedor: data
-                    },
-                    () => {
-                        console.log("devuelvo")
                     })
-                })
+				})
+				consultarFavorito(this.state.login,this.state.id).then(data => {
+					this.setState({
+						esFavorito: data
+					})
+				})
             }
         }
     }
@@ -82,13 +83,33 @@ class Venta extends Component {
             infoUsuario(this.state.datosProducto[5]).then(data => {
                 this.setState({
                     datosVendedor: data
-                },
-                () => {
-                    console.log("devuelvo")
                 })
             })
+			consultarFavorito(this.state.login,this.state.id).then(data => {
+				this.setState({
+					esFavorito: data
+				})
+			})
         }
-    }
+	}
+	
+	botonFavorito(){
+		if (this.state.esFavorito == "Favorito no existe"){
+			return <Text style={styles.favorito}>Favorito</Text>
+		}
+		else if (this.state.esFavorito == "Favorito existe"){
+			return <Text style={styles.añadido}>Añadido</Text>
+		}
+		else if (this.state.esFavorito == ""){
+			return <Text style={styles.añadido}>VACIO</Text>
+		}
+		else if (this.state.esFavorito == undefined){
+			return <Text style={styles.añadido}>NO FUNCIONA</Text>
+		}
+		else{
+			return <Text style={styles.añadido}>NO se sabe</Text>
+		}
+	}
 
     render(){
         return(
@@ -98,7 +119,10 @@ class Venta extends Component {
                     <Image
 						style={styles.image}
 						source={{uri: this.state.datosProducto[4]}}/>
-                    <Text style={styles.tipoPublicacion}>Venta</Text>
+					<View style={styles.horizontal}>
+                    	<Text style={styles.tipoPublicacion}>Venta</Text>
+						{ this.botonFavorito() }
+					</View>
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
                         <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
@@ -227,7 +251,40 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 10
-    }
+    },
+    favorito: {
+        fontSize: 17,
+        width: 80,
+        marginTop: 5,
+        marginRight: 10,
+        borderWidth: 3.5,
+        borderColor: '#ffc400',
+        borderRadius: 15,
+        backgroundColor: '#ffffff',
+        overflow: 'hidden',
+        textAlign: 'center',
+        alignItems: 'flex-start',
+        color: '#ffc400'
+    },
+    añadido: {
+        fontSize: 17,
+        width: 80,
+        marginTop: 5,
+        marginRight: 10,
+        borderWidth: 3.5,
+        borderColor: '#ffc400',
+        borderRadius: 15,
+        backgroundColor: '#ffc400',
+        overflow: 'hidden',
+        textAlign: 'center',
+        alignItems: 'flex-start',
+        color: 'white'
+    },
+	horizontal: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
 })
 
 export default Venta;

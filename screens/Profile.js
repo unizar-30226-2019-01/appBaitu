@@ -68,6 +68,14 @@ async cerrarSesion(e){
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
                 <KeyboardAvoidingView behavior="padding" enabled>
+					<View style={styles.horizontal}>
+						<TouchableOpacity  onPress={() => this.props.navigation.navigate('EditarPerfil')}>
+                            <Text style={styles.editar}>Editar</Text>
+                        </TouchableOpacity>
+						<TouchableOpacity  onPress={() => this.props.navigation.navigate('EditarPerfil')}>
+                            <Text style={styles.favorito}>Favorito</Text>
+                        </TouchableOpacity>
+					</View>
                         <TouchableOpacity  onPress={() => this.props.navigation.navigate('EditarPerfil')}>
                             <Text style={styles.editar}>Editar</Text>
                         </TouchableOpacity>
@@ -218,7 +226,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         color: 'white'
-    }
+	},
 })
 
 export default Profile;

@@ -17,10 +17,10 @@ class Profile extends Component {
       fecha: '',
       categoria: 'fsdf',
       descripcion: '',
-      precio: null,
+      precio: '',
       vendedor: 'a',
       provincia: 'adf',
-      image: null,
+      image: '',
       foto1: 'vacio',
       foto2: 'vacio',
       foto3: 'vacio'

@@ -414,3 +414,17 @@ export const eliminarSubasta = subasta => {
             console.log(res)
         })
   }
+
+  export const consultarFavorito = (producto, id) => {
+    return axios
+        .post(
+            `esFavorito/${id}`, {
+                usuario: producto.usuario
+            })
+        .then((res) => {
+            return res.data
+        })
+        .catch((err) => {
+            return err
+        })
+  }
