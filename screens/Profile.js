@@ -19,36 +19,27 @@ class Profile extends Component {
         this.onDelete = this.onDelete.bind(this)
     }
 
-    /*
-    _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
-}; */
-
-
-
-async componentDidMount() {
-  const token = await AsyncStorage.getItem('userToken')
-  if (token === undefined || token === null) {
-      console.log("no existe token")
-  }
-  else{
-      const decoded = jwt_decode(token)
-      const usuario = {
-          login: decoded.identity.login
-      }
-      infoUsuario(decoded.identity.login).then(data => {
-      this.setState({
-          login: decoded.identity.login,
-          datos: data
-      },
-      () => {
-          console.log("devuelvo")
-      })
-    })
-      //this.getAll(usuario)
-  }
-}
+	async componentDidMount() {
+		const token = await AsyncStorage.getItem('userToken')
+		if (token === undefined || token === null) {
+			console.log("no existe token")
+		}
+		else{
+			const decoded = jwt_decode(token)
+			const usuario = {
+				login: decoded.identity.login
+			}
+			infoUsuario(decoded.identity.login).then(data => {
+			this.setState({
+				login: decoded.identity.login,
+				datos: data
+			},
+			() => {
+				console.log("devuelvo")
+			})
+			})
+		}
+	}
 
 onDelete(e) {
     console.log("xdxd")

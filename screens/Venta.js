@@ -17,39 +17,78 @@ class Venta extends Component {
         this.state = {
             datosProducto: [],
             datosVendedor: [],
-			login: '',
+            login: '',
+            id: ''
         }
     }
 
-async componentDidMount() {
-    const token = await AsyncStorage.getItem('userToken')
-    if (token === undefined || token === null) {
-        console.log("no existe token")
-    }
-    else{
-        const decoded = jwt_decode(token)
-        const usuario = {
-            login: decoded.identity.login
+    async componentDidUpdate(){
+        if (this.state.id != this.props.navigation.state.params.id){
+            const token = await AsyncStorage.getItem('userToken')
+            if (token === undefined || token === null) {
+                console.log("no existe token")
+            }
+            else{
+                const decoded = jwt_decode(token)
+                const usuario = {
+                    login: decoded.identity.login
+                }
+                this.setState({
+                    id: this.props.navigation.state.params.id
+                })
+                infoVenta(this.state.id).then(data => {
+                    this.setState({
+                        login: decoded.identity.login,
+                        datosProducto: data
+                    },
+                    () => {
+                        console.log(this.state.login)
+                    })
+                })
+                infoUsuario(this.state.datosProducto[5]).then(data => {
+                    this.setState({
+                        datosVendedor: data
+                    },
+                    () => {
+                        console.log("devuelvo")
+                    })
+                })
+            }
         }
-        infoVenta('103').then(data => {
-            this.setState({
-                login: decoded.identity.login,
-                datosProducto: data
-            },
-            () => {
-                console.log(this.state.login)
-            })
-        })
-        infoUsuario(this.state.datosProducto[5]).then(data => {
-            this.setState({
-                datosVendedor: data
-            },
-            () => {
-                console.log("devuelvo")
-            })
-        })
     }
-}
+
+    async componentDidMount() {
+        const token = await AsyncStorage.getItem('userToken')
+        if (token === undefined || token === null) {
+            console.log("no existe token")
+        }
+        else{
+            const decoded = jwt_decode(token)
+            const usuario = {
+                login: decoded.identity.login
+            }
+            this.setState({
+                id: this.props.navigation.state.params.id
+            })
+            infoVenta(this.state.id).then(data => {
+                this.setState({
+                    login: decoded.identity.login,
+                    datosProducto: data
+                },
+                () => {
+                    console.log(this.state.login)
+                })
+            })
+            infoUsuario(this.state.datosProducto[5]).then(data => {
+                this.setState({
+                    datosVendedor: data
+                },
+                () => {
+                    console.log("devuelvo")
+                })
+            })
+        }
+    }
 
     render(){
         return(
@@ -58,7 +97,7 @@ async componentDidMount() {
                 <KeyboardAvoidingView behavior="padding" enabled>
                     <Image
 						style={styles.image}
-						source={require('../assets/images/ipad.jpg')}/>
+						source={{uri: this.state.datosProducto[4]}}/>
                     <Text style={styles.tipoPublicacion}>Venta</Text>
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
