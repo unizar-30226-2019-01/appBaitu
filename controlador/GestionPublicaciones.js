@@ -75,7 +75,7 @@ export const getProductos = () => {
               var data = []
               Object.keys(res.data).forEach((key) => {
                   var val = res.data[key]
-                  data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.precio_actual, val.Categoria, val.fecha_limite, val.hora_limite, val.FotoPrincipal, val.Provincia])
+                  data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.precio_actual, val.Categoria, val.FotoPrincipal, val.fecha_limite, val.hora_limite, val.FotoPrincipal, val.Provincia])
               })
 
               return data
