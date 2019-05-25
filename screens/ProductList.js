@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getProductos } from '../controlador/GestionPublicaciones';
+import { getProductos, getSubastas } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
 
 const numColumns = 2;
