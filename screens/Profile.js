@@ -97,8 +97,6 @@ async cerrarSesion(e){
                         <Text style={styles.correo}>{this.state.datos[3]}</Text>
                         <Text style={styles.cuerpoVerde}>Teléfono</Text>
                         <Text style={styles.cuerpo}>{this.state.datos[7]}</Text>
-                        <Text style={styles.cuerpoVerde}>Dirección</Text>
-                        <Text style={styles.cuerpo}>Residenciale Milloneti 7, Torino</Text>
                         <Text></Text>
                         <Text></Text>
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>

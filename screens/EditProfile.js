@@ -37,7 +37,7 @@ class Profile extends Component {
               login: decoded.identity.login
           }
           console.log(usuario.login)
-          infoUsuario(decoded.identity.login).then(data => {
+         await infoUsuario(decoded.identity.login).then(data => {
           this.setState({
               login: decoded.identity.login,
               datos: data
@@ -47,6 +47,11 @@ class Profile extends Component {
           })
         })
           //this.getAll(usuario)
+         this.setState({
+              nombre: this.state.datos[1],
+              apellidos: this.state.datos[2],
+              telefono: this.state.datos[7],
+          })
       }
     }
 
@@ -68,7 +73,6 @@ class Profile extends Component {
         console.log('Estoy actualizando cositas')
         this.props.navigation.navigate('DrawerStack')
     }
-
     volverMenu(e) {
       this.props.navigation.navigate('Profile')
     }
@@ -94,14 +98,28 @@ class Profile extends Component {
                             source={require('../assets/images/estrella.png')}/>
                     </Text>
                     <Text style={styles.title}>{this.state.login}</Text>
-                    <Text style={styles.subtitulo}>{this.state.datos[1]} {this.state.datos[2]}</Text>
                     <View style={styles.itemsContainer}>
+                        <Text style={styles.cuerpoVerde}>Nombre</Text>
+                        <TextInput style={styles.inputBox}
+                            defaultValue={this.state.datos[1]}
+                            clearButtonMode='while-editing'
+                            editable={true}
+                            onChangeText={(nombre) => this.setState({nombre})}
+                            onChange={this.onChange}
+                            />
+                        <Text style={styles.cuerpoVerde}>Apellidos</Text>
+                        <TextInput style={styles.inputBox}
+                            defaultValue={this.state.datos[2]}
+                            clearButtonMode='while-editing'
+                            editable={true}
+                            onChangeText={(apellidos) => this.setState({apellidos})}
+                            onChange={this.onChange}
+                            />
                         <Text style={styles.cuerpoVerde}>Correo</Text>
                         <TextInput style={styles.inputBox}
                             keyboardType="email-address"
                             defaultValue={this.state.datos[3]}
                             clearButtonMode='while-editing'
-                            editable={true}
                             onChangeText={(email) => this.setState({email})}
                             onChange={this.onChange}
                             />
@@ -114,18 +132,12 @@ class Profile extends Component {
                             onChangeText={(telefono) => this.setState({telefono})}
                             onChange={this.onChange}
                             />
-                        <Text style={styles.cuerpoVerde}>Dirección</Text>
-                        <TextInput style={styles.inputBox}
-                            defaultValue='Residenciale Milloneti 7, Torino'
-                            clearButtonMode='while-editing'
-                            editable={true}
-                            />
                         <Text></Text>
                         <Text></Text>
                         <TouchableOpacity style={styles.button} onPress={() => {this.onSubmit()}}>
                             <Text style={styles.buttonText}>GUARDAR CAMBIOS</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => {this.volverMenu}}>
+                        <TouchableOpacity style={styles.button} onPress={() => {this.volverMenu()}}>
                             <Text style={styles.buttonText}>DESCARTAR CAMBIOS</Text>
                         </TouchableOpacity>
                     </View>
