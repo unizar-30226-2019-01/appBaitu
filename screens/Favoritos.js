@@ -28,7 +28,7 @@ class Favoritos extends Component {
         super(props)
         this.state = {
 			isRefreshing: false,
-			ventas: [],
+			subastas: [],
 			favoritos: [],
             login: ''
         }
@@ -45,17 +45,17 @@ class Favoritos extends Component {
 	}
 
     onRefresh(){
-        this.setState({refreshing:true})
-        listarVentasFavoritos(this.state.login).then(data => {
-            this.setState({
-                ventas: data
-            })
-        })
+		this.setState({refreshing:true})
         listarSubastasFavoritos(this.state.login).then(data => {
             this.setState({
-                favoritos: this.state.ventas.concat(data)
+                subastas: data
             })
 		})
+        listarVentasFavoritos(this.state.login).then(data => {
+            this.setState({
+                favoritos: this.state.subastas.concat(data)
+            })
+        })
         this.setState({
 			refreshing:false
 		})

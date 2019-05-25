@@ -28,6 +28,7 @@ class ProductList extends Component {
 		super(props)
 		this.state = {
 			isRefreshing: false,
+			subastas: [],
 			products: []
 		};
 	}
@@ -38,13 +39,14 @@ class ProductList extends Component {
 
 	onRefresh(){
 		this.setState({refreshing:true})
-		//funcion de llamada cargar datos de nuevo
-		getProductos().then(data => {
+        getSubastas().then(data => {
             this.setState({
-                products: data
-            },
-            () => {
-				console.log("Productos obtenidos")
+                subastas: data
+            })
+		})
+        getProductos().then(data => {
+            this.setState({
+                products: this.state.subastas.concat(data)
             })
         })
 		this.setState({refreshing:false})
