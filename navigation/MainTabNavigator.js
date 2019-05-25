@@ -11,10 +11,12 @@ import EditProfile from '../screens/EditProfile';
 import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
 import Venta from '../screens/Venta';
+import Subasta from '../screens/Subasta';
 import Favoritos from '../screens/Favoritos';
 import HomeButton from '../components/HomeButton';
 import NullComponent from '../components/NullComponent';
 import MisPublis from '../screens/MisPublisList';
+
 // Pantallas para la barra lateral
 const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
@@ -22,6 +24,9 @@ const DrawerScreen = createDrawerNavigator({
     Chats: {screen: Chats},
     "Subir producto":{screen: Upload},
     "Venta": {screen: Venta, navigationOptions: {
+      drawerLabel: <NullComponent/>
+	}},
+    "Subasta": {screen: Subasta, navigationOptions: {
       drawerLabel: <NullComponent/>
 	}},
 	Favoritos: {screen: Favoritos, navigationOptions: {
@@ -39,6 +44,7 @@ const HomeNavigator = createStackNavigator({
     Profile: {screen: Profile},
     EditarPerfil: {screen: EditProfile},
     Venta: {screen: Venta},
+    Subasta: {screen: Subasta},
 	ProductList: {screen: ProductList},
 	Favoritos: {screen: Favoritos}
 }, {

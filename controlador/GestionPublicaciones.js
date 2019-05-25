@@ -80,7 +80,16 @@ export const getProductos = () => {
 
               return data
           })
-    }
+	}
+	
+	export const getTipoPublicacion = (id) => {
+		if (id=="159" || id=="157"){
+			return "Subasta"
+		}
+		else{
+			return "Venta"
+		}
+	}
 
   export const getEnVentaUsuario = (usuario) => {
 

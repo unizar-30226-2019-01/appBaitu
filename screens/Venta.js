@@ -128,7 +128,7 @@ class Venta extends Component {
 						style={styles.image}
 						source={{uri: this.state.datosProducto[4]}}/>
 					<View style={styles.horizontal}>
-                    	<Text style={styles.tipoPublicacion}>Venta</Text>
+                    	<Text style={styles.venta}>Venta</Text>
 						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
 							{ this.botonFavorito() }
 						</TouchableOpacity>
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginLeft: 20,
     },
-    tipoPublicacion: {
+    venta: {
         fontSize: 17,
         width: 65,
         marginTop: 5,

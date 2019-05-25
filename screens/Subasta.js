@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
+import {Title,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
@@ -138,7 +138,7 @@ class Venta extends Component {
 						style={styles.image}
 						source={{uri: this.state.datosProducto[4]}}/>
 					<View style={styles.horizontal}>
-                    	<Text style={styles.tipoPublicacion}>Subasta</Text>
+                    	<Text style={styles.subasta}>Subasta</Text>
 						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
 							{ this.botonFavorito() }
 						</TouchableOpacity>
@@ -264,20 +264,20 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginLeft: 20,
     },
-    tipoPublicacion: {
-        fontSize: 17,
-        width: 65,
-        marginTop: 5,
-        marginLeft: 10,
-        borderWidth: 3.5,
-        borderColor: '#8dff7f',
-        borderRadius: 15,
-        backgroundColor: '#8dff7f',
-        overflow: 'hidden',
-        textAlign: 'center',
-        alignItems: 'flex-start',
-        color: 'black'
-    },
+	subasta: {
+		fontSize: 15,
+		width: 70,
+		marginTop: 5,
+		marginLeft: 5,
+		borderWidth: 3.5,
+		borderColor: '#fea041',
+		borderRadius: 15,
+		backgroundColor: '#fea041',
+		overflow: 'hidden',
+		textAlign: 'center',
+		alignItems: 'flex-start',
+		color: 'black'
+	},
     clickableText: {
         fontSize: 30,
         textAlign: 'center',
