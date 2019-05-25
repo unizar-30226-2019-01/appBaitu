@@ -30,7 +30,8 @@ class Profile extends Component {
         location: '',
         tipo: '',
         status: false,
-        fechaFin: '01/01/9999'
+        fechaFin: '',
+        horaFin: '15:15'
     }
 
     this.onChange = this.onChange.bind(this)
@@ -51,7 +52,7 @@ class Profile extends Component {
 
   ShowHideTextComponentView(itemValue) {
       this.setState({tipo: itemValue})
-      if(this.state.tipo == 'Subasta'){
+      if(this.state.tipo === 'Subasta'){
         this.setState({status: false})
         console.log("lo pongo false")
       }
@@ -115,25 +116,51 @@ class Profile extends Component {
       Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
     }
     if(exito) {
-      const newProducto = {
-        nombre: this.state.nombre,
-        fecha: this.state.fecha,
-        categoria: this.state.categoria,
-        descripcion: this.state.descripcion,
-        precio: this.state.precio,
-        vendedor: this.state.vendedor,
-        fotoPrincipal: this.state.image,
-        foto1: this.state.foto1,
-        foto2: this.state.foto2,
-        foto3: this.state.foto3,
-        provincia: this.state.location
-      }
-      console.log(newProducto)
-      anadirProducto(newProducto).then(data => {this.setState({respuestaBD: data})})
-      this.setState({crear: true})
-      exito=false
+        console.log(this.state.status)
+        if(this.state.status===false){
+            console.log('Soy un articulo normal')
+          const newProducto = {
+            nombre: this.state.nombre,
+            fecha: this.state.fecha,
+            categoria: this.state.categoria,
+            descripcion: this.state.descripcion,
+            precio: this.state.precio,
+            vendedor: this.state.vendedor,
+            fotoPrincipal: this.state.image,
+            foto1: this.state.foto1,
+            foto2: this.state.foto2,
+            foto3: this.state.foto3,
+            provincia: this.state.location
+          }
+          console.log(newProducto)
+          anadirProducto(newProducto).then(data => {this.setState({respuestaBD: data})})
+          this.setState({crear: true})
+          exito=false
+        }
+        else{
+            console.log('Soy una asubasta')
+            const newProducto = {
+              nombre: this.state.nombre,
+              fecha: this.state.fecha,
+              categoria: this.state.categoria,
+              descripcion: this.state.descripcion,
+              precio: this.state.precio,
+              vendedor: this.state.vendedor,
+              foto: this.state.image,
+              foto1: this.state.foto1,
+              foto2: this.state.foto2,
+              foto3: this.state.foto3,
+              provincia: this.state.location,
+              fechaLimite: this.state.fechaFin,
+              horaLimite:this.state.horaFin
+          }
+          console.log(newProducto)
+          anadirSubasta(newProducto).then(data => {this.setState({respuestaBD: data})})
+          this.setState({crear: true})
+          exito=false
+          }
+        }
     }
-  }
 
   _pickImage = async () => {
     const {

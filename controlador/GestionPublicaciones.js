@@ -40,8 +40,11 @@ export const anadirSubasta = newProductoSubasta => {
       horaLimite: newProductoSubasta.horaLimite,
       provincia: newProductoSubasta.provincia
     }).then(res => {
+        console.log("Respuesta pyhon bien")
       return res.data
     }).catch(err => {
+        console.log("Respuesta pyhon mal")
+        console.log(err)
       return err})
 }
 
