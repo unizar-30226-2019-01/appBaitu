@@ -80,7 +80,7 @@ class Venta extends Component {
             this.setState({
                 id: this.props.navigation.state.params.id
             })
-            infoVenta(this.state.id).then(data => {
+            infoSubasta(this.state.id).then(data => {
                 this.setState({
                     login: decoded.identity.login,
                     datosProducto: data

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button} from 'react-native';
+import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getProductos } from '../controlador/GestionPublicaciones';
+import { getEnVentaUsuario } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
+import { infoUsuario } from '../controlador/GestionUsuarios.js'
+import jwt_decode from 'jwt-decode';
 
 const numColumns = 2;
 
@@ -28,29 +30,53 @@ class MisPublisList extends Component {
 		super(props)
 		this.state = {
 			isRefreshing: false,
-			products: []
+			products: [],
+			datos: [],
+            login: ''
 		};
 	}
 
+
 	async componentDidMount() {
-		this.onRefresh()
+		const token = await AsyncStorage.getItem('userToken')
+		if (token === undefined || token === null) {
+			console.log("no existe token")
+		}
+		else{
+			const decoded = jwt_decode(token)
+			const usuario = {
+				login: decoded.identity.login
+			}
+			infoUsuario(decoded.identity.login).then(data => {
+				this.setState({
+					login: decoded.identity.login,
+					datos: data
+				}
+			)
+		})
+	}
+	await this.onRefresh(this.state.datos[1])
 	}
 
-	onRefresh(){
+	onRefresh(id){
 		this.setState({refreshing:true})
 		//funcion de llamada cargar datos de nuevo
-		getProductos().then(data => {
+		const user = {
+			login: id
+		}
+		getEnVentaUsuario(user).then(data => {
             this.setState({
                 products: data
             },
             () => {
-				console.log("Productos obtenidos")
+				console.log("Productos (de venta solamenteeeeeeeeeeeeeee) obtenidos")
             })
         })
 		this.setState({refreshing:false})
 	}
 
 	renderItem = ({ item, index }) => {
+
 		if (item.empty === true) {
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}

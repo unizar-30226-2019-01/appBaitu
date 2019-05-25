@@ -81,7 +81,7 @@ export const getProductos = () => {
               return data
           })
 	}
-	
+
 	export const getTipoPublicacion = (id) => {
 		if (id=="159" || id=="157"){
 			return "Subasta"
@@ -92,9 +92,9 @@ export const getProductos = () => {
 	}
 
   export const getEnVentaUsuario = (usuario) => {
-
+      var URLbd= "`http://52.151.88.18:5000/listarEnVentaDeUsuario/" + usuario.login + '`'
     return axios
-        .get(`http://52.151.88.18:5000/listarEnVentaDeUsuario/${usuario.login}`, {
+        .get(URLbd, {
             headers: { "Content-type": "application/json" }
         })
         .then(res => {
