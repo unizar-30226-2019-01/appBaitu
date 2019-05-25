@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Platform,Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker,AsyncStorage} from 'react-native';
-import { LinearGradient, ImagePicker, Permissions, Location, Constants} from 'expo';
+import { LinearGradient, ImagePicker, Permissions, Location, Constants, DatePickerAndroid} from 'expo';
 import EditProfile from './EditProfile.js';
 import jwt_decode from 'jwt-decode';
 import * as firebase from 'firebase';
@@ -26,14 +26,43 @@ class Profile extends Component {
 		foto1: 'vacio',
 		foto2: 'vacio',
 		foto3: 'vacio',
-    uploading: false,
-    location: '',
-    tipo: ''
+        uploading: false,
+        location: '',
+        tipo: '',
+        status: true,
+        fechaFin: ''
     }
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
+
+  async abrirCalendario() {
+       try {
+         const {action, year, month, day} = await DatePickerAndroid.open({
+           date: new Date()
+         });
+         console.log(year)
+         console.log(month)
+         console.log(day)
+         console.log(action)
+       } catch ({code, message}) {
+         console.warn('Cannot open date picker', message);
+       }
+     }
+
+  ShowHideTextComponentView(itemValue) {
+      this.setState({tipo: itemValue})
+      if(this.state.tipo == 'Subasta'){
+        this.setState({status: true})
+        console.log("lo pongo true")
+      }
+      else{
+        this.setState({status: false})
+        console.log("lo pongo false")
+      }
+
+}
 
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
@@ -360,8 +389,9 @@ class Profile extends Component {
         }
       }
       return(
+          <KeyboardAvoidingView style={{ flex: 1 }}
+                keyboardVerticalOffset={100} behavior={"position"}>
         <LinearGradient colors={['#ffffff', '#eeeeee']}>
-        <KeyboardAvoidingView behavior="padding" enabled>
           <View style={styles.itemsContainer} showsVerticalScrollIndicator={false}>
             <ScrollView  showsVerticalScrollIndicator={false}>
               <Button style={styles.botonSelec} onPress={this._pickImage} title="Selecciona una foto"/>
@@ -382,11 +412,15 @@ class Profile extends Component {
                 selectedValue={this.state.tipo}
                               style={styles.picker}
                               onPress={() => Keyboard.dismiss()}
-                              onValueChange={(itemValue, itemIndex) => this.setState({tipo: itemValue})
-                        }>
+                              onValueChange={(itemValue) => this.ShowHideTextComponentView(itemValue)}>
                             <Picker.Item label="Producto" value="Producto" />
                             <Picker.Item label="Subasta" value="Subasta" />
                         </Picker>
+                        { this.state.status ? (<Text style={styles.cuerpoVerde}>Fecha finalizacion </Text>) : null }
+                        <TouchableOpacity style={styles.button} onPress={() => this.abrirCalendario()}>
+                            <Text style={styles.buttonText}>Seleccionar Fecha</Text>
+                        </TouchableOpacity>
+
 
 
                         <Text style={styles.cuerpoVerde}>Título</Text>
@@ -448,15 +482,15 @@ class Profile extends Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.onSubmit() }>
                             <Text style={styles.buttonText}>SUBIR ARTÍCULO</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack()}>
                             <Text style={styles.buttonText}>CANCELAR</Text>
                         </TouchableOpacity>
 
 
           </ScrollView>
           </View>
-        </KeyboardAvoidingView>
         </LinearGradient>
+        </KeyboardAvoidingView>
 
 
         )
