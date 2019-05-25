@@ -77,7 +77,7 @@ class Login extends Component {
     render(){
         const { navigation } = this.props;
         if(this.state.logear) {
-          if(this.state.respuestaBD=="error") {
+          if(this.state.respuestaBD=="Error") {
             Alert.alert('','Login o contraseña incorrectos',[{text: 'OK'}],{cancelable: false});
             this.setState({respuestaBD:""})
             this.setState({logear: false})
