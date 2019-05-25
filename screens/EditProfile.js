@@ -134,9 +134,9 @@ class Profile extends Component {
             fotovar = this.state.foto
         }
         return(
-            <ScrollView>
+          <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-                <KeyboardAvoidingView behavior="padding" enabled>
+            <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={100} behavior={"position"}>
                     <TouchableOpacity onPress={this._pickImage}>
                         <Image style={styles.imagenPerfil}
                             source={{uri: fotovar}}/>

@@ -91,7 +91,7 @@ class Venta extends Component {
 			})
         }
 	}
-	
+
 	botonFavorito(){
 		if (this.state.esFavorito == "Favorito existe"){
 			return <Text style={styles.añadido}>Añadido</Text>
@@ -152,6 +152,9 @@ class Venta extends Component {
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
 							<Text style={styles.buttonText}>Hacer oferta </Text>
+						</TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
+							<Text style={styles.buttonText}>Volver</Text>
 						</TouchableOpacity>
 					</View>
                 </KeyboardAvoidingView>
