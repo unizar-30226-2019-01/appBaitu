@@ -11,6 +11,7 @@ import EditProfile from '../screens/EditProfile';
 import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
 import Venta from '../screens/Venta';
+import Favoritos from '../screens/Favoritos';
 import HomeButton from '../components/HomeButton';
 import NullComponent from '../components/NullComponent';
 
@@ -22,7 +23,10 @@ const DrawerScreen = createDrawerNavigator({
     "Subir producto":{screen: Upload},
     "Venta": {screen: Venta, navigationOptions: {
       drawerLabel: <NullComponent/>
-    }}
+	}},
+	Favoritos: {screen: Favoritos, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}}
 }, {
     headerMode: 'none',
     drawerWidth: 300,
@@ -35,7 +39,8 @@ const HomeNavigator = createStackNavigator({
     Profile: {screen: Profile},
     EditarPerfil: {screen: EditProfile},
     Venta: {screen: Venta},
-    ProductList: {screen: ProductList}
+	ProductList: {screen: ProductList},
+	Favoritos: {screen: Favoritos}
 }, {
   headerMode: 'float',
   defaultNavigationOptions: ({navigation}) =>   ({

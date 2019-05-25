@@ -99,7 +99,7 @@ async cerrarSesion(e){
                         <Text style={styles.cuerpo}>{this.state.datos[7]}</Text>
                         <Text></Text>
                         <Text></Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Favoritos', {login: this.state.login})}>
                             <Text style={styles.buttonText}>MIS FAVORITOS</Text>
                             </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
