@@ -12,7 +12,8 @@ import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
 import Venta from '../screens/Venta';
 import HomeButton from '../components/HomeButton';
-import NullComponent from '../components/nullComponent';
+import NullComponent from '../components/NullComponent';
+
 // Pantallas para la barra lateral
 const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
