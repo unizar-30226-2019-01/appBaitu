@@ -12,7 +12,8 @@ import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
 import Venta from '../screens/Venta';
 import HomeButton from '../components/HomeButton';
-import NullComponent from '../components/nullComponent';
+import NullComponent from '../components/NullComponent';
+import MisPublis from '../screens/MisPublisList';
 // Pantallas para la barra lateral
 const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
@@ -74,7 +75,8 @@ const HomeNavigator = createStackNavigator({
 const AppStackNavigator = createSwitchNavigator({
     Login:{screen: Login},
     Register: {screen: Register},
-    Sidebar: {screen: HomeNavigator}},
+    Sidebar: {screen: HomeNavigator},
+    MisPublis: {screen: MisPublis}},
     {
     // headerMode: 'screen',
     }
