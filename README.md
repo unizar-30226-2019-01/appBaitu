@@ -1,6 +1,6 @@
 # appBaitu
 
-npm install -g explo-cli
+npm install -g expo-cli
 npm install react-native
 npm install axios
 npm install -g yarn
