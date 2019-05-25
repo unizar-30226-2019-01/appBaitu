@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Platform,Title,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker,AsyncStorage} from 'react-native';
-import { LinearGradient, ImagePicker, Permissions, Location, Constants, DatePickerAndroid} from 'expo';
+import {Platform,Title,DatePickerAndroid,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker,AsyncStorage} from 'react-native';
+import { LinearGradient, ImagePicker, Permissions, Location, Constants} from 'expo';
 import EditProfile from './EditProfile.js';
 import jwt_decode from 'jwt-decode';
 import * as firebase from 'firebase';
@@ -29,8 +29,8 @@ class Profile extends Component {
         uploading: false,
         location: '',
         tipo: '',
-        status: true,
-        fechaFin: ''
+        status: false,
+        fechaFin: '01/01/9999'
     }
 
     this.onChange = this.onChange.bind(this)
@@ -39,13 +39,11 @@ class Profile extends Component {
 
   async abrirCalendario() {
        try {
-         const {action, year, month, day} = await DatePickerAndroid.open({
+         var {action, year, month, day} = await DatePickerAndroid.open({
            date: new Date()
          });
-         console.log(year)
-         console.log(month)
-         console.log(day)
-         console.log(action)
+         month=month+1
+         this.setState({fechaFin: day+"/"+month+"/"+year})
        } catch ({code, message}) {
          console.warn('Cannot open date picker', message);
        }
@@ -54,12 +52,12 @@ class Profile extends Component {
   ShowHideTextComponentView(itemValue) {
       this.setState({tipo: itemValue})
       if(this.state.tipo == 'Subasta'){
-        this.setState({status: true})
-        console.log("lo pongo true")
-      }
-      else{
         this.setState({status: false})
         console.log("lo pongo false")
+      }
+      else{
+        this.setState({status: true})
+        console.log("lo pongo true")
       }
 
 }
@@ -417,10 +415,10 @@ class Profile extends Component {
                             <Picker.Item label="Subasta" value="Subasta" />
                         </Picker>
                         { this.state.status ? (<Text style={styles.cuerpoVerde}>Fecha finalizacion </Text>) : null }
-                        <TouchableOpacity style={styles.button} onPress={() => this.abrirCalendario()}>
+                        { this.state.status ? (  <TouchableOpacity style={styles.button} onPress={() => this.abrirCalendario()}>
                             <Text style={styles.buttonText}>Seleccionar Fecha</Text>
-                        </TouchableOpacity>
-
+                        </TouchableOpacity>) : null }
+                          { this.state.status ? (<Text>Fecha de finalización: {this.state.fechaFin}</Text>) : null }
 
 
                         <Text style={styles.cuerpoVerde}>Título</Text>
