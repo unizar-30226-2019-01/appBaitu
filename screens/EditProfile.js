@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Title,AsyncStorage,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight} from 'react-native';
-import { LinearGradient } from 'expo';
+import { LinearGradient, ImagePicker, Permissions } from 'expo';
 import { actualizarInfo, infoUsuario } from '../controlador/GestionUsuarios';
 import jwt_decode from 'jwt-decode';
 import EditProfile from './EditProfile.js';
@@ -18,7 +18,8 @@ class Profile extends Component {
         email: '',
         telefono: '',
         foto:'',
-        datos: []
+        datos: [],
+        uploading: false
       }
       this.onChange = this.onChange.bind(this)
       this.onSubmit = this.onSubmit.bind(this)
@@ -51,8 +52,56 @@ class Profile extends Component {
               nombre: this.state.datos[1],
               apellidos: this.state.datos[2],
               telefono: this.state.datos[7],
+              foto: this.state.datos[4]
           })
       }
+    }
+
+    _pickImage = async () => {
+      const {
+        status: cameraRollPerm
+      } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+      // only if user allows permission to camera roll
+      if (cameraRollPerm === 'granted') {
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+          allowsEditing: true,
+          aspect: [4, 3],
+        });
+        this.setState({foto : pickerResult.uri})
+        console.log("Tiene la imagen: "+this.state.foto)
+        this._handleImagePicked(pickerResult);
+      }
+    };
+
+
+    _handleImagePicked = async pickerResult => {
+        let uploadResponse, uploadResult;
+        console.log("Entra en handle")
+        try {
+          this.setState({
+            uploading: true
+          });
+
+          if (!pickerResult.cancelled) {
+            uploadResponse = await uploadImageAsync(pickerResult.uri);
+            uploadResult = await uploadResponse.json();
+
+            this.setState({
+              foto: uploadResult.location
+            });
+          }
+        } catch (e) {
+          console.log("Error en handle")
+          console.log({ uploadResponse });
+          console.log({ uploadResult });
+          console.log({ e });
+          alert('Upload failed, sorry :(');
+        } finally {
+          this.setState({
+            uploading: false
+          });
+        }
     }
 
     onChange(e) {
@@ -79,18 +128,18 @@ class Profile extends Component {
 
     render(){
         if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
-            foto= 'https://image.flaticon.com/icons/png/512/64/64572.png'
+            fotovar= 'https://image.flaticon.com/icons/png/512/64/64572.png'
         }
         else {
-            foto = this.state.datos[4]
+            fotovar = this.state.foto
         }
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
                 <KeyboardAvoidingView behavior="padding" enabled>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
+                    <TouchableOpacity onPress={this._pickImage}>
                         <Image style={styles.imagenPerfil}
-                            source={{uri: foto}}/>
+                            source={{uri: fotovar}}/>
                     </TouchableOpacity>
                     <Text style={styles.price}>{this.state.datos[6]}
                         <Image
@@ -147,6 +196,31 @@ class Profile extends Component {
         )
     }
 }
+
+async function uploadImageAsync(uri) {
+  let apiUrl = 'https://file-upload-example-backend-dkhqoilqqn.now.sh/upload';
+
+  let uriParts = uri.split('.');
+  let fileType = uriParts[uriParts.length - 1];
+
+  let formData = new FormData();
+  formData.append('photo', {
+    uri,
+    name: `photo.${fileType}`,
+    type: `image/${fileType}`,
+  });
+
+  let options = {
+    method: 'POST',
+    body: formData,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+
+  return fetch(apiUrl, options);
+};
 
 
 const styles = StyleSheet.create({
