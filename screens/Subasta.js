@@ -16,7 +16,17 @@ class Venta extends Component {
             datosVendedor: [],
             login: '',
 			id: '',
-			esFavorito: ""
+			esFavorito: "",
+            puja: ''
+        }
+    }
+
+    pujar(){
+        if(this.state.puja <= this.state.datosProducto[7]){
+            Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
+        }
+        else{
+            Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
         }
     }
 
@@ -153,7 +163,18 @@ class Venta extends Component {
 						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
 							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
+                        <Text style={styles.cuerpoVerde}>Haz tu puja aqui</Text>
+                        <TextInput style={styles.inputBox}
+                          underlineColorAndroid='rgba(0,0,0,0)'
+                          placeholder="Introduce aquí la cantidad(€)..."
+                          placeholderTextColor = "#BCC5D5"
+                      	  autoCorrect={false}
+                          keyboardType={'numeric'}
+                          type="number"
+                          value={this.state.precio}
+                          onChangeText={(puja) => this.setState({puja})}
+                        />
+						<TouchableOpacity style={styles.button} onPress={() => this.pujar() }>
 							<Text style={styles.buttonText}>Pujar</Text>
 						</TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
