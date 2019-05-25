@@ -122,9 +122,6 @@ class Profile extends Component {
         console.log('Estoy actualizando cositas')
         this.props.navigation.navigate('DrawerStack')
     }
-    volverMenu(e) {
-      this.props.navigation.navigate('Profile')
-    }
 
     render(){
         if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
@@ -186,7 +183,7 @@ class Profile extends Component {
                         <TouchableOpacity style={styles.button} onPress={() => {this.onSubmit()}}>
                             <Text style={styles.buttonText}>GUARDAR CAMBIOS</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => {this.volverMenu()}}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack()}>
                             <Text style={styles.buttonText}>DESCARTAR CAMBIOS</Text>
                         </TouchableOpacity>
                     </View>
