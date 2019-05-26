@@ -3,10 +3,8 @@ import {Title,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvo
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoSubasta, consultarFavorito, crearFavorito, eliminarFavorito } from '../controlador/GestionPublicaciones';
+import { infoSubasta, consultarFavorito, crearFavorito, eliminarFavorito, eliminarSubasta } from '../controlador/GestionPublicaciones';
 import * as firebase from 'firebase'
-
-let foto=''
 
 class Venta extends Component {
     constructor(props) {
@@ -92,6 +90,11 @@ class Venta extends Component {
 			})
         }
 	}
+
+    eliminarPublicacion(){
+            eliminarSubasta(this.state.id)
+            this.props.navigation.goBack()
+    }
 
     editarPublicacion(){
         this.props.navigation.navigate('EditSubasta', {id: this.state.id})

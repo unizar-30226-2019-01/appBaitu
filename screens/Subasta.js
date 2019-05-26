@@ -8,7 +8,7 @@ import * as firebase from 'firebase'
 
 let foto=''
 
-class Venta extends Component {
+class Subasta extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -321,4 +321,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default Venta;
+export default Subasta;

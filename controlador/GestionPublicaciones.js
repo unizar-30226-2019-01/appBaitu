@@ -90,16 +90,6 @@ export const getPublicaciones = () => {
           })
 	}
 
-	export const getTipoPublicacion = (id) => {
-		return axios
-			.get(`http://52.151.88.18:5000/getTipoPublicacion/${id}`)
-        	.then(res => {
-				    return res.data
-			})
-			.catch(err => {
-			  console.log(err)
-			})
-	}
 
   export const getEnVentaUsuario = (usuario) => {
     return axios

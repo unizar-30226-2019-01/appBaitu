@@ -97,16 +97,8 @@ class Venta extends Component {
     }
 
     eliminarPublicacion(){
-        if(getTipoPublicacion(this.state.id)=="Venta"){
-            console.log("Voy a intentar borrar una venta")
-            eliminarProducto(this.state.id)
-            this.props.navigation.goBack()
-        }
-        else{
-            console.log("Voy a intentar borrar una subasta")
-            eliminarSubasta(this.state.id)
-            this.props.navigation.goBack()
-        }
+        eliminarProducto(this.state.id)
+        this.props.navigation.goBack()
     }
 
 	botonFavorito(){

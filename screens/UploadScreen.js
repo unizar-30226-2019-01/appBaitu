@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform,Title,DatePickerAndroid,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker,AsyncStorage} from 'react-native';
+import {Platform,Title,DatePickerAndroid,TimePickerAndroid,Button,Alert,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,Keyboard,ScrollView,TouchableOpacity,TouchableHighlight,Picker,AsyncStorage} from 'react-native';
 import { LinearGradient, ImagePicker, Permissions, Location, Constants} from 'expo';
 import EditProfile from './EditProfile.js';
 import jwt_decode from 'jwt-decode';
@@ -31,7 +31,7 @@ class Profile extends Component {
         tipo: '',
         status: false,
         fechaFin: '',
-        horaFin: '15:15'
+        horaFin: ''
     }
 
     this.onChange = this.onChange.bind(this)
@@ -49,6 +49,19 @@ class Profile extends Component {
          console.warn('Cannot open date picker', message);
        }
      }
+
+     async abrirReloj() {
+         try {
+            var {action, hour, minute} = await TimePickerAndroid.open({
+                hour: 14,
+                minute: 0,
+                is24Hour: true
+            });
+            this.setState({horaFin: hour+":"+minute})
+          } catch ({code, message}) {
+            console.warn('Cannot open time picker', message);
+          }
+      }
 
   ShowHideTextComponentView(itemValue) {
       this.setState({tipo: itemValue})
@@ -139,7 +152,7 @@ class Profile extends Component {
         }
         else{
             console.log('Soy una asubasta')
-            if(this.state.fechaFin === ''){
+            if(this.state.fechaFin === '' || this.state.horaFin === ''){
                  Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
             }
             else{
@@ -451,7 +464,11 @@ class Profile extends Component {
                             <Text style={styles.buttonText}>Seleccionar Fecha</Text>
                         </TouchableOpacity>) : null }
                           { this.state.status ? (<Text>Fecha de finalización: {this.state.fechaFin}</Text>) : null }
-
+                          { this.state.status ? (<Text style={styles.cuerpoVerde}>Hora finalizacion </Text>) : null }
+                          { this.state.status ? (  <TouchableOpacity style={styles.button} onPress={() => this.abrirReloj()}>
+                              <Text style={styles.buttonText}>Seleccionar hora</Text>
+                          </TouchableOpacity>) : null }
+                            { this.state.status ? (<Text>Hora de finalización: {this.state.horaFin}</Text>) : null }
 
                         <Text style={styles.cuerpoVerde}>Título</Text>
                         <TextInput style={styles.inputBox}
