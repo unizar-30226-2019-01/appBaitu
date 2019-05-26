@@ -79,7 +79,7 @@ class MisPublisList extends Component {
 		}
 		if(this.state.estado){
 			return (
-				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('VentaOwner', {id: item[1]})}>
 					<Image
 						style={styles.image}
 						source={{uri: item[6]}}/>
@@ -91,7 +91,7 @@ class MisPublisList extends Component {
 		}
 		else {
 			return (
-				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('SubastaOwner', {id: item[1]})}>
 					<Image
 						style={styles.image}
 						source={{uri: item[8]}}/>
@@ -102,11 +102,11 @@ class MisPublisList extends Component {
 			)
 		}
 	}
-	
+
 	botones(){
 		return(
 			<View>
-				<TouchableOpacity onPress={this.props.navigation.goBack.bind(this)}>
+				<TouchableOpacity onPress={() => this.props.navigation.goBack()}>
 					<Image
 						style={styles.goBack}
 						source={require('../assets/images/goBack.png')}/>
