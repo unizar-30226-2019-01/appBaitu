@@ -100,7 +100,7 @@ export const getPublicaciones = () => {
 	}
 
 	export const getTipoPublicacion = (id) => {
-		if (id=="159" || id=="157"){
+		if (id=="159" || id=="157" || id=="165"){
 			return "Subasta"
 		}
 		else{

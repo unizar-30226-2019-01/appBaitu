@@ -1,35 +1,50 @@
 import React, {Component} from 'react';
-import {Title,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
+import {Title,Picker, TimePickerAndroid, DatePickerAndroid,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
 import { infoSubasta, consultarFavorito, crearFavorito, eliminarFavorito, getTipoPublicacion } from '../controlador/GestionPublicaciones';
-import * as firebase from 'firebase'
 
-let foto=''
-
-class Venta extends Component {
+class Subasta extends Component {
     constructor(props) {
         super(props)
         this.state = {
             datosProducto: [],
-            datosVendedor: [],
             login: '',
 			id: '',
-			esFavorito: "",
-            puja: '',
             descripcion: '',
-            nombre: ''
+            nombre: '',
+            categoria: ''
         }
     }
 
-    pujar(){
-        if(this.state.puja <= this.state.datosProducto[7]){
-            Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
+    async abrirCalendario() {
+         try {
+           var {action, year, month, day} = await DatePickerAndroid.open({
+             date: new Date()
+           });
+           month=month+1
+           this.setState({fechaFin: day+"/"+month+"/"+year})
+         } catch ({code, message}) {
+           console.warn('Cannot open date picker', message);
+         }
+       }
+
+       async abrirReloj() {
+           try {
+              var {action, hour, minute} = await TimePickerAndroid.open({
+                  hour: 14,
+                  minute: 0,
+                  is24Hour: true
+              });
+              this.setState({horaFin: hour+":"+minute})
+            } catch ({code, message}) {
+              console.warn('Cannot open time picker', message);
+            }
         }
-        else{
-            Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
-        }
+
+    editarPublicacion(){
+        // LLAMAR AQUI A LA FUNCION DEL BACK PARA ACTUALIZAR LAS SUBASTAS XDXDXDDXDXDXDXDXDXDXDXDXDX
     }
 
     async componentDidUpdate(){
@@ -52,26 +67,12 @@ class Venta extends Component {
                         datosProducto: data
                     })
                 })
-                infoUsuario(this.state.datosProducto[5]).then(data => {
-                    this.setState({
-                        datosVendedor: data
-                    })
-				})
-				const producto = {
-					usuario: decoded.identity.login
-				}
-				consultarFavorito(producto,this.props.navigation.state.params.id).then(data => {
-					this.setState({
-						esFavorito: data
-					})
-				})
             }
         }
     }
 
     async componentDidMount() {
         const token = await AsyncStorage.getItem('userToken')
-        console.log(token)
         if (token === undefined || token === null) {
             console.log("no existe token")
         }
@@ -89,48 +90,14 @@ class Venta extends Component {
                     datosProducto: data
                 })
             })
-            console.log(datosProducto)
-            infoUsuario(this.state.datosProducto[5]).then(data => {
-                this.setState({
-                    datosVendedor: data
-                })
-			})
-			const producto = {
-				usuario: decoded.identity.login
-			}
-			consultarFavorito(producto,this.props.navigation.state.params.id).then(data => {
-				this.setState({
-					esFavorito: data
-				})
-			})
         }
-	}
-
-	botonFavorito(){
-		if (this.state.esFavorito == "Favorito existe"){
-			return <Text style={styles.añadido}>Añadido</Text>
-		}
-		else{
-			return <Text style={styles.favorito}>Favorito</Text>
-		}
-	}
-
-	cambiarFavorito(){
-		const producto = {
-			usuario: this.state.login
-		}
-		if(this.state.esFavorito == "Favorito existe"){
-			eliminarFavorito(producto,this.state.id)
-			this.setState({
-				esFavorito: "Favorito no existe"
-			})
-		}
-		else if(this.state.esFavorito == "Favorito no existe"){
-			crearFavorito(producto,this.state.id)
-			this.setState({
-				esFavorito: "Favorito existe"
-			})
-		}
+        this.setState({
+             nombre: this.state.datosProducto[1],
+             descripción: this.state.datosProducto[2],
+             categoría: this.state.datosProducto[3],
+             fechaFin: this.state.datosProducto[8],
+             horaFin: this.state.datosProducto[9]
+         })
 	}
 
     render(){
@@ -161,34 +128,49 @@ class Venta extends Component {
                             onChangeText={(descripcion) => this.setState({descripcion})}
                             onChange={this.onChange}
                             />
-						<Text style={styles.cuerpoVerde}>Vendedor</Text>
-						<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('Profile')}>
-							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
-						</TouchableOpacity>
-						<Text style={styles.price}>{this.state.datosVendedor[6]}
-							<Image
-								style={styles.estrella}
-								source={require('../assets/images/estrella.png')}/>
-						</Text>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
-						</TouchableOpacity>
-                        <Text style={styles.cuerpoVerde}>Haz tu puja aqui</Text>
-                        <TextInput style={styles.inputBox}
-                          underlineColorAndroid='rgba(0,0,0,0)'
-                          placeholder="Introduce aquí la cantidad(€)..."
-                          placeholderTextColor = "#BCC5D5"
-                      	  autoCorrect={false}
-                          keyboardType={'numeric'}
-                          type="number"
-                          value={this.state.precio}
-                          onChangeText={(puja) => this.setState({puja})}
-                        />
-						<TouchableOpacity style={styles.button} onPress={() => this.pujar() }>
-							<Text style={styles.buttonText}>Pujar</Text>
+                        <Text style={styles.cuerpoVerde}>Categoría</Text>
+                        <Picker
+                              defaultValue={this.state.datosProducto[3]}
+                              selectedValue={this.state.categoria}
+                              style={styles.picker}
+                              onPress={() => Keyboard.dismiss()}
+                              onValueChange={(itemValue, itemIndex) => this.setState({categoria: itemValue})
+                        }>
+                            <Picker.Item label="Coches" value="Coches" />
+                            <Picker.Item label="Electrónica" value="Electrónica" />
+                            <Picker.Item label="Telefonía" value="Telefonía" />
+                            <Picker.Item label="Deporte" value="Deporte" />
+                            <Picker.Item label="Inmobiliaria" value="Inmobiliaria" />
+                            <Picker.Item label="Motos" value="Motos" />
+                            <Picker.Item label="Bicicletas" value="Bicicletas" />
+                            <Picker.Item label="Videojuegos" value="Videojuegos" />
+                            <Picker.Item label="Hogar" value="Hogar" />
+                            <Picker.Item label="Moda" value="Moda" />
+                            <Picker.Item label="Electrodomésticos" value="Electrodomésticos" />
+                            <Picker.Item label="Libros y Música" value="Libros y Música" />
+                            <Picker.Item label="Niños" value="Niños" />
+                            <Picker.Item label="Empleo" value="Empleo" />
+                            <Picker.Item label="Construcción" value="Construcción" />
+                            <Picker.Item label="Coleccionismo" value="Coleccionismo" />
+                        </Picker>
+
+                        <Text style={styles.cuerpoVerde}>Fecha límite</Text>
+                        <TouchableOpacity style={styles.button} onPress={() => this.abrirCalendario()}>
+                            <Text style={styles.buttonText}>Cambiar Fecha</Text>
+                        </TouchableOpacity>
+                        <Text>Fecha de finalización: {this.state.fechaFin}</Text>
+
+                        <Text style={styles.cuerpoVerde}>Hora límite</Text>
+                        <TouchableOpacity style={styles.button} onPress={() => this.abrirReloj()}>
+                            <Text style={styles.buttonText}>Cambiar Hora</Text>
+                        </TouchableOpacity>
+                        <Text>Hora de finalización: {this.state.horaFin}</Text>
+
+						<TouchableOpacity style={styles.button} onPress={() => this.editarPublicacion() }>
+							<Text style={styles.buttonText}>Guardar Cambios </Text>
 						</TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
-							<Text style={styles.buttonText}>Volver</Text>
+							<Text style={styles.buttonText}>Descartar Cambios</Text>
 						</TouchableOpacity>
 					</View>
                 </KeyboardAvoidingView>
@@ -348,4 +330,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default Venta;
+export default Subasta;
