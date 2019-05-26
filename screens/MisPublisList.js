@@ -36,33 +36,21 @@ class MisPublisList extends Component {
 		};
 	}
 
-
-	async componentDidMount() {
-		const token = await AsyncStorage.getItem('userToken')
-		if (token === undefined || token === null) {
-			console.log("no existe token")
-		}
-		else{
-			const decoded = jwt_decode(token)
-			const usuario = {
-				login: decoded.identity.login
-			}
-			infoUsuario(decoded.identity.login).then(data => {
-				this.setState({
-					login: decoded.identity.login,
-					datos: data
-				}
-			)
+	componentWillMount(){
+		this.setState({
+			login: this.props.navigation.state.params.login
 		})
 	}
-	await this.onRefresh(this.state.datos[1])
+
+	componentDidMount() {
+		this.onRefresh()
 	}
 
-	onRefresh(id){
+	onRefresh(){
 		this.setState({refreshing:true})
 		//funcion de llamada cargar datos de nuevo
 		const user = {
-			login: id
+			login: this.state.login
 		}
 		getEnVentaUsuario(user).then(data => {
             this.setState({
