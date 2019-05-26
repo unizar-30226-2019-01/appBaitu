@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getProductos, getSubastas, getTipoPublicacion } from '../controlador/GestionPublicaciones';
+import { getProductos, getSubastas, getTipoPublicacion, getPublicaciones } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
 
 const numColumns = 2;
@@ -39,7 +39,7 @@ class ProductList extends Component {
 
 	onRefresh(){
 		this.setState({refreshing:true})
-        getSubastas().then(data => {
+        /* getSubastas().then(data => {
             this.setState({
                 subastas: data
             })
@@ -48,9 +48,15 @@ class ProductList extends Component {
             this.setState({
                 products: this.state.subastas.concat(data)
             })
+        }) */
+        getPublicaciones().then(data => {
+            this.setState({
+                products: data
+            })
         })
 		this.setState({refreshing:false})
 	}
+
 	tipoPublicacion(id){
 		var tipo = getTipoPublicacion(id)
 		if (tipo=="Venta"){
@@ -58,6 +64,16 @@ class ProductList extends Component {
 		}
 		else{
 			return <Text style={styles.subasta}>Subasta</Text>
+		}
+	}
+
+	precioPublicacion(id){
+		var tipo = getTipoPublicacion(id)
+		if (tipo=="Venta"){
+			return <Text style={styles.price}>{item[3]}€</Text>
+		}
+		else{
+			return <Text style={styles.price}>{item[4]}€</Text>
 		}
 	}
 
@@ -72,7 +88,7 @@ class ProductList extends Component {
 						style={styles.image}
 						source={{uri: item[6]}}/>
 					{this.tipoPublicacion(item[1])}
-					<Text style={styles.price}>{item[4]}€</Text>
+					{this.precioPublicacion(item[1])}
 					<Text style={styles.title}>{item[0]}</Text>
 				</TouchableOpacity>
 			)
