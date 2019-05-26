@@ -21,15 +21,6 @@ class Venta extends Component {
         }
     }
 
-    pujar(){
-        if(this.state.puja <= this.state.datosProducto[7]){
-            Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
-        }
-        else{
-            Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
-        }
-    }
-
     async componentDidUpdate(){
         if (this.state.id != this.props.navigation.state.params.id){
             const token = await AsyncStorage.getItem('userToken')
