@@ -17,7 +17,9 @@ class Venta extends Component {
             login: '',
 			id: '',
 			esFavorito: "",
-            puja: ''
+            puja: '',
+            descripcion: '',
+            nombre: ''
         }
     }
 
@@ -69,6 +71,7 @@ class Venta extends Component {
 
     async componentDidMount() {
         const token = await AsyncStorage.getItem('userToken')
+        console.log(token)
         if (token === undefined || token === null) {
             console.log("no existe token")
         }
@@ -86,6 +89,7 @@ class Venta extends Component {
                     datosProducto: data
                 })
             })
+            console.log(datosProducto)
             infoUsuario(this.state.datosProducto[5]).then(data => {
                 this.setState({
                     datosVendedor: data
@@ -139,18 +143,24 @@ class Venta extends Component {
 						source={{uri: this.state.datosProducto[4]}}/>
 					<View style={styles.horizontal}>
                     	<Text style={styles.subasta}>Subasta</Text>
-						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
-							{ this.botonFavorito() }
-						</TouchableOpacity>
 					</View>
 					<View style={styles.itemsContainer}>
-                        <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
-                        <Text style={styles.cuerpoVerde}>Precio salida</Text>
-                        <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
-                        <Text style={styles.cuerpoVerde}>Precio actual</Text>
-                        <Text style={styles.title}>{this.state.datosProducto[7]}€</Text>
+                    <Text style={styles.cuerpoVerde}>Nombre</Text>
+                    <TextInput style={styles.inputBox}
+                        defaultValue={this.state.datosProducto[1]}
+                        clearButtonMode='while-editing'
+                        editable={true}
+                        onChangeText={(nombre) => this.setState({nombre})}
+                        onChange={this.onChange}
+                        />
 						<Text style={styles.cuerpoVerde}>Descripción</Text>
-						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
+                        <TextInput style={styles.inputBox}
+                            defaultValue={this.state.datosProducto[2]}
+                            clearButtonMode='while-editing'
+                            editable={true}
+                            onChangeText={(descripcion) => this.setState({descripcion})}
+                            onChange={this.onChange}
+                            />
 						<Text style={styles.cuerpoVerde}>Vendedor</Text>
 						<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('Profile')}>
 							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
@@ -226,6 +236,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#B4FFAB',
         overflow: 'hidden',
         textAlign: 'center'
+    },
+    inputBox: {
+        fontSize: 20,
+        marginTop: 5,
+        overflow: 'hidden',
+        textAlign: 'left',
+        paddingHorizontal: 7,
+        borderColor: '#777777',
+        borderWidth: 1
     },
     cuerpo: {
         fontSize: 20,

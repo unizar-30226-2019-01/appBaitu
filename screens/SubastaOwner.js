@@ -93,6 +93,10 @@ class Venta extends Component {
         }
 	}
 
+    editarPublicacion(){
+        this.props.navigation.navigate('EditSubasta', {id: this.state.id})
+    }
+
 	botonFavorito(){
 		if (this.state.esFavorito == "Favorito existe"){
 			return <Text style={styles.añadido}>Añadido</Text>
@@ -151,22 +155,24 @@ class Venta extends Component {
 								style={styles.estrella}
 								source={require('../assets/images/estrella.png')}/>
 						</Text>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
+                        <TouchableOpacity style={styles.button} onPress={() => this.editarPublicacion() }>
+							<Text style={styles.buttonText}>Editar publicación</Text>
 						</TouchableOpacity>
-                        <Text style={styles.cuerpoVerde}>Haz tu puja aqui</Text>
-                        <TextInput style={styles.inputBox}
-                          underlineColorAndroid='rgba(0,0,0,0)'
-                          placeholder="Introduce aquí la cantidad(€)..."
-                          placeholderTextColor = "#BCC5D5"
-                      	  autoCorrect={false}
-                          keyboardType={'numeric'}
-                          type="number"
-                          value={this.state.precio}
-                          onChangeText={(puja) => this.setState({puja})}
-                        />
-						<TouchableOpacity style={styles.button} onPress={() => this.pujar() }>
-							<Text style={styles.buttonText}>Pujar</Text>
+                        <TouchableOpacity style={styles.redbutton} onPress={() => {
+                           Alert.alert(
+                           "Borrar publicación",
+                           "¿Seguro que desea borrar su publicación? La publicación no podrá ser recuperada.",
+                           [
+                             {
+                               text: "No"
+                             },
+                             { text: "Si", onPress: () =>{this.eliminarPublicacion()} }
+                           ],
+                           { cancelable: false }
+                           );
+                           return true;
+                            }}>
+                            <Text style={styles.buttonText}>ELIMINAR PUBLICACIÓN</Text>
 						</TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 							<Text style={styles.buttonText}>Volver</Text>
@@ -196,6 +202,14 @@ const styles = StyleSheet.create({
     estrella: {
         width: 20,
         height: 20
+    },
+    redbutton: {
+        width:300,
+        backgroundColor:'#cb3234',
+        borderRadius: 25,
+        marginVertical: 10,
+        paddingVertical: 17,
+        alignSelf: 'center'
     },
     cuerpoVerde: {
         fontSize: 20,

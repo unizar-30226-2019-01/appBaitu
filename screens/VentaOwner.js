@@ -93,12 +93,7 @@ class Venta extends Component {
 	}
 
     editarPublicacion(){
-        if(getTipoPublicacion(this.state.datosProducto[0])=="Venta"){
-            this.props.navigation.navigate('EditVenta')
-        }
-        else{
-            this.props.navigation.navigate('EditSubasta')
-        }
+            this.props.navigation.navigate('EditVenta', {id: this.state.id})
     }
 
     eliminarPublicacion(){
