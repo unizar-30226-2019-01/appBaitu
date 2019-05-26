@@ -109,7 +109,7 @@ class Profile extends Component {
 
   onSubmit(e) {
     Keyboard.dismiss()
-    if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.imagen != '') {
+    if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.imagen != '' ) {
       exito = true
     }
     else {
@@ -139,26 +139,31 @@ class Profile extends Component {
         }
         else{
             console.log('Soy una asubasta')
-            const newProducto = {
-              nombre: this.state.nombre,
-              fecha: this.state.fecha,
-              categoria: this.state.categoria,
-              descripcion: this.state.descripcion,
-              precio: this.state.precio,
-              vendedor: this.state.vendedor,
-              foto: this.state.image,
-              foto1: this.state.foto1,
-              foto2: this.state.foto2,
-              foto3: this.state.foto3,
-              provincia: this.state.location,
-              fechaLimite: this.state.fechaFin,
-              horaLimite:this.state.horaFin
+            if(this.state.fechaFin === ''){
+                 Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
+            }
+            else{
+                const newProducto = {
+                  nombre: this.state.nombre,
+                  fecha: this.state.fecha,
+                  categoria: this.state.categoria,
+                  descripcion: this.state.descripcion,
+                  foto: this.state.image,
+                  foto1: this.state.foto1,
+                  foto2: this.state.foto2,
+                  foto3: this.state.foto3,
+                  precio: this.state.precio,
+                  vendedor: this.state.vendedor,
+                  fechaLimite: this.state.fechaFin,
+                  horaLimite:this.state.horaFin,
+                  provincia: this.state.location
+              }
+              console.log(newProducto)
+              anadirSubasta(newProducto).then(data => {this.setState({respuestaBD: data})})
+              this.setState({crear: true})
+              exito=false
           }
-          console.log(newProducto)
-          anadirSubasta(newProducto).then(data => {this.setState({respuestaBD: data})})
-          this.setState({crear: true})
-          exito=false
-          }
+        }
         }
     }
 
