@@ -92,7 +92,7 @@ class Favoritos extends Component {
 				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
 					<Image
 						style={styles.image}
-						source={{uri: item[6]}}/>
+						source={{uri: item[8]}}/>
 					{this.tipoPublicacion(item[1])}
 					<Text style={styles.price}>{item[4]}€</Text>
 					<Text style={styles.title}>{item[0]}</Text>
