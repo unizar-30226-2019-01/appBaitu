@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage} from 'react-native';
+import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
@@ -167,8 +167,8 @@ class Venta extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        overflow: 'hidden',
-        alignSelf: 'center'
+        height: Dimensions.get('window').width,
+		alignItems: 'center',
     },
     buttonText: {
         fontSize:16,
