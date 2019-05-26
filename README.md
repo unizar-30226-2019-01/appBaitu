@@ -15,3 +15,5 @@ npm install @pusher/chatkit-client
 npm install body-parser
 npm install cors
 npm install express
+
+npm install react-native-image-gallery --save
