@@ -3,8 +3,9 @@ import {Title,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvo
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoSubasta, consultarFavorito, crearFavorito, eliminarFavorito, realizarOfertaSubasta } from '../controlador/GestionPublicaciones';
-import * as firebase from 'firebase'
+import { infoSubasta, consultarFavorito, crearFavorito, eliminarFavorito, realizarOfertaSubasta, getFotos } from '../controlador/GestionPublicaciones';
+import * as firebase from 'firebase';
+import Gallery from 'react-native-image-gallery';
 
 let foto=''
 
@@ -18,7 +19,12 @@ class Subasta extends Component {
 			id: '',
 			esFavorito: "",
             puja: '',
-            respuestaBD: ''
+            respuestaBD: '',
+            fotos: [],
+            images: '',
+            image1:'',
+            image2:'',
+            image3:''
         }
     }
 
@@ -78,6 +84,11 @@ class Subasta extends Component {
 						esFavorito: data
 					})
 				})
+                await getFotos(this.state.id).then(data => {
+                    this.setState({
+                     fotos: data
+                 })
+                })
             }
         }
     }
@@ -114,6 +125,11 @@ class Subasta extends Component {
 					esFavorito: data
 				})
 			})
+            await getFotos(this.state.id).then(data => {
+                this.setState({
+                 fotos: data
+             })
+            })
         }
 	}
 
@@ -148,10 +164,15 @@ class Subasta extends Component {
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-                <KeyboardAvoidingView behavior="padding" enabled>
-                    <Image
-						style={styles.image}
-						source={{uri: this.state.datosProducto[4]}}/>
+            <Gallery
+                style={styles.image}
+                images={[
+                  { source: { uri: this.state.datosProducto[4]}, },
+                  { source: { uri: this.state.image1[0] }, },
+                  { source: { uri: this.state.image2[0] }, },
+                  { source: { uri: this.state.image3[0] }, }
+                ]}
+              />
 					<View style={styles.horizontal}>
                     	<Text style={styles.subasta}>Subasta</Text>
 						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
@@ -196,7 +217,6 @@ class Subasta extends Component {
 							<Text style={styles.buttonText}>Volver</Text>
 						</TouchableOpacity>
 					</View>
-                </KeyboardAvoidingView>
       	  </LinearGradient>
         </ScrollView>
         )
@@ -206,7 +226,10 @@ class Subasta extends Component {
 
 const styles = StyleSheet.create({
     image: {
-		height: Dimensions.get('window').width,
+        flex: 1,
+        backgroundColor: 'gray',
+        height: (Dimensions.get('window').width)*0.75,
+        width: Dimensions.get('window').width,
 		alignItems: 'center',
     },
     buttonText: {
