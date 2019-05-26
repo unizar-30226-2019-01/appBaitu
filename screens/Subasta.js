@@ -3,7 +3,7 @@ import {Title,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvo
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoSubasta, consultarFavorito, crearFavorito, eliminarFavorito } from '../controlador/GestionPublicaciones';
+import { infoSubasta, consultarFavorito, crearFavorito, eliminarFavorito, realizarOfertaSubasta } from '../controlador/GestionPublicaciones';
 import * as firebase from 'firebase'
 
 let foto=''
@@ -26,7 +26,13 @@ class Subasta extends Component {
             Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
         }
         else{
-            Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
+            console.log(this.state.id)
+            console.log(this.state.puja)
+            console.log(this.state.login)
+            var data = realizarOfertaSubasta(this.state.login,this.state.id,this.state.puja)
+            console.log(data)
+            Alert.alert('','¡Se ha realizado la puja correctamente!',[{text: 'OK'}],{cancelable: false});
+            this.props.navigation.goBack()
         }
     }
 
