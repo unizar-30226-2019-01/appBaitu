@@ -55,6 +55,15 @@ class ProductList extends Component {
 		this.setState({refreshingS:false})
 	}
 
+	onRefresh(){
+		if(this.state.estado){
+			this.onRefreshV()
+		}
+		else{
+			this.state.onRefreshS()
+		}
+	}
+
 	renderItem = ({ item, index }) => {
 		if (item.empty === true) {
 			return <View style={[styles.item, styles.itemInvisible]} />;
