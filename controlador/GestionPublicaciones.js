@@ -57,7 +57,7 @@ export const getPublicaciones = () => {
             var data = []
             Object.keys(res.data).forEach((key) => {
                 var val = res.data[key]
-                data.push([val.Nombre, val.id, val.FotoPrincipal, val.Precio, val.precio_salida])
+                data.push([val.Nombre, val.id, val.FotoPrincipal])
             })
             console.log(data)
 
