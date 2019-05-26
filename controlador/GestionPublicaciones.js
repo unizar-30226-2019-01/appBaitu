@@ -78,7 +78,7 @@ export const getPublicaciones = () => {
 				  data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Precio, val.Categoria, val.FotoPrincipal, val.Provincia])
 			  })
 			  console.log(data)
-  
+
 			  return data
 		  })
 	}
@@ -109,9 +109,8 @@ export const getPublicaciones = () => {
 	}
 
   export const getEnVentaUsuario = (usuario) => {
-      var URLbd= "`http://52.151.88.18:5000/listarEnVentaDeUsuario/" + usuario.login + '`'
     return axios
-        .get(URLbd, {
+        .get(`http://52.151.88.18:5000/listarEnVentaDeUsuario/${usuario}`, {
             headers: { "Content-type": "application/json" }
         })
         .then(res => {
@@ -143,7 +142,7 @@ export const getPublicaciones = () => {
 
   export const getSubastasEnCurso = (usuario) => {
     return axios
-        .get(`http://52.151.88.18:5000/listarSubastasDeUsuario/${usuario.login}`, {
+        .get(`http://52.151.88.18:5000/listarSubastasDeUsuario/${usuario}`, {
             headers: { "Content-type": "application/json" }
         })
         .then(res => {
@@ -332,9 +331,6 @@ export const eliminarProducto = producto => {
           `http://52.151.88.18:5000/eliminarVenta/${producto}`, {
               headers: { "Content-type": "application/json" }
           })
-      .then((res) => {
-          console.log(res)
-      })
       .catch((res) => {
           console.log(res)
       })
@@ -346,9 +342,6 @@ export const eliminarSubasta = subasta => {
           `http://52.151.88.18:5000/eliminarSubasta/${subasta}`, {
               headers: { "Content-type": "application/json" }
           })
-      .then((res) => {
-          console.log(res)
-      })
       .catch((res) => {
           console.log(res)
       })

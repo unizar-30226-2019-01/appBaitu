@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getEnVentaUsuario } from '../controlador/GestionPublicaciones';
+import { getEnVentaUsuario, getSubastasEnCurso } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
 import { infoUsuario } from '../controlador/GestionUsuarios.js'
 import jwt_decode from 'jwt-decode';
@@ -49,16 +49,14 @@ class MisPublisList extends Component {
 	onRefresh(){
 		this.setState({refreshing:true})
 		//funcion de llamada cargar datos de nuevo
-		const user = {
-			login: this.state.login
-		}
-		getEnVentaUsuario(user).then(data => {
+		getSubastasEnCurso(this.state.login).then(data => {
             this.setState({
                 products: data
             },
             () => {
-				console.log("Productos (de venta solamenteeeeeeeeeeeeeee) obtenidos")
+				console.log("Productos (de subasta solamenteeeeeeeeeeeeeee) obtenidos")
             })
+			console.log(products)
         })
 		this.setState({refreshing:false})
 	}
@@ -69,10 +67,10 @@ class MisPublisList extends Component {
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
 		return (
-			<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
+			<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('SubastaOwner', {id: item[1]})}>
 				<Image
 					style={styles.image}
-					source={{uri: item[6]}}/>
+					source={{uri: item[8]}}/>
 				<Text style={styles.tipoPublicacion}>Venta</Text>
 				<Text style={styles.price}>{item[4]}€</Text>
 				<Text style={styles.title}>{item[0]}</Text>

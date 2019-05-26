@@ -12,6 +12,10 @@ import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
 import Venta from '../screens/Venta';
 import Subasta from '../screens/Subasta';
+import VentaOwner from '../screens/VentaOwner';
+import SubastaOwner from '../screens/SubastaOwner';
+import EditVenta from '../screens/EditVenta';
+import EditSubasta from '../screens/EditSubasta';
 import Favoritos from '../screens/Favoritos';
 import HomeButton from '../components/HomeButton';
 import NullComponent from '../components/NullComponent';
@@ -45,6 +49,10 @@ const HomeNavigator = createStackNavigator({
     EditarPerfil: {screen: EditProfile},
     Venta: {screen: Venta},
     Subasta: {screen: Subasta},
+    VentaOwner: {screen: VentaOwner},
+    SubastaOwner: {screen: SubastaOwner},
+    EditVenta: {screen: EditVenta},
+    EditSubasta: {screen: EditSubasta},
 	ProductList: {screen: ProductList},
 	Favoritos: {screen: Favoritos}
 }, {
