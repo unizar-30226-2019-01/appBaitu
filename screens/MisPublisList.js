@@ -29,11 +29,12 @@ class MisPublisList extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			isRefreshing: false,
-			products: [],
-			datos: [],
-            login: '',
-			subastas: []
+			refreshingV: false,
+			refreshingS: false,
+			ventas: [],
+			subastas: [],
+			estado: true,		//Venta true, subasta false
+            login: ''
 		};
 	}
 
@@ -43,92 +44,136 @@ class MisPublisList extends Component {
 		})
 	}
 
-	async componentDidMount() {
-		await this.onRefresh()
+	componentDidMount() {
+		this.onRefreshV()
+	}
+
+	onRefreshV(){
+		this.setState({refreshingV:true, estado:true})
+		getEnVentaUsuario(this.state.login).then(data => {
+            this.setState({ventas: data})
+        })
+		this.setState({refreshingV:false})
+	}
+
+	onRefreshS(){
+		this.setState({refreshingS:true, estado:false})
+		getSubastasEnCurso(this.state.login).then(data => {
+            this.setState({subastas: data})
+		})
+		this.setState({refreshingS:false})
 	}
 
 	onRefresh(){
-		this.setState({refreshing:true})
-		//funcion de llamada cargar datos de nuevo
-		getSubastasEnCurso(this.state.login).then(data => {
-            this.setState({
-                subastas: data
-            })
-		})
-		getEnVentaUsuario(this.state.login).then(data => {
-			this.setState({
-				products: this.state.subastas.concat(data)
-			})
-		})
-		this.setState({
-			refreshing:false
-		})
-	}
-
-	tipoPublicacion(id){
-		if (getTipoPublicacion(id) == "Venta"){
-			return <Text style={styles.venta}>Venta</Text>
+		if(this.state.estado){
+			this.onRefreshV()
 		}
 		else{
-			return <Text style={styles.subasta}>Subasta</Text>
+			this.state.onRefreshS()
 		}
 	}
 
 	renderItem = ({ item, index }) => {
-		 if (item.empty === true) {
+		if (item.empty === true) {
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
-		if(getTipoPublicacion(item[1]) == "Venta"){
+		if(this.state.estado){
 			return (
 				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('VentaOwner', {id: item[1]})}>
 					<Image
 						style={styles.image}
 						source={{uri: item[6]}}/>
-					{this.tipoPublicacion(item[1])}
+					<Text style={styles.venta}>Venta</Text>
 					<Text style={styles.price}>{item[4]}€</Text>
 					<Text style={styles.title}>{item[0]}</Text>
 				</TouchableOpacity>
 			)
 		}
-		else{
+		else {
 			return (
 				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('SubastaOwner', {id: item[1]})}>
 					<Image
 						style={styles.image}
 						source={{uri: item[8]}}/>
-					{this.tipoPublicacion(item[1])}
+					<Text style={styles.subasta}>Subasta</Text>
 					<Text style={styles.price}>{item[4]}€</Text>
 					<Text style={styles.title}>{item[0]}</Text>
 				</TouchableOpacity>
 			)
 		}
-    }
+	}
 
+	botones(){
+		return(
+			<View>
+				<TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+					<Image
+						style={styles.goBack}
+						source={require('../assets/images/goBack.png')}/>
+				</TouchableOpacity>
+				<View style={styles.horizontal}>
+					<TouchableOpacity onPress={this.onRefreshV.bind(this)}>
+						<Text style={styles.botonVentaSubasta}>Ventas</Text>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={this.onRefreshS.bind(this)}>
+						<Text style={styles.botonVentaSubasta}>Subastas</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+		)
+	}
 
     render(){
-        return(
-			<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
-			<Button onPress={() => this.props.navigation.navigate('Sidebar')} title="Volver"/>
-			<FlatList
-				refreshControl={
-				<RefreshControl
-					refreshing={this.state.isRefreshing}
-					onRefresh={this.onRefresh.bind(this)}
-				/>
-				}
-				data={formatData(this.state.products, numColumns)}
-				style={styles.containerItem}
-				renderItem={this.renderItem}
-				numColumns={numColumns}
-				keyExtractor={(item, index) => index.toString()}
-			/>
-			</LinearGradient>
-        )
+		if(this.state.estado) {
+			return(
+				<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
+					<FlatList
+						refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshingV}
+							onRefresh={this.onRefreshV.bind(this)}
+						/>
+						}
+						ListHeaderComponent={this.botones()}
+						data={formatData(this.state.ventas, numColumns)}
+						style={styles.containerItem}
+						renderItem={this.renderItem}
+						numColumns={numColumns}
+						keyExtractor={(item, index) => index.toString()}
+					/>
+				</LinearGradient>
+			)
+		}
+		else {
+			return(
+				<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
+					<FlatList
+						refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshingS}
+							onRefresh={this.onRefreshS.bind(this)}
+						/>
+						}
+						ListHeaderComponent={this.botones()}
+						data={formatData(this.state.subastas, numColumns)}
+						style={styles.containerItem}
+						renderItem={this.renderItem}
+						numColumns={numColumns}
+						keyExtractor={(item, index) => index.toString()}
+					/>
+				</LinearGradient>
+	        )
+		}
     }
 }
 
 
 const styles = StyleSheet.create({
+	horizontal: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+	},
 	colorContainer : {
 		flex: 1
 	},
@@ -187,6 +232,26 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
         fontWeight: 'bold'
     },
+    botonVentaSubasta: {
+        fontSize: 17,
+        width: 90,
+        margin: 5,
+        borderWidth: 3.5,
+        borderColor: '#1c313a',
+        borderRadius: 15,
+        backgroundColor: '#1c313a',
+        overflow: 'hidden',
+        textAlign: 'center',
+        alignItems: 'center',
+        color: 'white'
+	},
+	goBack: {
+		height: 35,
+		width: 35,
+		marginTop: 5,
+		marginLeft: 5,
+		alignSelf: 'flex-start'
+	}
 })
 
 export default MisPublisList;

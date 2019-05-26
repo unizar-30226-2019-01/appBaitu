@@ -55,22 +55,14 @@ class ProductList extends Component {
 		this.setState({refreshingS:false})
 	}
 
-	/* precioPublicacion(id){
-		var tipo = getTipoPublicacion(id)
-		var precio
-		if (tipo=="Venta"){
-			infoVenta(id).then(data => {
-				precio = data[6]
-			})
-			console.log(precio)
-			return precio
+	onRefresh(){
+		if(this.state.estado){
+			this.onRefreshV()
 		}
 		else{
-			infoSubasta(id).then(data => {
-				return data[6]
-			})
+			this.state.onRefreshS()
 		}
-	} */
+	}
 
 	renderItem = ({ item, index }) => {
 		if (item.empty === true) {
@@ -102,56 +94,60 @@ class ProductList extends Component {
 		}
     }
 
+	botones(){
+		return(
+			<View style={styles.horizontal}>
+				<TouchableOpacity onPress={this.onRefreshV.bind(this)}>
+					<Text style={styles.botonVentaSubasta}>Ventas</Text>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={this.onRefreshS.bind(this)}>
+					<Text style={styles.botonVentaSubasta}>Subastas</Text>
+				</TouchableOpacity>
+			</View>
+		)
+	}
 
     render(){
 		if(this.state.estado) {
 			return(
 				<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
-
-					<Button onPress={this.onRefreshV.bind(this)} title="Ventas" />
-					<Button onPress={this.onRefreshS.bind(this)} title="Subastas" />
-
-				<FlatList
-					refreshControl={
-					<RefreshControl
-						refreshing={this.state.refreshingV}
-						onRefresh={this.onRefreshV.bind(this)}
+					<FlatList
+						refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshingV}
+							onRefresh={this.onRefreshV.bind(this)}
+						/>
+						}
+						ListHeaderComponent={this.botones()}
+						data={formatData(this.state.ventas, numColumns)}
+						style={styles.containerItem}
+						renderItem={this.renderItem}
+						numColumns={numColumns}
+						keyExtractor={(item, index) => index.toString()}
 					/>
-					}
-					data={formatData(this.state.ventas, numColumns)}
-					style={styles.containerItem}
-					renderItem={this.renderItem}
-					numColumns={numColumns}
-					keyExtractor={(item, index) => index.toString()}
-				/>
-
 				</LinearGradient>
 			)
 		}
 		else {
 			return(
 				<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
-
-					<Button onPress={this.onRefreshV.bind(this)} title="Ventas" />
-					<Button onPress={this.onRefreshS.bind(this)} title="Subastas" />
-
-				<FlatList
-					refreshControl={
-					<RefreshControl
-						refreshing={this.state.refreshingS}
-						onRefresh={this.onRefreshS.bind(this)}
+					<FlatList
+						refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshingS}
+							onRefresh={this.onRefreshS.bind(this)}
+						/>
+						}
+						ListHeaderComponent={this.botones()}
+						data={formatData(this.state.subastas, numColumns)}
+						style={styles.containerItem}
+						renderItem={this.renderItem}
+						numColumns={numColumns}
+						keyExtractor={(item, index) => index.toString()}
 					/>
-					}
-					data={formatData(this.state.subastas, numColumns)}
-					style={styles.containerItem}
-					renderItem={this.renderItem}
-					numColumns={numColumns}
-					keyExtractor={(item, index) => index.toString()}
-				/>
 				</LinearGradient>
 	        )
 		}
-
     }
 }
 
@@ -160,7 +156,7 @@ const styles = StyleSheet.create({
 	horizontal: {
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'space-between'
+		justifyContent: 'center',
 	},
 	colorContainer : {
 		flex: 1
@@ -220,6 +216,19 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
         fontWeight: 'bold'
     },
+    botonVentaSubasta: {
+        fontSize: 17,
+        width: 90,
+        margin: 5,
+        borderWidth: 3.5,
+        borderColor: '#1c313a',
+        borderRadius: 15,
+        backgroundColor: '#1c313a',
+        overflow: 'hidden',
+        textAlign: 'center',
+        alignItems: 'center',
+        color: 'white'
+	},
 })
 
 export default ProductList;

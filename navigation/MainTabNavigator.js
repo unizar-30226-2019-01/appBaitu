@@ -35,7 +35,10 @@ const DrawerScreen = createDrawerNavigator({
 	}},
 	Favoritos: {screen: Favoritos, navigationOptions: {
 		drawerLabel: <NullComponent/>
-	}}
+	}},
+    MisPublis: {screen: MisPublis, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}},
 }, {
     headerMode: 'none',
     drawerWidth: 300,
@@ -94,8 +97,7 @@ const HomeNavigator = createStackNavigator({
 const AppStackNavigator = createSwitchNavigator({
     Login:{screen: Login},
     Register: {screen: Register},
-    Sidebar: {screen: HomeNavigator},
-    MisPublis: {screen: MisPublis}},
+    Sidebar: {screen: HomeNavigator}},
     {
     // headerMode: 'screen',
     }
