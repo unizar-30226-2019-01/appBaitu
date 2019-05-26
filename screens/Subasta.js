@@ -17,11 +17,12 @@ class Subasta extends Component {
             login: '',
 			id: '',
 			esFavorito: "",
-            puja: ''
+            puja: '',
+            respuestaBD: ''
         }
     }
 
-    pujar(){
+    async pujar(){
         if(this.state.puja <= this.state.datosProducto[7]){
             Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
         }
@@ -29,10 +30,18 @@ class Subasta extends Component {
             console.log(this.state.id)
             console.log(this.state.puja)
             console.log(this.state.login)
-            var data = realizarOfertaSubasta(this.state.login,this.state.id,this.state.puja)
-            console.log(data)
-            Alert.alert('','¡Se ha realizado la puja correctamente!',[{text: 'OK'}],{cancelable: false});
-            this.props.navigation.goBack()
+            await realizarOfertaSubasta(this.state.login,this.state.id,this.state.puja).then(data => {
+                this.setState({
+                    respuestaBD: data
+                })
+            })
+            if(this.state.respuestaBD === "OK"){
+                Alert.alert('','¡Se ha realizado la puja correctamente!',[{text: 'OK'}],{cancelable: false});
+                this.props.navigation.goBack()
+            }
+            else{
+                Alert.alert('','No se ha podido realizar la puja',[{text: 'OK'}],{cancelable: false});
+            }
         }
     }
 
