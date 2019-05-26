@@ -57,8 +57,7 @@ class ProductList extends Component {
 	}
 
 	tipoPublicacion(id){
-		var tipo = getTipoPublicacion(id)
-		if (tipo=="Venta"){
+		if (getTipoPublicacion(id) == "Venta"){
 			return <Text style={styles.venta}>Venta</Text>
 		}
 		else{
@@ -84,9 +83,9 @@ class ProductList extends Component {
 	} */
 
 	renderItem = ({ item, index }) => {
-		// if (item.empty === true) {
+		if (item.empty === true) {
 			return <View style={[styles.item, styles.itemInvisible]} />;
-		/*}
+		}
 		if(getTipoPublicacion(item[1]) == "Venta"){
 			return (
 				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
@@ -110,7 +109,7 @@ class ProductList extends Component {
 					<Text style={styles.title}>{item[0]}</Text>
 				</TouchableOpacity>
 			)
-		}*/
+		}
     }
 
 

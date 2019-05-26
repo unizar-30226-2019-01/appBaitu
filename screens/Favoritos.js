@@ -62,8 +62,7 @@ class Favoritos extends Component {
     }
 
 	tipoPublicacion(id){
-		var tipo = getTipoPublicacion(id)
-		if (tipo=="Venta"){
+		if (getTipoPublicacion(id) == "Venta"){
 			return <Text style={styles.venta}>Venta</Text>
 		}
 		else{

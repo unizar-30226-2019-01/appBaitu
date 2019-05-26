@@ -100,12 +100,18 @@ export const getPublicaciones = () => {
 	}
 
 	export const getTipoPublicacion = (id) => {
-		if (id=="159" || id=="157"){
-			return "Subasta"
-		}
-		else{
-			return "Venta"
-		}
+		return axios
+			.get(`http://52.151.88.18:5000/getTipoPublicacion/${id}`, {
+				headers: { "Content-type": "application/json" }
+			})
+        	.then(res => {
+				if (res=="Venta"){
+					return "Venta"
+				}
+				else{
+					return "Subasta"
+				}
+			})
 	}
 
   export const getEnVentaUsuario = (usuario) => {
