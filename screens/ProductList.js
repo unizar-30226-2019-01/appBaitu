@@ -69,11 +69,18 @@ class ProductList extends Component {
 
 	precioPublicacion(id){
 		var tipo = getTipoPublicacion(id)
+		var precio
 		if (tipo=="Venta"){
-			return <Text style={styles.price}>{item[3]}€</Text>
+			infoVenta(id).then(data => {
+				precio = data[6]
+			})
+			return <Text style={styles.price}>{precio}€</Text>
 		}
 		else{
-			return <Text style={styles.price}>{item[4]}€</Text>
+			infoSubasta(id).then(data => {
+				precio = data[6]
+			})
+			return <Text style={styles.price}>{precio}€</Text>
 		}
 	}
 
@@ -100,7 +107,7 @@ class ProductList extends Component {
 						style={styles.image}
 						source={{uri: item[6]}}/>
 					{this.tipoPublicacion(item[1])}
-					<Text style={styles.price}>{item[4]}€</Text>
+					{this.precioPublicacion(item[1])}
 					<Text style={styles.title}>{item[0]}</Text>
 				</TouchableOpacity>
 			)
