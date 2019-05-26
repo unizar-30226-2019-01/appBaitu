@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getEnVentaUsuario, getSubastasEnCurso } from '../controlador/GestionPublicaciones';
+import { getEnVentaUsuario, getSubastasEnCurso, getTipoPublicacion } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
 import { infoUsuario } from '../controlador/GestionUsuarios.js'
 import jwt_decode from 'jwt-decode';
@@ -32,7 +32,8 @@ class MisPublisList extends Component {
 			isRefreshing: false,
 			products: [],
 			datos: [],
-            login: ''
+            login: '',
+			subastas: []
 		};
 	}
 
@@ -42,8 +43,8 @@ class MisPublisList extends Component {
 		})
 	}
 
-	componentDidMount() {
-		this.onRefresh()
+	async componentDidMount() {
+		await this.onRefresh()
 	}
 
 	onRefresh(){
@@ -51,32 +52,58 @@ class MisPublisList extends Component {
 		//funcion de llamada cargar datos de nuevo
 		getSubastasEnCurso(this.state.login).then(data => {
             this.setState({
-                products: data
-            },
-            () => {
-				console.log("Productos (de subasta solamenteeeeeeeeeeeeeee) obtenidos")
+                subastas: data
             })
-			console.log(products)
-        })
-		this.setState({refreshing:false})
+		})
+		getEnVentaUsuario(this.state.login).then(data => {
+			this.setState({
+				products: this.state.subastas.concat(data)
+			})
+		})
+		this.setState({
+			refreshing:false
+		})
+	}
+
+	tipoPublicacion(id){
+		var tipo = getTipoPublicacion(id)
+		if (tipo=="Venta"){
+			return <Text style={styles.venta}>Venta</Text>
+		}
+		else{
+			return <Text style={styles.subasta}>Subasta</Text>
+		}
 	}
 
 	renderItem = ({ item, index }) => {
-
-		if (item.empty === true) {
+		 if (item.empty === true) {
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
-		return (
-			<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('SubastaOwner', {id: item[1]})}>
-				<Image
-					style={styles.image}
-					source={{uri: item[8]}}/>
-				<Text style={styles.tipoPublicacion}>Venta</Text>
-				<Text style={styles.price}>{item[4]}€</Text>
-				<Text style={styles.title}>{item[0]}</Text>
-			</TouchableOpacity>
-		);
-    };
+		if(getTipoPublicacion(item[1]) == "Venta"){
+			return (
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('VentaOwner', {id: item[1]})}>
+					<Image
+						style={styles.image}
+						source={{uri: item[6]}}/>
+					{this.tipoPublicacion(item[1])}
+					<Text style={styles.price}>{item[4]}€</Text>
+					<Text style={styles.title}>{item[0]}</Text>
+				</TouchableOpacity>
+			)
+		}
+		else{
+			return (
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('SubastaOwner', {id: item[1]})}>
+					<Image
+						style={styles.image}
+						source={{uri: item[8]}}/>
+					{this.tipoPublicacion(item[1])}
+					<Text style={styles.price}>{item[4]}€</Text>
+					<Text style={styles.title}>{item[0]}</Text>
+				</TouchableOpacity>
+			)
+		}
+    }
 
 
     render(){
@@ -123,7 +150,7 @@ const styles = StyleSheet.create({
 		width: Dimensions.get('window').width/numColumns-4,
 		alignItems: 'center',
 	},
-	tipoPublicacion: {
+	venta: {
 		fontSize: 15,
 		width: 60,
 		marginTop: 5,
@@ -132,6 +159,20 @@ const styles = StyleSheet.create({
 		borderColor: '#8dff7f',
 		borderRadius: 15,
 		backgroundColor: '#8dff7f',
+		overflow: 'hidden',
+		textAlign: 'center',
+		alignItems: 'flex-start',
+		color: 'black'
+	},
+	subasta: {
+		fontSize: 15,
+		width: 70,
+		marginTop: 5,
+		marginLeft: 5,
+		borderWidth: 3.5,
+		borderColor: '#fea041',
+		borderRadius: 15,
+		backgroundColor: '#fea041',
 		overflow: 'hidden',
 		textAlign: 'center',
 		alignItems: 'flex-start',
