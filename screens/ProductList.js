@@ -86,25 +86,27 @@ class ProductList extends Component {
 		if (item.empty === true) {
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
-		if(getTipoPublicacion(item[1]) == "Venta"){
+		var tipo = getTipoPublicacion(item[1])
+		console.log(this.tipo)
+		if(tipo == "Venta"){
 			return (
 				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
 					<Image
 						style={styles.image}
 						source={{uri: item[6]}}/>
-					{this.tipoPublicacion(item[1])}
+					<Text style={styles.venta}>Venta</Text>
 					<Text style={styles.price}>{item[4]}€</Text>
 					<Text style={styles.title}>{item[0]}</Text>
 				</TouchableOpacity>
 			)
 		}
-		else{
+		else if (tipo == "Subasta"){
 			return (
 				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
 					<Image
 						style={styles.image}
 						source={{uri: item[6]}}/>
-					{this.tipoPublicacion(item[1])}
+					<Text style={styles.subasta}>Subasta</Text>
 					<Text style={styles.price}>{item[4]}€</Text>
 					<Text style={styles.title}>{item[0]}</Text>
 				</TouchableOpacity>
