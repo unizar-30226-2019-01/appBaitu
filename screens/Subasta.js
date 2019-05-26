@@ -89,6 +89,24 @@ class Subasta extends Component {
                      fotos: data
                  })
                 })
+                this.setState({image1: this.state.fotos[0]})
+                this.setState({image2: this.state.fotos[1]})
+                this.setState({image3: this.state.fotos[2]})
+                if(this.state.image1[0] === undefined) {
+                    this.setState({
+                        image1:'http://geodezja-elipsa.pl/ikony/picture.png'
+                    })
+                }
+                if(this.state.image2[0] === undefined) {
+                    this.setState({
+                        image2:'http://geodezja-elipsa.pl/ikony/picture.png'
+                    })
+                }
+                if(this.state.image3[0] === undefined) {
+                    this.setState({
+                        image3:'http://geodezja-elipsa.pl/ikony/picture.png'
+                    })
+                }
             }
         }
     }
@@ -130,6 +148,24 @@ class Subasta extends Component {
                  fotos: data
              })
             })
+            this.setState({image1: this.state.fotos[0]})
+            this.setState({image2: this.state.fotos[1]})
+            this.setState({image3: this.state.fotos[2]})
+            if(this.state.image1[0] === undefined) {
+                this.setState({
+                    image1:'http://geodezja-elipsa.pl/ikony/picture.png'
+                })
+            }
+            if(this.state.image2[0] === undefined) {
+                this.setState({
+                    image2:'http://geodezja-elipsa.pl/ikony/picture.png'
+                })
+            }
+            if(this.state.image3[0] === undefined) {
+                this.setState({
+                    image3:'http://geodezja-elipsa.pl/ikony/picture.png'
+                })
+            }
         }
 	}
 
