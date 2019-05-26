@@ -16,10 +16,8 @@ export const anadirProducto = newProducto => {
       provincia: newProducto.provincia
     })
     .then(res => {
-        console.log("Respuesta pyhon bien")
         return res.data
     }).catch(err => {
-      console.log("Respuesta pyhon mal")
       console.log(err)
       return err})
 }
@@ -40,10 +38,8 @@ export const anadirSubasta = newProductoSubasta => {
       horaLimite: newProductoSubasta.horaLimite,
       provincia: newProductoSubasta.provincia
     }).then(res => {
-        console.log("Respuesta pyhon bien")
       return res.data
     }).catch(err => {
-        console.log("Respuesta pyhon mal")
         console.log(err)
       return err})
 }
@@ -59,8 +55,6 @@ export const getPublicaciones = () => {
                 var val = res.data[key]
                 data.push([val.Nombre, val.id, val.FotoPrincipal])
             })
-            console.log(data)
-
             return data
         })
   }
@@ -77,24 +71,21 @@ export const getPublicaciones = () => {
 				  //var fotos = getFotos(val.id)
 				  data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Precio, val.Categoria, val.FotoPrincipal, val.Provincia])
 			  })
-			  console.log(data)
-
 			  return data
 		  })
 	}
 
-  export const getSubastas = () => {
-      return axios
-          .get('http://52.151.88.18:5000/listarSubastas', {
+    export const getSubastas = () => {
+    return axios
+        .get('http://52.151.88.18:5000/listarSubastas', {
               headers: { "Content-type": "application/json" }
           })
           .then(res => {
               var data = []
-              Object.keys(res.data).forEach((key) => {
-                  var val = res.data[key]
-                  data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.precio_actual, val.Categoria, val.FotoPrincipal, val.fecha_limite, val.hora_limite, val.FotoPrincipal, val.Provincia])
+                Object.keys(res.data).forEach((key) => {
+                var val = res.data[key]
+                data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.precio_actual, val.Categoria, val.FotoPrincipal, val.fecha_limite, val.hora_limite, val.FotoPrincipal, val.Provincia])
               })
-
               return data
           })
 	}
@@ -103,7 +94,7 @@ export const getPublicaciones = () => {
 		return axios
 			.get(`http://52.151.88.18:5000/getTipoPublicacion/${id}`)
         	.then(res => {
-				return res.data
+				    return res.data
 			})
 			.catch(err => {
 			  console.log(err)
@@ -276,7 +267,6 @@ export const infoSubasta = id => {
 
         })
         .then(res => {
-            console.log(res.data.id)
             var data = []
             data[0]=res.data.id
             data[1]=res.data.Nombre
@@ -410,7 +400,6 @@ export const eliminarSubasta = subasta => {
                 usuario: usuario
             })
         .then((res) => {
-            console.log(res.data)
             return res.data
         })
         .catch((res) => {
@@ -425,7 +414,6 @@ export const eliminarSubasta = subasta => {
                 usuario: usuario
             })
         .then((res) => {
-            console.log(res.data)
             return res.data
         })
         .catch((res) => {
