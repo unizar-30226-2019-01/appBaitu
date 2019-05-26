@@ -60,7 +60,7 @@ class ProductList extends Component {
 		if (getTipoPublicacion(id) == "Venta"){
 			return <Text style={styles.venta}>Venta</Text>
 		}
-		else{
+		else if (getTipoPublicacion(id) == "Subasta"){
 			return <Text style={styles.subasta}>Subasta</Text>
 		}
 	}

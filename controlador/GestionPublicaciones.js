@@ -105,12 +105,7 @@ export const getPublicaciones = () => {
 				headers: { "Content-type": "application/json" }
 			})
         	.then(res => {
-				if (res=="Venta"){
-					return "Venta"
-				}
-				else{
-					return "Subasta"
-				}
+				return res.data
 			})
 	}
 
