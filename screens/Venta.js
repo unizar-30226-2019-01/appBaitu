@@ -67,9 +67,6 @@ class Venta extends Component {
                 this.setState({image1: this.state.fotos[0]})
                 this.setState({image2: this.state.fotos[1]})
                 this.setState({image3: this.state.fotos[2]})
-                this.setState({image1: this.state.image1[0]})
-                this.setState({image2: this.state.image2[0]})
-                this.setState({image3: this.state.image3[0]})
             }
         }
     }
@@ -114,9 +111,6 @@ class Venta extends Component {
             this.setState({image1: this.state.fotos[0]})
             this.setState({image2: this.state.fotos[1]})
             this.setState({image3: this.state.fotos[2]})
-            this.setState({image1: this.state.image1[0]})
-            this.setState({image2: this.state.image2[0]})
-            this.setState({image3: this.state.image3[0]})
         }
 	}
 
@@ -155,9 +149,9 @@ class Venta extends Component {
                 style={styles.image}
                 images={[
                   { source: { uri: this.state.datosProducto[4]}, },
-                  { source: { uri: this.state.image1 }, },
-                  { source: { uri: this.state.image2 }, },
-                  { source: { uri: this.state.image3 }, }
+                  { source: { uri: this.state.image1[0] }, },
+                  { source: { uri: this.state.image2[0] }, },
+                  { source: { uri: this.state.image3[0] }, }
                 ]}
               />
 					<View style={styles.horizontal}>
