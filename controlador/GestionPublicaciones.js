@@ -48,23 +48,40 @@ export const anadirSubasta = newProductoSubasta => {
       return err})
 }
 
-export const getProductos = () => {
+export const getPublicaciones = () => {
     return axios
-        .get('http://52.151.88.18:5000/listarEnVenta', {
+        .get('http://52.151.88.18:5000/listarPublicaciones', {
             headers: { "Content-type": "application/json" }
         })
         .then(res => {
             var data = []
             Object.keys(res.data).forEach((key) => {
                 var val = res.data[key]
-                //var fotos = getFotos(val.id)
-                data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Precio, val.Categoria, val.FotoPrincipal, val.Provincia])
+                data.push([val.Nombre, val.id, val.FotoPrincipal, val.Precio, val.precio_salida])
             })
             console.log(data)
 
             return data
         })
   }
+
+  export const getProductos = () => {
+	  return axios
+		  .get('http://52.151.88.18:5000/listarEnVenta', {
+			  headers: { "Content-type": "application/json" }
+		  })
+		  .then(res => {
+			  var data = []
+			  Object.keys(res.data).forEach((key) => {
+				  var val = res.data[key]
+				  //var fotos = getFotos(val.id)
+				  data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Precio, val.Categoria, val.FotoPrincipal, val.Provincia])
+			  })
+			  console.log(data)
+  
+			  return data
+		  })
+	}
 
   export const getSubastas = () => {
       return axios
