@@ -3,8 +3,9 @@ import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoVenta, consultarFavorito, crearFavorito, eliminarFavorito } from '../controlador/GestionPublicaciones';
-import * as firebase from 'firebase'
+import { infoVenta, consultarFavorito, crearFavorito, eliminarFavorito, getFotos } from '../controlador/GestionPublicaciones';
+import * as firebase from 'firebase';
+import Gallery from 'react-native-image-gallery';
 
 let foto=''
 
@@ -16,7 +17,12 @@ class Venta extends Component {
             datosVendedor: [],
             login: '',
 			id: '',
-			esFavorito: ""
+			esFavorito: "",
+            fotos: [],
+            images: '',
+            image1:'',
+            image2:'',
+            image3:''
         }
     }
 
@@ -53,6 +59,17 @@ class Venta extends Component {
 						esFavorito: data
 					})
 				})
+                await getFotos(this.state.id).then(data => {
+                    this.setState({
+                     fotos: data
+                 })
+                })
+                this.setState({image1: this.state.fotos[0]})
+                this.setState({image2: this.state.fotos[1]})
+                this.setState({image3: this.state.fotos[2]})
+                this.setState({image1: this.state.image1[0]})
+                this.setState({image2: this.state.image2[0]})
+                this.setState({image3: this.state.image3[0]})
             }
         }
     }
@@ -89,6 +106,17 @@ class Venta extends Component {
 					esFavorito: data
 				})
 			})
+            await getFotos(this.state.id).then(data => {
+                this.setState({
+                 fotos: data
+             })
+            })
+            this.setState({image1: this.state.fotos[0]})
+            this.setState({image2: this.state.fotos[1]})
+            this.setState({image3: this.state.fotos[2]})
+            this.setState({image1: this.state.image1[0]})
+            this.setState({image2: this.state.image2[0]})
+            this.setState({image3: this.state.image3[0]})
         }
 	}
 
@@ -123,16 +151,22 @@ class Venta extends Component {
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-                <KeyboardAvoidingView behavior="padding" enabled>
-                    <Image
-						style={styles.image}
-						source={{uri: this.state.datosProducto[4]}}/>
+            <Gallery
+                style={styles.image}
+                images={[
+                  { source: { uri: this.state.datosProducto[4]}, },
+                  { source: { uri: this.state.image1 }, },
+                  { source: { uri: this.state.image2 }, },
+                  { source: { uri: this.state.image3 }, }
+                ]}
+              />
 					<View style={styles.horizontal}>
                     	<Text style={styles.venta}>Venta</Text>
 						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
 							{ this.botonFavorito() }
 						</TouchableOpacity>
 					</View>
+
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
                         <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
@@ -157,7 +191,6 @@ class Venta extends Component {
 							<Text style={styles.buttonText}>Volver</Text>
 						</TouchableOpacity>
 					</View>
-                </KeyboardAvoidingView>
       	  </LinearGradient>
         </ScrollView>
         )
@@ -167,7 +200,10 @@ class Venta extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        height: Dimensions.get('window').width,
+        flex: 1,
+        backgroundColor: 'gray',
+        height: (Dimensions.get('window').width)*0.75,
+        width: Dimensions.get('window').width,
 		alignItems: 'center',
     },
     buttonText: {
