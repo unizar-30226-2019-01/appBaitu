@@ -104,7 +104,7 @@ class Favoritos extends Component {
 	botones(){
 		return(
 			<View>
-				<TouchableOpacity onPress={this.props.navigation.goBack.bind(this)}>
+				<TouchableOpacity onPress={() => this.props.navigation.goBack()}>
 					<Image
 						style={styles.goBack}
 						source={require('../assets/images/goBack.png')}/>
