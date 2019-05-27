@@ -167,7 +167,7 @@ class Venta extends Component {
 						<Text style={styles.cuerpoVerde}>Descripción</Text>
 						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
 						<Text style={styles.cuerpoVerde}>Vendedor</Text>
-						<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('Profile')}>
+						<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('ProfileAjeno', {login:this.state.datosProducto[5]})}>
 							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
 						</TouchableOpacity>
 						<Text style={styles.price}>{this.state.datosVendedor[6]}

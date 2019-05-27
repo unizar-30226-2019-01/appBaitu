@@ -6,6 +6,9 @@ import Login from '../screens/Login';
 import Register from '../screens/Register';
 import ProductList from '../screens/ProductList';
 import Profile from '../screens/Profile';
+import ProfileAjeno from '../screens/ProfileAjeno';
+import Calificar from '../screens/Calificar';
+import Reportar from '../screens/Reportar';
 import Upload from '../screens/UploadScreen';
 import EditProfile from '../screens/EditProfile';
 import Chats from '../screens/ChatsList';
@@ -40,6 +43,18 @@ const DrawerScreen = createDrawerNavigator({
     MisPublis: {screen: MisPublis, navigationOptions: {
 		drawerLabel: <NullComponent/>
 	}},
+    Profile: {screen: Profile, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}},
+    ProfileAjeno: {screen: ProfileAjeno, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}},
+    Calificar: {screen: Calificar, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}},
+    Reportar: {screen: Reportar, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}},
     SearchList: {screen: SearchList, navigationOptions: {
 		drawerLabel: <NullComponent/>
 	}},
@@ -53,6 +68,9 @@ const DrawerScreen = createDrawerNavigator({
 const HomeNavigator = createStackNavigator({
     DrawerStack: {screen: DrawerScreen},
     Profile: {screen: Profile},
+    ProfileAjeno: {screen: ProfileAjeno},
+    Calificar: {screen: Calificar},
+    Reportar: {screen: Reportar},
     EditarPerfil: {screen: EditProfile},
     Venta: {screen: Venta},
     Subasta: {screen: Subasta},
