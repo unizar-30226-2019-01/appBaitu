@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {Text,View} from 'react-native';
+
 
 export default class Reportar extends Component {
     constructor(props) {
@@ -9,8 +11,10 @@ export default class Reportar extends Component {
         }
     }
     render(){
-        <View>
-            <Text>Reportar</Text>
-        </View>
+        return(
+            <View>
+                <Text>Reportar</Text>
+            </View>
+        )
     }
 }

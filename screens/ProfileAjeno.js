@@ -68,7 +68,7 @@ class Profile extends Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {login: this.state.login})}>
                             <Text style={styles.buttonText}>CALIFICAR USUARIO</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Reportar', {login: this.state.login})}>
+                        <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Reportar', {login: this.state.login})}>
                             <Text style={styles.buttonText}>REPORTAR USUARIO</Text>
                         </TouchableOpacity>
                         <Text></Text>
@@ -100,19 +100,23 @@ const styles = StyleSheet.create({
         height: 20
     },
     redbutton: {
+        flex:1,
         width:300,
         backgroundColor:'#cb3234',
         borderRadius: 25,
         marginVertical: 10,
         paddingVertical: 17,
+        justifyContent: 'flex-end',
         alignSelf: 'center'
     },
     button: {
+        flex:1,
         width:300,
         backgroundColor:'#1c313a',
         borderRadius: 25,
         marginVertical: 10,
         paddingVertical: 17,
+        justifyContent: 'flex-end',
         alignSelf: 'center'
     },
     buttonText: {
