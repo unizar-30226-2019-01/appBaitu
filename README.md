@@ -8,6 +8,7 @@ npm add react-navigation@^3.0.0
 npm install firebase
 npm install jwt-decode
 npm install expo-image-picker
+npm install react-native-image-gallery --save
 #chat
 npm isntall @pusher/chatkit
 npm install @pusher/chatkit-server
@@ -15,5 +16,3 @@ npm install @pusher/chatkit-client
 npm install body-parser
 npm install cors
 npm install express
-
-npm install react-native-image-gallery --save

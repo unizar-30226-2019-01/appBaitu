@@ -12,7 +12,8 @@ class ProductScreen extends Component {
     constructor(){
          super();
          this.state={
-           PickerSelectedVal : '',
+           category : '',
+           order:'',
            price: 30,
            minPrice: 0,
            maxPrice: 1000
@@ -62,10 +63,10 @@ class ProductScreen extends Component {
             </Picker>
             <Text style={styles.cuerpoVerde}>Ordenar de...</Text>
             <Picker
-                  selectedValue={this.state.category}
+                  selectedValue={this.state.order}
                   style={styles.picker}
                   onPress={() => Keyboard.dismiss()}
-                  onValueChange={(itemValue, itemIndex) => this.setState({category: itemValue})
+                  onValueChange={(itemValue2, itemIndex2) => this.setState({order: itemValue2})
             }>
                 <Picker.Item label="Mayor a menor" value="MayorAMenor" />
                 <Picker.Item label="Menor a mayor" value="MenorAMayor" />
