@@ -22,9 +22,12 @@ class Subasta extends Component {
             respuestaBD: '',
             fotos: [],
             images: '',
-            image1:'',
-            image2:'',
-            image3:''
+            image1:[],
+            image2:[],
+            image3:[],
+            i1:'',
+            i2:'',
+            i3:''
         }
     }
 
@@ -89,23 +92,25 @@ class Subasta extends Component {
                      fotos: data
                  })
                 })
+                this.setState({i1:undefined})
+                this.setState({i2:undefined})
+                this.setState({i3:undefined})
                 this.setState({image1: this.state.fotos[0]})
                 this.setState({image2: this.state.fotos[1]})
                 this.setState({image3: this.state.fotos[2]})
-                if(this.state.image1[0] === undefined) {
-                    this.setState({
-                        image1:'http://geodezja-elipsa.pl/ikony/picture.png'
-                    })
+
+                this.setState({i1: this.state.image1[0]})
+                this.setState({i2: this.state.image2[0]})
+                this.setState({i3: this.state.image3[0]})
+
+                if(this.state.i1 === undefined || this.state.i1 === '') {
+                    this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
                 }
-                if(this.state.image2[0] === undefined) {
-                    this.setState({
-                        image2:'http://geodezja-elipsa.pl/ikony/picture.png'
-                    })
+                if(this.state.i2 === undefined || this.state.i2 === '') {
+                    this.setState({i2:'http://geodezja-elipsa.pl/ikony/picture.png'})
                 }
-                if(this.state.image3[0] === undefined) {
-                    this.setState({
-                        image3:'http://geodezja-elipsa.pl/ikony/picture.png'
-                    })
+                if(this.state.i3 === undefined || this.state.i3 === '') {
+                    this.setState({i3:'http://geodezja-elipsa.pl/ikony/picture.png'})
                 }
             }
         }
@@ -148,24 +153,25 @@ class Subasta extends Component {
                  fotos: data
              })
             })
+
             this.setState({image1: this.state.fotos[0]})
             this.setState({image2: this.state.fotos[1]})
             this.setState({image3: this.state.fotos[2]})
-            if(this.state.image1[0] === undefined) {
-                this.setState({
-                    image1:'http://geodezja-elipsa.pl/ikony/picture.png'
-                })
+
+            this.setState({i1: this.state.image1[0]})
+            this.setState({i2: this.state.image2[0]})
+            this.setState({i3: this.state.image3[0]})
+
+            if(this.state.i1 === undefined || this.state.i1 === '') {
+                this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
             }
-            if(this.state.image2[0] === undefined) {
-                this.setState({
-                    image2:'http://geodezja-elipsa.pl/ikony/picture.png'
-                })
+            if(this.state.i2 === undefined || this.state.i2 === '') {
+                this.setState({i2:'http://geodezja-elipsa.pl/ikony/picture.png'})
             }
-            if(this.state.image3[0] === undefined) {
-                this.setState({
-                    image3:'http://geodezja-elipsa.pl/ikony/picture.png'
-                })
+            if(this.state.i3 === undefined || this.state.i3 === '') {
+                this.setState({i3:'http://geodezja-elipsa.pl/ikony/picture.png'})
             }
+
         }
 	}
 
@@ -204,9 +210,9 @@ class Subasta extends Component {
                 style={styles.image}
                 images={[
                   { source: { uri: this.state.datosProducto[4]}, },
-                  { source: { uri: this.state.image1[0] }, },
-                  { source: { uri: this.state.image2[0] }, },
-                  { source: { uri: this.state.image3[0] }, }
+                  { source: { uri: this.state.i1 }, },
+                  { source: { uri: this.state.i2 }, },
+                  { source: { uri: this.state.i3 }, }
                 ]}
               />
 					<View style={styles.horizontal}>
