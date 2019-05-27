@@ -12,8 +12,8 @@ class ProductScreen extends Component {
     constructor(){
          super();
          this.state={
-           category : '',
-           order:'',
+           category : 'Todas',
+           order:'MayorAMenor',
            price: 30,
            minPrice: 0,
            maxPrice: 1000
@@ -24,80 +24,77 @@ class ProductScreen extends Component {
         const { navigation } = this.props;
         return(
         <DismissKeyboard>
-        <View style={styles.container}>
-        <KeyboardAvoidingView behavior="padding" enabled>
-         <Text style={styles.title}>¡Búsqueda!</Text>
-          <TextInput style={styles.inputBox}
-              underlineColorAndroid='transparent'
-              underlineColorAndroid='rgba(0,0,0,0)'
-              placeholder="¿Qué quieres buscar?"
-              placeholderTextColor = "#BCC5D5"
-              autoCapitalize={'none'}
-              autoCorrect={false}
-              />
-              <Text style={styles.cuerpoVerde}>Categoría</Text>
-              <Picker
-                    selectedValue={this.state.category}
-                    style={styles.picker}
-                    onPress={() => Keyboard.dismiss()}
-                    onValueChange={(itemValue, itemIndex) => this.setState({category: itemValue})
-              }>
-                  <Picker.Item label="Todas" value="Todas" />
-                  <Picker.Item label="Coches" value="Coches" />
-                  <Picker.Item label="Electrónica" value="Electrónica" />
-                  <Picker.Item label="Telefonía" value="Telefonía" />
-                  <Picker.Item label="Deporte" value="Deporte" />
-                  <Picker.Item label="Inmobiliaria" value="Inmobiliaria" />
-                  <Picker.Item label="Motos" value="Motos" />
-                  <Picker.Item label="Bicicletas" value="Bicicletas" />
-                  <Picker.Item label="Videojuegos" value="Videojuegos" />
-                  <Picker.Item label="Hogar" value="Hogar" />
-                  <Picker.Item label="Moda" value="Moda" />
-                  <Picker.Item label="Electrodomésticos" value="Electrodomésticos" />
-                  <Picker.Item label="Libros" value="Libros" />
-                  <Picker.Item label="Niños" value="Niños" />
-                  <Picker.Item label="Empleo" value="Empleo" />
-                  <Picker.Item label="Construcción" value="Construcción" />
-                  <Picker.Item label="Coleccionismo" value="Coleccionismo" />
-                  <Picker.Item label="Otros" value="Otros" />
-            </Picker>
-            <Text style={styles.cuerpoVerde}>Ordenar de...</Text>
-            <Picker
-                  selectedValue={this.state.order}
-                  style={styles.picker}
-                  onPress={() => Keyboard.dismiss()}
-                  onValueChange={(itemValue2, itemIndex2) => this.setState({order: itemValue2})
-            }>
-                <Picker.Item label="Mayor a menor" value="MayorAMenor" />
-                <Picker.Item label="Menor a mayor" value="MenorAMayor" />
-          </Picker>
-          <Text style={styles.cuerpoVerde}>Precio máximo</Text>
-          <Slider
-                    style={{ width: 320}}
-                    step={1}
-                    minimumValue={this.state.minPrice}
-                    maximumValue={this.state.maxPrice}
-                    value={this.state.price}
-                    onValueChange={val => this.setState({ price: val })}
-                    thumbTintColor='rgb(252, 228, 149)'
-                    maximumTrackTintColor='#d3d3d3'
-                    minimumTrackTintColor='rgb(252, 228, 149)'
-        />
-        <View style={styles.textCon}>
-            <Text>{this.state.minPrice} €</Text>
-            <Text>
-                {this.state.price + '€'}
-            </Text>
-            <Text>{this.state.maxPrice} €</Text>
-        </View>
-        <Text></Text>
-        <Text></Text>
-
-               <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
-             <Text style={styles.buttonText}>Buscar</Text>
-           </TouchableOpacity>
-            </KeyboardAvoidingView>
-  		</View>
+			<View style={styles.container}>
+				<KeyboardAvoidingView behavior="padding" enabled>
+					<Text style={styles.title}>¡Búsqueda!</Text>
+					<TextInput style={styles.inputBox}
+						underlineColorAndroid='transparent'
+						underlineColorAndroid='rgba(0,0,0,0)'
+						placeholder="¿Qué quieres buscar?"
+						placeholderTextColor = "#BCC5D5"
+						autoCapitalize={'none'}
+						autoCorrect={false}
+					/>
+					<Text style={styles.cuerpoVerde}>Categoría</Text>
+					<Picker
+							selectedValue={this.state.category}
+							style={styles.picker}
+							onPress={() => Keyboard.dismiss()}
+							onValueChange={(itemValue, itemIndex) => this.setState({category: itemValue})
+					}>
+						<Picker.Item label="Todas" value="Todas" />
+						<Picker.Item label="Coches" value="Coches" />
+						<Picker.Item label="Electrónica" value="Electrónica" />
+						<Picker.Item label="Telefonía" value="Telefonía" />
+						<Picker.Item label="Deporte" value="Deporte" />
+						<Picker.Item label="Inmobiliaria" value="Inmobiliaria" />
+						<Picker.Item label="Motos" value="Motos" />
+						<Picker.Item label="Bicicletas" value="Bicicletas" />
+						<Picker.Item label="Videojuegos" value="Videojuegos" />
+						<Picker.Item label="Hogar" value="Hogar" />
+						<Picker.Item label="Moda" value="Moda" />
+						<Picker.Item label="Electrodomésticos" value="Electrodomésticos" />
+						<Picker.Item label="Libros" value="Libros" />
+						<Picker.Item label="Niños" value="Niños" />
+						<Picker.Item label="Empleo" value="Empleo" />
+						<Picker.Item label="Construcción" value="Construcción" />
+						<Picker.Item label="Coleccionismo" value="Coleccionismo" />
+						<Picker.Item label="Otros" value="Otros" />
+					</Picker>
+					<Text style={styles.cuerpoVerde}>Ordenar de...</Text>
+					<Picker
+						selectedValue={this.state.order}
+						style={styles.picker}
+						onPress={() => Keyboard.dismiss()}
+						onValueChange={(itemValue2, itemIndex2) => this.setState({order: itemValue2})
+					}>
+						<Picker.Item label="Mayor a menor" value="MayorAMenor" />
+						<Picker.Item label="Menor a mayor" value="MenorAMayor" />
+					</Picker>
+					<Text style={styles.cuerpoVerde}>Precio máximo</Text>
+					<Slider
+						style={{ width: 320}}
+						step={1}
+						minimumValue={this.state.minPrice}
+						maximumValue={this.state.maxPrice}
+						value={this.state.price}
+						onValueChange={val => this.setState({ price: val })}
+						thumbTintColor='rgb(252, 228, 149)'
+						maximumTrackTintColor='#d3d3d3'
+						minimumTrackTintColor='rgb(252, 228, 149)'
+					/>
+					<View style={styles.textCon}>
+						<Text>{this.state.minPrice} €</Text>
+						<Text>{this.state.price + '€'}</Text>
+						<Text>{this.state.maxPrice} €</Text>
+					</View>
+					<Text></Text>
+					<Text></Text>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+						<Text style={styles.buttonText}>Buscar</Text>
+					</TouchableOpacity>
+				</KeyboardAvoidingView>
+			</View>
         </DismissKeyboard>
         )
     }
