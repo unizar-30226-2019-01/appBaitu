@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet,Text,View,TextInput,TouchableOpacity,TouchableHighlight,Image,KeyboardAvoidingView,Picker,Keyboard,TouchableWithoutFeedback,Slider} from 'react-native';
+import {ScrollView,StyleSheet,Text,View,TextInput,TouchableOpacity,TouchableHighlight,Image,KeyboardAvoidingView,Picker,Keyboard,TouchableWithoutFeedback,Slider} from 'react-native';
 import { LinearGradient } from 'expo';
 
 const DismissKeyboard = ({ children }) => (
@@ -13,7 +13,8 @@ class ProductScreen extends Component {
          super();
          this.state={
            category : 'Todas',
-           order:'MayorAMenor',
+		   order:'MayorAMenor',
+		   nombre: '',
            price: 30,
            minPrice: 0,
            maxPrice: 1000
@@ -23,17 +24,16 @@ class ProductScreen extends Component {
     render(){
         const { navigation } = this.props;
         return(
-        <DismissKeyboard>
-			<View style={styles.container}>
-				<KeyboardAvoidingView behavior="padding" enabled>
-					<Text style={styles.title}>¡Búsqueda!</Text>
+			<ScrollView>
+				<View style={styles.container}>
+					<Text style={styles.title}>¡Encuentra lo que estás buscando!</Text>
 					<TextInput style={styles.inputBox}
 						underlineColorAndroid='transparent'
 						underlineColorAndroid='rgba(0,0,0,0)'
 						placeholder="¿Qué quieres buscar?"
 						placeholderTextColor = "#BCC5D5"
-						autoCapitalize={'none'}
 						autoCorrect={false}
+						onChangeText={(nombre) => this.setState({nombre})}
 					/>
 					<Text style={styles.cuerpoVerde}>Categoría</Text>
 					<Picker
@@ -90,76 +90,77 @@ class ProductScreen extends Component {
 					</View>
 					<Text></Text>
 					<Text></Text>
-					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('SearchList', {price: this.state.price, category: this.state.category, order: this.state.order, nombre: this.state.nombre})}>
 						<Text style={styles.buttonText}>Buscar</Text>
 					</TouchableOpacity>
-				</KeyboardAvoidingView>
-			</View>
-        </DismissKeyboard>
+				</View>
+			</ScrollView>
         )
     }
 }
 
 
 const styles = StyleSheet.create({
-  container : {
-    flexGrow: 1,
-    alignItems: 'center'
-  },
-  title: {
-    fontSize: 20,
-    textAlign: 'center',
-    fontWeight: 'bold'
-  },textCon: {
-        width: 320,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
+	container : {
+		flexGrow: 1,
+		alignItems: 'center'
+	},
+	title: {
+		marginTop: 5,
+		fontSize: 20,
+		textAlign: 'center',
+		fontWeight: 'bold'
+	},
+	textCon: {
+			width: 320,
+			flexDirection: 'row',
+			justifyContent: 'space-between'
+	},
+	inputBox: {
+		width:300,
+		backgroundColor: '#F5FCFF',
+		borderRadius: 25,
+		paddingHorizontal:16,
+		fontSize:20,
+		color:'black',
+		marginVertical: 10,
+	},
+	button: {
+		width:320,
+		backgroundColor:'#1c313a',
+		borderRadius: 25,
+		marginVertical: 10,
+		paddingVertical: 13
+	},
+	link: {
 
-  inputBox: {
-    width:300,
-    backgroundColor: '#F5FCFF',
-    borderRadius: 25,
-    paddingHorizontal:16,
-    fontSize:20,
-    color:'black',
-    marginVertical: 10
-  },
-  button: {
-    width:320,
-    backgroundColor:'#1c313a',
-     borderRadius: 25,
-      marginVertical: 10,
-      paddingVertical: 13
-  },
-  link: {
-
-  },cuerpoVerde: {
-      fontSize: 20,
-      marginTop: 5,
-      marginLeft: 5,
-      marginRight: 5,
-      borderWidth: 5,
-      borderColor: '#B4FFAB',
-      borderRadius: 15,
-      paddingHorizontal: 7,
-      backgroundColor: '#B4FFAB',
-      overflow: 'hidden',
-      textAlign: 'center'
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'white',
-    textAlign:'center'
-    },
-  picker: {
-      width:320,
-      borderRadius: 10,
-      borderWidth: 1,
-      borderColor: '#1c313a',
-      overflow: 'hidden'
-  }
+	},
+	cuerpoVerde: {
+		fontSize: 20,
+		marginTop: 5,
+		marginLeft: 5,
+		marginRight: 5,
+		borderWidth: 5,
+		borderColor: '#B4FFAB',
+		borderRadius: 15,
+		paddingHorizontal: 7,
+		backgroundColor: '#B4FFAB',
+		overflow: 'hidden',
+		textAlign: 'center'
+	},
+	buttonText: {
+		fontSize:16,
+		fontWeight:'500',
+		color:'white',
+		textAlign:'center'
+	},
+	picker: {
+		width:320,
+		borderRadius: 10,
+		borderWidth: 1,
+		borderColor: '#1c313a',
+		overflow: 'hidden'
+	}
 });
 
 export default ProductScreen;
