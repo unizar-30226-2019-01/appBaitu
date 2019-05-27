@@ -3,6 +3,7 @@ import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,S
 import { LinearGradient } from 'expo';
 import { getProductos, getSubastas, getTipoPublicacion, getPublicaciones, infoSubasta, infoVenta } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
+import NullComponent from '../components/NullComponent';
 
 const numColumns = 2;
 
@@ -23,20 +24,160 @@ const formatData = (data, numColumns) => {
 	return data;
 };
 
-class ProductList extends Component {
+class SearchList extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			category: 'Todas',
+			order: 'MayorAMenor',
+			price: 30,
+			nombre: '',
+			refreshingV: false,
+			refreshingS: false,
+			ventas: [],
+			subastas: [],
+			estado: true		//Venta true, subasta false
 		};
 	}
 
-    render(){
-		<Text>{this.props.navigation.state.params.categoria}</Text>
-		<Text>{this.props.navigation.state.params.orden}</Text>
-		<Text>{this.props.navigation.state.params.price}</Text>
+	componentDidUpdate() {
+		if(this.state.nombre!=this.props.navigation.state.params.nombre ||
+			this.state.category!=this.props.navigation.state.params.category ||
+			this.state.order!=this.props.navigation.state.params.order ||
+			this.state.price!=this.props.navigation.state.params.price){
+				this.setState({
+					nombre: this.props.navigation.state.params.nombre,
+					category: this.props.navigation.state.params.category,
+					order: this.props.navigation.state.params.order,
+					price: this.props.navigation.state.params.price
+				})
+				this.onRefresh()
+			}
 	}
-}
 
+	componentDidMount() {
+		this.setState({
+			nombre: this.props.navigation.state.params.nombre,
+			category: this.props.navigation.state.params.category,
+			order: this.props.navigation.state.params.order,
+			price: this.props.navigation.state.params.price
+		})
+		this.onRefresh()
+	}
+
+	onRefreshV(){
+		this.setState({refreshingV:true, estado:true})
+		getProductos().then(data => {
+            this.setState({ventas: data})
+        })
+		this.setState({refreshingV:false})
+	}
+
+	onRefreshS(){
+		this.setState({refreshingS:true, estado:false})
+		getSubastas().then(data => {
+            this.setState({subastas: data})
+		})
+		this.setState({refreshingS:false})
+	}
+
+	onRefresh(){
+		if(this.state.estado){
+			this.onRefreshV()
+		}
+		else{
+			this.onRefreshS()
+		}
+	}
+
+	renderItem = ({ item, index }) => {
+		if (item.empty === true || item[4] > this.state.price) {
+			return <View/>;
+		}
+		else{
+			if(this.state.estado){
+				return (
+					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
+						<Image
+							style={styles.image}
+							source={{uri: item[6]}}/>
+						<Text style={styles.venta}>Venta</Text>
+						<Text style={styles.price}>{item[4]}€</Text>
+						<Text style={styles.title}>{item[0]}</Text>
+					</TouchableOpacity>
+				)
+			}
+			else {
+				return (
+					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
+						<Image
+							style={styles.image}
+							source={{uri: item[6]}}/>
+						<Text style={styles.subasta}>Subasta</Text>
+						<Text style={styles.price}>{item[4]}€</Text>
+						<Text style={styles.title}>{item[0]}</Text>
+					</TouchableOpacity>
+				)
+			}
+		}
+    }
+
+	botones(){
+		return(
+			<View style={styles.horizontal}>
+				<TouchableOpacity onPress={this.onRefreshV.bind(this)}>
+					<Text style={styles.botonVentaSubasta}>Ventas</Text>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={this.onRefreshS.bind(this)}>
+					<Text style={styles.botonVentaSubasta}>Subastas</Text>
+				</TouchableOpacity>
+			</View>
+		)
+	}
+
+    render(){
+		if(this.state.estado) {
+			return(
+				<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
+					<FlatList
+						refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshingV}
+							onRefresh={this.onRefreshV.bind(this)}
+						/>
+						}
+						ListHeaderComponent={this.botones()}
+						data={formatData(this.state.ventas, numColumns)}
+						style={styles.containerItem}
+						renderItem={this.renderItem}
+						numColumns={numColumns}
+						keyExtractor={(item, index) => index.toString()}
+					/>
+				</LinearGradient>
+			)
+		}
+		else {
+			return(
+				<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
+					<FlatList
+						refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshingS}
+							onRefresh={this.onRefreshS.bind(this)}
+						/>
+						}
+						ListHeaderComponent={this.botones()}
+						data={formatData(this.state.subastas, numColumns)}
+						style={styles.containerItem}
+						renderItem={this.renderItem}
+						numColumns={numColumns}
+						keyExtractor={(item, index) => index.toString()}
+					/>
+				</LinearGradient>
+	        )
+		}
+    }
+}
 
 const styles = StyleSheet.create({
 	horizontal: {
@@ -51,7 +192,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#ffffff',
 		flex: 1,
 		margin:2,
-		height: 240
+		height: 240,
 	},
 	itemInvisible: {
 		backgroundColor: 'transparent',
@@ -117,4 +258,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default ProductList;
+export default SearchList;

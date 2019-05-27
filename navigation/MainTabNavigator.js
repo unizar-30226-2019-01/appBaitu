@@ -13,6 +13,7 @@ import Upload from '../screens/UploadScreen';
 import EditProfile from '../screens/EditProfile';
 import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
+import SearchList from '../screens/SearchList';
 import Venta from '../screens/Venta';
 import Subasta from '../screens/Subasta';
 import VentaOwner from '../screens/VentaOwner';
@@ -54,6 +55,9 @@ const DrawerScreen = createDrawerNavigator({
     Reportar: {screen: Reportar, navigationOptions: {
 		drawerLabel: <NullComponent/>
 	}},
+    SearchList: {screen: SearchList, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}},
 }, {
     headerMode: 'none',
     drawerWidth: 300,
@@ -75,7 +79,8 @@ const HomeNavigator = createStackNavigator({
     EditVenta: {screen: EditVenta},
     EditSubasta: {screen: EditSubasta},
 	ProductList: {screen: ProductList},
-	Favoritos: {screen: Favoritos}
+	Favoritos: {screen: Favoritos},
+	SearchList: {screen: SearchList}
 }, {
   headerMode: 'float',
   defaultNavigationOptions: ({navigation}) =>   ({

@@ -151,7 +151,6 @@ class ProductList extends Component {
     }
 }
 
-
 const styles = StyleSheet.create({
 	horizontal: {
 		flex: 1,
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#ffffff',
 		flex: 1,
 		margin:2,
-		height: 240
+		height: 240,
 	},
 	itemInvisible: {
 		backgroundColor: 'transparent',
