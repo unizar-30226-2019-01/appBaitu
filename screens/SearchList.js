@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getProductos, getSubastas, getTipoPublicacion, getPublicaciones, infoSubasta, infoVenta } from '../controlador/GestionPublicaciones';
+import { getProductos, getSubastas, getTipoPublicacion, getPublicaciones, infoSubasta, infoVenta, filtrarVentas, filtrarSubastas } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
-import NullComponent from '../components/NullComponent';
 
 const numColumns = 2;
 
@@ -67,17 +66,17 @@ class SearchList extends Component {
 
 	onRefreshV(){
 		this.setState({refreshingV:true, estado:true})
-		getProductos().then(data => {
-            this.setState({ventas: data})
-        })
+		filtrarSubastas(this.state.nombre, this.state.category, this.state.order, this.state.price).then(data => {
+			this.setState({ventas: data})
+		})
 		this.setState({refreshingV:false})
 	}
 
 	onRefreshS(){
 		this.setState({refreshingS:true, estado:false})
-		getSubastas().then(data => {
+		filtrarSubastas(this.state.nombre, this.state.category, this.state.order, this.state.price).then(data => {
             this.setState({subastas: data})
-		})
+        })
 		this.setState({refreshingS:false})
 	}
 
@@ -86,39 +85,37 @@ class SearchList extends Component {
 			this.onRefreshV()
 		}
 		else{
-			this.onRefreshS()
+			this.state.onRefreshS()
 		}
 	}
 
 	renderItem = ({ item, index }) => {
-		if (item.empty === true || item[4] > this.state.price) {
-			return <View/>;
+		if (item.empty === true) {
+			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
-		else{
-			if(this.state.estado){
-				return (
-					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
-						<Image
-							style={styles.image}
-							source={{uri: item[6]}}/>
-						<Text style={styles.venta}>Venta</Text>
-						<Text style={styles.price}>{item[4]}€</Text>
-						<Text style={styles.title}>{item[0]}</Text>
-					</TouchableOpacity>
-				)
-			}
-			else {
-				return (
-					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
-						<Image
-							style={styles.image}
-							source={{uri: item[6]}}/>
-						<Text style={styles.subasta}>Subasta</Text>
-						<Text style={styles.price}>{item[4]}€</Text>
-						<Text style={styles.title}>{item[0]}</Text>
-					</TouchableOpacity>
-				)
-			}
+		if(this.state.estado){
+			return (
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
+					<Image
+						style={styles.image}
+						source={{uri: item[6]}}/>
+					<Text style={styles.venta}>Venta</Text>
+					<Text style={styles.price}>{item[4]}€</Text>
+					<Text style={styles.title}>{item[0]}</Text>
+				</TouchableOpacity>
+			)
+		}
+		else {
+			return (
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
+					<Image
+						style={styles.image}
+						source={{uri: item[6]}}/>
+					<Text style={styles.subasta}>Subasta</Text>
+					<Text style={styles.price}>{item[4]}€</Text>
+					<Text style={styles.title}>{item[0]}</Text>
+				</TouchableOpacity>
+			)
 		}
     }
 
