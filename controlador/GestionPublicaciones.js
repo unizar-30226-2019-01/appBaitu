@@ -329,6 +329,36 @@ export const eliminarSubasta = subasta => {
       })
 }
 
+export const filtrarVentas = (nombre,categoria,orden,precio) => {
+	return axios
+		.get(`http://52.151.88.18:5000/filtrarVentas/${nombre}/${categoria}/${orden}/${precio}`, {
+			headers: { "Content-type": "application/json" }
+		})
+        .then(res => {
+            var data = []
+            Object.keys(res.data).forEach((key) => {
+                var val = res.data[key]
+                data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Precio, val.Categoria, val.FotoPrincipal, val.Provincia])
+            })
+            return data
+        })
+}
+
+export const filtrarSubastas = (nombre,categoria,orden,precio) => {
+	return axios
+		.get(`http://52.151.88.18:5000/filtrarSubastas/${nombre}/${categoria}/${orden}/${precio}`, {
+			headers: { "Content-type": "application/json" }
+		})
+        .then(res => {
+            var data = []
+            Object.keys(res.data).forEach((key) => {
+                var val = res.data[key]
+                data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.precio_actual, val.Categoria, val.FotoPrincipal, val.fecha_limite, val.hora_limite, val.FotoPrincipal, val.Provincia])
+            })
+            return data
+        })
+}
+
   export const crearFavorito = (producto, id) => {
     return axios
         .post(
