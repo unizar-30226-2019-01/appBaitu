@@ -109,3 +109,19 @@ export const infoUsuario = login => {
         return data
 	})
 }
+
+export const reportar = infoReport => {
+  return axios
+
+    .post(`http://52.151.88.18:5000/reportar/${infoReport.producto}`, {    //pasar el id del producto por parametro xq sino falla
+      denunciante: infoReport.denunciante,
+      vendedor: infoReport.vendedor,
+      texto: infoReport.texto
+    })
+    .then(response => {
+      if(response.data != "Error"){
+        console.log("token")
+      }
+      return response.data
+    })
+}

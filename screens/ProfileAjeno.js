@@ -9,14 +9,16 @@ class Profile extends Component {
         super(props)
         this.state = {
             datos: [],
-            login: ''
+            login: '',
+            producto: ''
         }
     }
 
 	async componentDidMount() {
         console.log(this.state.login)
         await this.setState({
-            login: this.props.navigation.state.params.login
+            login: this.props.navigation.state.params.login,
+            producto: this.props.navigation.state.params.producto
         })
         console.log(this.state.login)
 		infoUsuario(this.state.login).then(data => {
@@ -65,10 +67,10 @@ class Profile extends Component {
                         <Text style={styles.correo}>{this.state.datos[3]}</Text>
                         <Text style={styles.cuerpoVerde}>Teléfono</Text>
                         <Text style={styles.cuerpo}>{this.state.datos[7]}</Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {login: this.state.login})}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {qualifiedUser: this.state.login})}>
                             <Text style={styles.buttonText}>CALIFICAR USUARIO</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Reportar', {login: this.state.login})}>
+                        <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Reportar', {reportedUser: this.state.login, producto: this.state.producto})}>
                             <Text style={styles.buttonText}>REPORTAR USUARIO</Text>
                         </TouchableOpacity>
                         <Text></Text>

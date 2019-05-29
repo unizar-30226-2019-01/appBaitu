@@ -48,6 +48,7 @@ class Subasta extends Component {
             })
             if(this.state.respuestaBD === "OK"){
                 Alert.alert('','¡Se ha realizado la puja correctamente!',[{text: 'OK'}],{cancelable: false});
+                this.props.navigation.goBack()
             }
             else{
                 Alert.alert('','No se ha podido realizar la puja',[{text: 'OK'}],{cancelable: false});
@@ -233,7 +234,14 @@ class Subasta extends Component {
 						<Text style={styles.cuerpoVerde}>Descripción</Text>
 						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
 						<Text style={styles.cuerpoVerde}>Vendedor</Text>
-						<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('Profile')}>
+                        <TouchableOpacity style={styles.link} onPress={() => {
+                            if(this.state.login === this.state.datosProducto[5]){
+                                this.props.navigation.navigate('Profile')
+                            }
+                            else{
+                                this.props.navigation.navigate('ProfileAjeno', {login:this.state.datosProducto[5],producto:this.state.id})
+                            }
+                        }}>
 							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
 						</TouchableOpacity>
 						<Text style={styles.price}>{this.state.datosVendedor[6]}
