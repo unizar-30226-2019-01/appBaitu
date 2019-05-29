@@ -5,9 +5,7 @@ import jwt_decode from 'jwt-decode';
 import { deleteUser } from '../controlador/GestionUsuarios';
 import { infoUsuario } from '../controlador/GestionUsuarios.js'
 import EditarPerfil from './EditProfile.js';
-import * as firebase from 'firebase'
 
-let foto=''
 
 class Profile extends Component {
     constructor(props) {
@@ -21,21 +19,28 @@ class Profile extends Component {
 
 	async componentDidMount() {
 		const token = await AsyncStorage.getItem('userToken')
+        console.log(token)
 		if (token === undefined || token === null) {
 			console.log("no existe token")
 		}
 		else{
+            console.log("aqui1")
 			const decoded = jwt_decode(token)
 			const usuario = {
 				login: decoded.identity.login
 			}
-			infoUsuario(decoded.identity.login).then(data => {
+            console.log("aqui2")
+            console.log(decoded.identity.login)
+			await infoUsuario(decoded.identity.login).then(data => {
     			this.setState({
     				login: decoded.identity.login,
     				datos: data
     			}
 			)
 		})
+        console.log("aqui3")
+        console.log(this.state.login)
+        console.log("aqui4")
 	}
 }
     onRefresh(){
