@@ -331,7 +331,7 @@ export const eliminarSubasta = subasta => {
 
 export const filtrarVentas = (nombre,categoria,orden,precio) => {
 	return axios
-		.get(`http://52.151.88.18:5000/filtrarVentas/${nombre}/${categoria}/${orden}/${precio}`, {
+		.get(`http://52.151.88.18:5000/filtrarVentas/${categoria}/${orden}/${precio}/${nombre}`, {
 			headers: { "Content-type": "application/json" }
 		})
         .then(res => {
@@ -349,7 +349,7 @@ export const filtrarVentas = (nombre,categoria,orden,precio) => {
 
 export const filtrarSubastas = (nombre,categoria,orden,precio) => {
 	return axios
-		.get(`http://52.151.88.18:5000/filtrarSubastas/${nombre}/${categoria}/${orden}/${precio}`, {
+		.get(`http://52.151.88.18:5000/filtrarSubastas/${categoria}/${orden}/${precio}/${nombre}`, {
 			headers: { "Content-type": "application/json" }
 		})
         .then(res => {

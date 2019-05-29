@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getProductos, getSubastas, getTipoPublicacion, getPublicaciones, infoSubasta, infoVenta, filtrarVentas, filtrarSubastas } from '../controlador/GestionPublicaciones';
+import { getTipoPublicacion, infoSubasta, infoVenta, filtrarVentas, filtrarSubastas } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
 
 const numColumns = 2;
@@ -14,8 +14,11 @@ const widthVenta = 60
 
 
 const formatData = (data, numColumns) => {
-	const numberOfFullRows = Math.floor(data.length / numColumns);
-	let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+	//const numberOfFullRows = Math.floor(data.length / numColumns);
+	//const numberOfFullRows = Math.floor(data.length / numColumns);
+	//let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+	const numberOfFullRows = 5
+	let numberOfElementsLastRow = 10 - (numberOfFullRows * numColumns);
 	while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
 		data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
 		numberOfElementsLastRow++;
@@ -66,7 +69,7 @@ class SearchList extends Component {
 
 	onRefreshV(){
 		this.setState({refreshingV:true, estado:true})
-		filtrarSubastas(this.state.nombre, this.state.category, this.state.order, this.state.price).then(data => {
+		filtrarVentas(this.state.category, this.state.order, this.state.price, this.state.nombre).then(data => {
 			this.setState({ventas: data})
 		})
 		this.setState({refreshingV:false})
@@ -74,13 +77,14 @@ class SearchList extends Component {
 
 	onRefreshS(){
 		this.setState({refreshingS:true, estado:false})
-		filtrarSubastas(this.state.nombre, this.state.category, this.state.order, this.state.price).then(data => {
+		filtrarSubastas(this.state.category, this.state.order, this.state.price, this.state.nombre).then(data => {
             this.setState({subastas: data})
         })
 		this.setState({refreshingS:false})
 	}
 
 	onRefresh(){
+		console.log(this.state)
 		if(this.state.estado){
 			this.onRefreshV()
 		}
