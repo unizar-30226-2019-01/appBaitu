@@ -31,6 +31,7 @@ class SearchList extends Component {
 			order: 'MayorAMenor',
 			price: 30,
 			nombre: '',
+			ubicacion: '',
 			refreshingV: false,
 			refreshingS: false,
 			ventas: [],
@@ -48,15 +49,26 @@ class SearchList extends Component {
 		}
 	}
 
+	codU(){
+		if (this.state.ubicacion == ''){
+			return "_*_"
+		}
+		else{
+			return this.state.ubicacion
+		}
+	}
+
 	componentDidUpdate() {
 		if(this.state.nombre!=this.props.navigation.state.params.nombre ||
 			this.state.category!=this.props.navigation.state.params.category ||
 			this.state.order!=this.props.navigation.state.params.order ||
+			this.state.ubicacion!=this.props.navigation.state.params.ubicacion ||
 			this.state.price!=this.props.navigation.state.params.price){
 				this.setState({
 					nombre: this.props.navigation.state.params.nombre,
 					category: this.props.navigation.state.params.category,
 					order: this.props.navigation.state.params.order,
+					ubicacion: this.props.navigation.state.params.ubicacion,
 					price: this.props.navigation.state.params.price
 				})
 				this.onRefresh()
@@ -67,6 +79,7 @@ class SearchList extends Component {
 		await this.setState({
 			nombre: this.props.navigation.state.params.nombre,
 			category: this.props.navigation.state.params.category,
+			ubicacion: this.props.navigation.state.params.ubicacion,
 			order: this.props.navigation.state.params.order,
 			price: this.props.navigation.state.params.price
 		})
@@ -75,7 +88,7 @@ class SearchList extends Component {
 
 	onRefreshV(){
 		this.setState({refreshingV:true, estado:true})
-		filtrarVentas(this.state.category, this.state.order, this.state.price, this.codN(this.state.nombre)).then(data => {
+		filtrarVentas(this.state.category, this.state.order, this.state.price, this.codN(this.state.nombre), this.codU(this.state.ubicacion)).then(data => {
 			this.setState({ventas: data})
 		})
 		this.setState({refreshingV:false})
@@ -83,14 +96,13 @@ class SearchList extends Component {
 
 	onRefreshS(){
 		this.setState({refreshingS:true, estado:false})
-		filtrarSubastas(this.state.category, this.state.order, this.state.price, this.codN(this.state.nombre)).then(data => {
+		filtrarSubastas(this.state.category, this.state.order, this.state.price, this.codN(this.state.nombre), this.codU(this.state.ubicacion)).then(data => {
             this.setState({subastas: data})
         })
 		this.setState({refreshingS:false})
 	}
 
 	onRefresh(){
-		console.log(this.state)
 		if(this.state.estado){
 			this.onRefreshV()
 		}

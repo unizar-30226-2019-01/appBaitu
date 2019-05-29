@@ -15,6 +15,7 @@ class ProductScreen extends Component {
            category : 'Todas',
 		   order:'MayorAMenor',
 		   nombre: '',
+		   ubicacion: '',
            price: 30,
            minPrice: 0,
            maxPrice: 1000
@@ -34,6 +35,14 @@ class ProductScreen extends Component {
 						placeholderTextColor = "#BCC5D5"
 						autoCorrect={false}
 						onChangeText={(nombre) => this.setState({nombre})}
+					/>
+					<TextInput style={styles.inputBox}
+						underlineColorAndroid='transparent'
+						underlineColorAndroid='rgba(0,0,0,0)'
+						placeholder="¿Dónde lo quieres?"
+						placeholderTextColor = "#BCC5D5"
+						autoCorrect={false}
+						onChangeText={(nombre) => this.setState({ubicacion})}
 					/>
 					<Text style={styles.cuerpoVerde}>Categoría</Text>
 					<Picker
@@ -90,7 +99,7 @@ class ProductScreen extends Component {
 					</View>
 					<Text></Text>
 					<Text></Text>
-					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('SearchList', {price: this.state.price, category: this.state.category, order: this.state.order, nombre: this.state.nombre})}>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('SearchList', {price: this.state.price, category: this.state.category, order: this.state.order, nombre: this.state.nombre, ubicacion: this.state.ubicacion})}>
 						<Text style={styles.buttonText}>Buscar</Text>
 					</TouchableOpacity>
 				</View>

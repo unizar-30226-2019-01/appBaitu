@@ -227,6 +227,8 @@ class Subasta extends Component {
                         <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
                         <Text style={styles.cuerpoVerde}>Precio actual</Text>
                         <Text style={styles.title}>{this.state.datosProducto[7]}€</Text>
+						<Text style={styles.cuerpoVerde}>Ubicación</Text>
+						<Text style={styles.cuerpo}>{this.state.datosProducto[10]}</Text>
 						<Text style={styles.cuerpoVerde}>Descripción</Text>
 						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
 						<Text style={styles.cuerpoVerde}>Vendedor</Text>
@@ -270,8 +272,7 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         backgroundColor: 'gray',
-        height: (Dimensions.get('window').width)*0.75,
-        width: Dimensions.get('window').width,
+        height: (Dimensions.get('window').width),
 		alignItems: 'center',
     },
     buttonText: {

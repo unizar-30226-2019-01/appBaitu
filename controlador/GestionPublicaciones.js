@@ -246,7 +246,8 @@ export const infoVenta = id => {
           data[3]=res.data.Categoria
           data[4]=res.data.FotoPrincipal
           data[5]=res.data.Vendedor
-          data[6]=res.data.Precio
+		  data[6]=res.data.Precio
+		  data[7]=res.data.Provincia
           return data
       })
   }
@@ -267,7 +268,8 @@ export const infoSubasta = id => {
             data[6]=res.data.precio_salida
             data[7]=res.data.precio_actual
             data[8]=res.data.fecha_limite
-            data[9]=res.data.hora_limite
+			data[9]=res.data.hora_limite
+			data[10]=res.data.Provincia
             return data
         })
 }
@@ -329,9 +331,9 @@ export const eliminarSubasta = subasta => {
       })
 }
 
-export const filtrarVentas = (categoria,orden,precio,nombre) => {
+export const filtrarVentas = (categoria,orden,precio,nombre,ubicacion) => {
 	return axios
-		.get(`http://52.151.88.18:5000/filtrarVentas/${categoria}/${orden}/${precio}/${nombre}`, {
+		.get(`http://52.151.88.18:5000/filtrarVentas/${categoria}/${orden}/${precio}/${nombre}/${ubicacion}`, {
 			headers: { "Content-type": "application/json" }
 		})
         .then(res => {
@@ -347,9 +349,9 @@ export const filtrarVentas = (categoria,orden,precio,nombre) => {
 		})
 }
 
-export const filtrarSubastas = (categoria,orden,precio,nombre) => {
+export const filtrarSubastas = (categoria,orden,precio,nombre,ubicacion) => {
 	return axios
-		.get(`http://52.151.88.18:5000/filtrarSubastas/${categoria}/${orden}/${precio}/${nombre}`, {
+		.get(`http://52.151.88.18:5000/filtrarSubastas/${categoria}/${orden}/${precio}/${nombre}/${ubicacion}`, {
 			headers: { "Content-type": "application/json" }
 		})
         .then(res => {
