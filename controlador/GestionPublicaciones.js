@@ -309,6 +309,29 @@ export const getFotos = id => {
         })
   }
 
+  export const actualizarSubasta = subastaEditada => {
+  return axios
+      .post('http://52.151.88.18:5000/modificarSubasta', {
+          idP: subastaEditada.id,
+          nombre: subastaEditada.nombre,
+          descripcion: subastaEditada.descripcion,
+          categoria: subastaEditada.categoria,
+          fotoP: subastaEditada.fotoP,
+          foto1: subastaEditada.foto1,
+          foto2: subastaEditada.foto2,
+          foto3: subastaEditada.foto3,
+          fotoPAntigua: subastaEditada.fotoPAntigua,
+          foto1Antigua: subastaEditada.foto1Antigua,
+          foto2Antigua: subastaEditada.foto2Antigua,
+          foto3Antigua: subastaEditada.foto3Antigua,
+          fecha: subastaEditada.fecha
+      })
+      .then(res => {
+          return res.data
+      }).catch(err => {
+        return err})
+}
+
 export const eliminarProducto = producto => {
     return axios
       .post(

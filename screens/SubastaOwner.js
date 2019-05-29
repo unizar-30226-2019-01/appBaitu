@@ -33,13 +33,13 @@ class Venta extends Component {
                 this.setState({
                     id: this.props.navigation.state.params.id
                 })
-                infoSubasta(this.state.id).then(data => {
+                await infoSubasta(this.state.id).then(data => {
                     this.setState({
                         login: decoded.identity.login,
                         datosProducto: data
                     })
                 })
-                infoUsuario(this.state.datosProducto[5]).then(data => {
+                await infoUsuario(this.state.datosProducto[5]).then(data => {
                     this.setState({
                         datosVendedor: data
                     })
@@ -69,13 +69,13 @@ class Venta extends Component {
             this.setState({
                 id: this.props.navigation.state.params.id
             })
-            infoSubasta(this.state.id).then(data => {
+            await infoSubasta(this.state.id).then(data => {
                 this.setState({
                     login: decoded.identity.login,
                     datosProducto: data
                 })
             })
-            infoUsuario(this.state.datosProducto[5]).then(data => {
+            await infoUsuario(this.state.datosProducto[5]).then(data => {
                 this.setState({
                     datosVendedor: data
                 })

@@ -18,32 +18,15 @@ class Subasta extends Component {
         }
     }
 
-    async abrirCalendario() {
-         try {
-           var {action, year, month, day} = await DatePickerAndroid.open({
-             date: new Date()
-           });
-           month=month+1
-           this.setState({fechaFin: day+"/"+month+"/"+year})
-         } catch ({code, message}) {
-           console.warn('Cannot open date picker', message);
-         }
-       }
-
-       async abrirReloj() {
-           try {
-              var {action, hour, minute} = await TimePickerAndroid.open({
-                  hour: 14,
-                  minute: 0,
-                  is24Hour: true
-              });
-              this.setState({horaFin: hour+":"+minute})
-            } catch ({code, message}) {
-              console.warn('Cannot open time picker', message);
-            }
-        }
-
     editarPublicacion(){
+        console.log(this.state.categoria)
+        if (this.state.categoria == ''){
+            Alert.alert('','Por favor, selecciona la categoría',[{text: 'OK'}],{cancelable: false});
+
+        }
+        else {
+
+        }
         // LLAMAR AQUI A LA FUNCION DEL BACK PARA ACTUALIZAR LAS SUBASTAS XDXDXDDXDXDXDXDXDXDXDXDXDX
     }
 
@@ -94,11 +77,17 @@ class Subasta extends Component {
         this.setState({
              nombre: this.state.datosProducto[1],
              descripción: this.state.datosProducto[2],
-             categoría: this.state.datosProducto[3],
+             categoria: this.state.datosProducto[3],
              fechaFin: this.state.datosProducto[8],
              horaFin: this.state.datosProducto[9]
          })
+         console.log(this.state.nombre)
+         console.log(this.state.descripcion)
+         console.log(this.state.caregoria)
+         console.log(this.state.fechaFin)
+         console.log(this.state.horaFin)
 	}
+
 
     render(){
         return(
@@ -153,18 +142,6 @@ class Subasta extends Component {
                             <Picker.Item label="Construcción" value="Construcción" />
                             <Picker.Item label="Coleccionismo" value="Coleccionismo" />
                         </Picker>
-
-                        <Text style={styles.cuerpoVerde}>Fecha límite</Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.abrirCalendario()}>
-                            <Text style={styles.buttonText}>Cambiar Fecha</Text>
-                        </TouchableOpacity>
-                        <Text>Fecha de finalización: {this.state.fechaFin}</Text>
-
-                        <Text style={styles.cuerpoVerde}>Hora límite</Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.abrirReloj()}>
-                            <Text style={styles.buttonText}>Cambiar Hora</Text>
-                        </TouchableOpacity>
-                        <Text>Hora de finalización: {this.state.horaFin}</Text>
 
 						<TouchableOpacity style={styles.button} onPress={() => this.editarPublicacion() }>
 							<Text style={styles.buttonText}>Guardar Cambios </Text>

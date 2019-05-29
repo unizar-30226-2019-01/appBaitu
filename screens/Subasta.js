@@ -4,10 +4,9 @@ import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
 import { infoSubasta, consultarFavorito, crearFavorito, eliminarFavorito, realizarOfertaSubasta, getFotos } from '../controlador/GestionPublicaciones';
-import * as firebase from 'firebase';
 import Gallery from 'react-native-image-gallery';
 
-let foto=''
+
 
 class Subasta extends Component {
     constructor(props) {
@@ -49,7 +48,6 @@ class Subasta extends Component {
             })
             if(this.state.respuestaBD === "OK"){
                 Alert.alert('','¡Se ha realizado la puja correctamente!',[{text: 'OK'}],{cancelable: false});
-                this.props.navigation.goBack()
             }
             else{
                 Alert.alert('','No se ha podido realizar la puja',[{text: 'OK'}],{cancelable: false});
