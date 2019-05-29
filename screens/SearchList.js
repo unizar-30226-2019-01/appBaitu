@@ -42,6 +42,15 @@ class SearchList extends Component {
 		};
 	}
 
+	codN(){
+		if (this.state.nombre == ''){
+			return "_*_"
+		}
+		else{
+			return this.state.nombre
+		}
+	}
+
 	componentDidUpdate() {
 		if(this.state.nombre!=this.props.navigation.state.params.nombre ||
 			this.state.category!=this.props.navigation.state.params.category ||
@@ -69,7 +78,7 @@ class SearchList extends Component {
 
 	onRefreshV(){
 		this.setState({refreshingV:true, estado:true})
-		filtrarVentas(this.state.category, this.state.order, this.state.price, this.state.nombre).then(data => {
+		filtrarVentas(this.state.category, this.state.order, this.state.price, codN(this.state.nombre)).then(data => {
 			this.setState({ventas: data})
 		})
 		this.setState({refreshingV:false})
@@ -77,7 +86,7 @@ class SearchList extends Component {
 
 	onRefreshS(){
 		this.setState({refreshingS:true, estado:false})
-		filtrarSubastas(this.state.category, this.state.order, this.state.price, this.state.nombre).then(data => {
+		filtrarSubastas(this.state.category, this.state.order, this.state.price, codN(this.state.nombre)).then(data => {
             this.setState({subastas: data})
         })
 		this.setState({refreshingS:false})
