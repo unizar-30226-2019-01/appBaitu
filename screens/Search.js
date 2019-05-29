@@ -42,7 +42,7 @@ class ProductScreen extends Component {
 						placeholder="¿Dónde lo quieres?"
 						placeholderTextColor = "#BCC5D5"
 						autoCorrect={false}
-						onChangeText={(nombre) => this.setState({ubicacion})}
+						onChangeText={(ubicacion) => this.setState({ubicacion})}
 					/>
 					<Text style={styles.cuerpoVerde}>Categoría</Text>
 					<Picker
