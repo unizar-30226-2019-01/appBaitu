@@ -14,11 +14,8 @@ const widthVenta = 60
 
 
 const formatData = (data, numColumns) => {
-	//const numberOfFullRows = Math.floor(data.length / numColumns);
-	//const numberOfFullRows = Math.floor(data.length / numColumns);
-	//let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
-	const numberOfFullRows = 5
-	let numberOfElementsLastRow = 10 - (numberOfFullRows * numColumns);
+	const numberOfFullRows = Math.floor(data.length / numColumns);
+	let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
 	while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
 		data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
 		numberOfElementsLastRow++;
@@ -66,8 +63,8 @@ class SearchList extends Component {
 			}
 	}
 
-	componentDidMount() {
-		this.setState({
+	async componentDidMount() {
+		await this.setState({
 			nombre: this.props.navigation.state.params.nombre,
 			category: this.props.navigation.state.params.category,
 			order: this.props.navigation.state.params.order,
@@ -78,7 +75,7 @@ class SearchList extends Component {
 
 	onRefreshV(){
 		this.setState({refreshingV:true, estado:true})
-		filtrarVentas(this.state.category, this.state.order, this.state.price, codN(this.state.nombre)).then(data => {
+		filtrarVentas(this.state.category, this.state.order, this.state.price, this.codN(this.state.nombre)).then(data => {
 			this.setState({ventas: data})
 		})
 		this.setState({refreshingV:false})
@@ -86,7 +83,7 @@ class SearchList extends Component {
 
 	onRefreshS(){
 		this.setState({refreshingS:true, estado:false})
-		filtrarSubastas(this.state.category, this.state.order, this.state.price, codN(this.state.nombre)).then(data => {
+		filtrarSubastas(this.state.category, this.state.order, this.state.price, this.codN(this.state.nombre)).then(data => {
             this.setState({subastas: data})
         })
 		this.setState({refreshingS:false})
@@ -98,7 +95,7 @@ class SearchList extends Component {
 			this.onRefreshV()
 		}
 		else{
-			this.state.onRefreshS()
+			this.onRefreshS()
 		}
 	}
 
