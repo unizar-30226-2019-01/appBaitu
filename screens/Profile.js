@@ -12,7 +12,8 @@ class Profile extends Component {
         super(props)
         this.state = {
             datos: [],
-            login: ''
+            login: '',
+            refreshing: false
         }
         this.onDelete = this.onDelete.bind(this)
     }
@@ -43,18 +44,15 @@ class Profile extends Component {
         console.log("aqui4")
 	}
 }
-    onRefresh(){
-        this.setState({refreshing:true})
+    async onRefresh() {
+        this.setState({refreshing : true})
         //funcion de llamada cargar datos de nuevo
-        getProductos().then(data => {
+        await infoUsuario(this.state.login).then(data => {
             this.setState({
-                products: data
-            },
-            () => {
-                console.log("Perfil actualizado")
+                datos: data
             })
         })
-        this.setState({refreshing:false})
+        this.setState({refreshing : false})
     }
 
 onDelete(e) {
@@ -81,7 +79,12 @@ async cerrarSesion(e){
         foto = this.state.datos[4]
       }
         return(
-            <ScrollView>
+            <ScrollView refreshControl={
+                <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.onRefresh.bind(this)}
+                />
+            }>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
                 <KeyboardAvoidingView behavior="padding" enabled>
                         <TouchableOpacity  onPress={() => this.props.navigation.navigate('EditarPerfil')}>

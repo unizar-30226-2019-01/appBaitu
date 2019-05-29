@@ -25,6 +25,20 @@ export const register = newUser => {
 
 export const login = user => {
   return axios
+    .post('http://52.151.88.18:5000/loginCheck', {
+      login: user.login,
+      password: user.password
+    })
+    .then(response => {
+      return response.data
+    })
+    .catch(err => {
+      console.log("error")
+    })
+}
+
+export const login2 = user => {
+  return axios
     .post('http://52.151.88.18:5000/login', {
       login: user.login,
       password: user.password
@@ -79,7 +93,7 @@ export const deleteUser = user => {
 export const infoUsuario = login => {
     console.log("login: "+ login)
   return axios
-      .post(`http://52.151.88.18:5000/infoUsuario/`, {
+      .post(`http://52.151.88.18:5000/infoUsuario`, {
           usuario: login
       })
       .then(res => {

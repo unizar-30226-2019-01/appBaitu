@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet,AsyncStorage,Text,Alert,View,TextInput,TouchableOpacity,TouchableWithoutFeedback,TouchableHighlight,Image,Keyboard,KeyboardAvoidingView,BackHandler} from 'react-native';
 import { LinearGradient } from 'expo';
 import { StackNavigator} from 'react-navigation';
-import { login } from '../controlador/GestionUsuarios.js'
+import { login, login2 } from '../controlador/GestionUsuarios.js'
 
 
 import Register from './Register.js';
@@ -10,6 +10,7 @@ import Register from './Register.js';
 
 var exito = false;
 var respuestaBD = "";
+var respuestaBD2 = "";
 
 class Login extends Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class Login extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onSubmit(e) {
+  async onSubmit(e) {
     Keyboard.dismiss()
     if(this.state.login != '' && this.state.password != '') {
       exito = true
@@ -64,11 +65,18 @@ class Login extends Component {
         login: this.state.login,
         password: this.state.password
       }
-      login(user).then(data => {
+     await login(user).then(data => {
         this.setState({
           respuestaBD: data
         })
       })
+
+      await login2(user).then(data => {
+          this.setState({
+              respuestaBD2: data
+          })
+      })
+      
       this.setState({logear: true})
       exito = false
     }
@@ -77,13 +85,13 @@ class Login extends Component {
     render(){
         const { navigation } = this.props;
         if(this.state.logear) {
-          if(this.state.respuestaBD=="Error") {
+          if(this.state.respuestaBD === "error") {
             Alert.alert('','Login o contraseña incorrectos',[{text: 'OK'}],{cancelable: false});
             this.setState({respuestaBD:""})
             this.setState({logear: false})
           }
-          else if(this.state.respuestaBD != undefined){
-            AsyncStorage.setItem('userToken', this.state.respuestaBD)
+          else if(this.state.respuestaBD === "exito"){
+            AsyncStorage.setItem('userToken', this.state.respuestaBD2)
             this.props.navigation.navigate('Sidebar')
           }
         }
