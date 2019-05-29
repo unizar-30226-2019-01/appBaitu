@@ -35,6 +35,9 @@ class Subasta extends Component {
         if(this.state.puja <= this.state.datosProducto[7]){
             Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
         }
+        else if(this.state.login===this.state.datosProducto[5]){
+            Alert.alert('','No puedes pujar en una subasta tuya',[{text: 'OK'}],{cancelable: false});
+        }
         else{
             console.log(this.state.id)
             console.log(this.state.puja)
