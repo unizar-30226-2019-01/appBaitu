@@ -77,9 +77,10 @@ export const deleteUser = user => {
 }
 
 export const infoUsuario = login => {
+    console.log("login: "+ login)
   return axios
-      .get(`http://52.151.88.18:5000/infoUsuario/${login}`, {
-
+      .post(`http://52.151.88.18:5000/infoUsuario/`, {
+          usuario: login
       })
       .then(res => {
         var data = []

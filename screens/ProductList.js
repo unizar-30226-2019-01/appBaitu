@@ -36,7 +36,7 @@ class ProductList extends Component {
 	}
 
 	componentDidMount() {
-		this.onRefreshV()
+		this.onRefresh()
 	}
 
 	onRefreshV(){

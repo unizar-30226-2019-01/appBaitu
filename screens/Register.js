@@ -179,7 +179,12 @@ const styles = StyleSheet.create({
     fontWeight:'500',
     color:'white',
     textAlign:'center'
-}
+},
+link: {
+  textAlignVertical: 'bottom',
+  fontSize: 20,
+  marginBottom: 40
+},
 });
 
 export default Register;

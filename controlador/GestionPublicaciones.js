@@ -246,7 +246,8 @@ export const infoVenta = id => {
           data[3]=res.data.Categoria
           data[4]=res.data.FotoPrincipal
           data[5]=res.data.Vendedor
-          data[6]=res.data.Precio
+		  data[6]=res.data.Precio
+		  data[7]=res.data.Provincia
           return data
       })
   }
@@ -267,7 +268,8 @@ export const infoSubasta = id => {
             data[6]=res.data.precio_salida
             data[7]=res.data.precio_actual
             data[8]=res.data.fecha_limite
-            data[9]=res.data.hora_limite
+			data[9]=res.data.hora_limite
+			data[10]=res.data.Provincia
             return data
         })
 }
@@ -327,6 +329,42 @@ export const eliminarSubasta = subasta => {
       .catch((res) => {
           console.log(res)
       })
+}
+
+export const filtrarVentas = (categoria,orden,precio,nombre,ubicacion) => {
+	return axios
+		.get(`http://52.151.88.18:5000/filtrarVentas/${categoria}/${orden}/${precio}/${nombre}/${ubicacion}`, {
+			headers: { "Content-type": "application/json" }
+		})
+        .then(res => {
+            var data = []
+            Object.keys(res.data).forEach((key) => {
+                var val = res.data[key]
+                data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Precio, val.Categoria, val.FotoPrincipal, val.Provincia])
+            })
+            return data
+		})
+		.catch((res) => {
+			console.log(res)
+		})
+}
+
+export const filtrarSubastas = (categoria,orden,precio,nombre,ubicacion) => {
+	return axios
+		.get(`http://52.151.88.18:5000/filtrarSubastas/${categoria}/${orden}/${precio}/${nombre}/${ubicacion}`, {
+			headers: { "Content-type": "application/json" }
+		})
+        .then(res => {
+            var data = []
+            Object.keys(res.data).forEach((key) => {
+                var val = res.data[key]
+                data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.precio_actual, val.Categoria, val.FotoPrincipal, val.fecha_limite, val.hora_limite, val.FotoPrincipal, val.Provincia])
+            })
+            return data
+		})
+		.catch((res) => {
+			console.log(res)
+		})
 }
 
   export const crearFavorito = (producto, id) => {

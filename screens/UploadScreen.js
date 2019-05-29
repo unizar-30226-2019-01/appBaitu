@@ -172,8 +172,7 @@ class Profile extends Component {
                   provincia: this.state.location
               }
               console.log(newProducto)
-              anadirSubasta(newProducto).then(data => {this.setState({respuestaBD: data})})+
-              this.state.navigation.goBack()
+              anadirSubasta(newProducto).then(data => {this.setState({respuestaBD: data})})
               this.setState({crear: true})
               exito=false
           }

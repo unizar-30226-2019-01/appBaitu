@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getProductos, getSubastas, getTipoPublicacion, getPublicaciones, infoSubasta, infoVenta } from '../controlador/GestionPublicaciones';
+import { getTipoPublicacion, infoSubasta, infoVenta, filtrarVentas, filtrarSubastas } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
-import NullComponent from '../components/NullComponent';
 
 const numColumns = 2;
 
@@ -32,6 +31,7 @@ class SearchList extends Component {
 			order: 'MayorAMenor',
 			price: 30,
 			nombre: '',
+			ubicacion: '',
 			refreshingV: false,
 			refreshingS: false,
 			ventas: [],
@@ -40,25 +40,46 @@ class SearchList extends Component {
 		};
 	}
 
+	codN(){
+		if (this.state.nombre == ''){
+			return "_*_"
+		}
+		else{
+			return this.state.nombre
+		}
+	}
+
+	codU(){
+		if (this.state.ubicacion == ''){
+			return "_*_"
+		}
+		else{
+			return this.state.ubicacion
+		}
+	}
+
 	componentDidUpdate() {
 		if(this.state.nombre!=this.props.navigation.state.params.nombre ||
 			this.state.category!=this.props.navigation.state.params.category ||
 			this.state.order!=this.props.navigation.state.params.order ||
+			this.state.ubicacion!=this.props.navigation.state.params.ubicacion ||
 			this.state.price!=this.props.navigation.state.params.price){
 				this.setState({
 					nombre: this.props.navigation.state.params.nombre,
 					category: this.props.navigation.state.params.category,
 					order: this.props.navigation.state.params.order,
+					ubicacion: this.props.navigation.state.params.ubicacion,
 					price: this.props.navigation.state.params.price
 				})
 				this.onRefresh()
 			}
 	}
 
-	componentDidMount() {
-		this.setState({
+	async componentDidMount() {
+		await this.setState({
 			nombre: this.props.navigation.state.params.nombre,
 			category: this.props.navigation.state.params.category,
+			ubicacion: this.props.navigation.state.params.ubicacion,
 			order: this.props.navigation.state.params.order,
 			price: this.props.navigation.state.params.price
 		})
@@ -67,17 +88,17 @@ class SearchList extends Component {
 
 	onRefreshV(){
 		this.setState({refreshingV:true, estado:true})
-		getProductos().then(data => {
-            this.setState({ventas: data})
-        })
+		filtrarVentas(this.state.category, this.state.order, this.state.price, this.codN(this.state.nombre), this.codU(this.state.ubicacion)).then(data => {
+			this.setState({ventas: data})
+		})
 		this.setState({refreshingV:false})
 	}
 
 	onRefreshS(){
 		this.setState({refreshingS:true, estado:false})
-		getSubastas().then(data => {
+		filtrarSubastas(this.state.category, this.state.order, this.state.price, this.codN(this.state.nombre), this.codU(this.state.ubicacion)).then(data => {
             this.setState({subastas: data})
-		})
+        })
 		this.setState({refreshingS:false})
 	}
 
@@ -91,34 +112,32 @@ class SearchList extends Component {
 	}
 
 	renderItem = ({ item, index }) => {
-		if (item.empty === true || item[4] > this.state.price) {
-			return <View/>;
+		if (item.empty === true) {
+			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
-		else{
-			if(this.state.estado){
-				return (
-					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
-						<Image
-							style={styles.image}
-							source={{uri: item[6]}}/>
-						<Text style={styles.venta}>Venta</Text>
-						<Text style={styles.price}>{item[4]}€</Text>
-						<Text style={styles.title}>{item[0]}</Text>
-					</TouchableOpacity>
-				)
-			}
-			else {
-				return (
-					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
-						<Image
-							style={styles.image}
-							source={{uri: item[6]}}/>
-						<Text style={styles.subasta}>Subasta</Text>
-						<Text style={styles.price}>{item[4]}€</Text>
-						<Text style={styles.title}>{item[0]}</Text>
-					</TouchableOpacity>
-				)
-			}
+		if(this.state.estado){
+			return (
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
+					<Image
+						style={styles.image}
+						source={{uri: item[6]}}/>
+					<Text style={styles.venta}>Venta</Text>
+					<Text style={styles.price}>{item[4]}€</Text>
+					<Text style={styles.title}>{item[0]}</Text>
+				</TouchableOpacity>
+			)
+		}
+		else {
+			return (
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
+					<Image
+						style={styles.image}
+						source={{uri: item[6]}}/>
+					<Text style={styles.subasta}>Subasta</Text>
+					<Text style={styles.price}>{item[4]}€</Text>
+					<Text style={styles.title}>{item[0]}</Text>
+				</TouchableOpacity>
+			)
 		}
     }
 

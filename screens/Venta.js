@@ -203,6 +203,8 @@ class Venta extends Component {
                         <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
 						<Text style={styles.cuerpoVerde}>Descripción</Text>
 						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
+						<Text style={styles.cuerpoVerde}>Ubicación</Text>
+						<Text style={styles.cuerpo}>{this.state.datosProducto[7]}</Text>
 						<Text style={styles.cuerpoVerde}>Vendedor</Text>
 						<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('ProfileAjeno', {login:this.state.datosProducto[5]})}>
 							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
@@ -233,8 +235,7 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         backgroundColor: 'gray',
-        height: (Dimensions.get('window').width)*0.75,
-        width: Dimensions.get('window').width,
+        height: (Dimensions.get('window').width),
 		alignItems: 'center',
     },
     buttonText: {
