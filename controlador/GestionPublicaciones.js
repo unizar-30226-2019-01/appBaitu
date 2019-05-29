@@ -341,7 +341,10 @@ export const filtrarVentas = (nombre,categoria,orden,precio) => {
                 data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Precio, val.Categoria, val.FotoPrincipal, val.Provincia])
             })
             return data
-        })
+		})
+		.catch((res) => {
+			console.log(res)
+		})
 }
 
 export const filtrarSubastas = (nombre,categoria,orden,precio) => {
@@ -356,7 +359,10 @@ export const filtrarSubastas = (nombre,categoria,orden,precio) => {
                 data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.precio_actual, val.Categoria, val.FotoPrincipal, val.fecha_limite, val.hora_limite, val.FotoPrincipal, val.Provincia])
             })
             return data
-        })
+		})
+		.catch((res) => {
+			console.log(res)
+		})
 }
 
   export const crearFavorito = (producto, id) => {
