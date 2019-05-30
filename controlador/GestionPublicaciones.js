@@ -220,7 +220,21 @@ export const getSubastasMenorMayor = () => {
         })
   }
 
+  export const getProductosComprados = (usuario) => {
+      return axios
+          .get(`http://52.151.88.18:5000/listarProductosComprados/${usuario.login}`, {
+              headers: { "Content-type": "application/json" }
+          })
+          .then(res => {
+              var data = []
+              Object.keys(res.data).forEach((key) => {
+                  var val = res.data[key]
+                  data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Categoria, val.FotoPrincipal])
+              })
 
+              return data
+          })
+      }
 
 
 export const tipoProducto = id => {
@@ -318,6 +332,8 @@ export const getFotos = id => {
           console.log(err)
         })
   }
+
+
 
   export const actualizarSubasta = subastaEditada => {
   return axios

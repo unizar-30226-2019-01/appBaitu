@@ -12,54 +12,18 @@ class Venta extends Component {
         super(props)
         this.state = {
             datosProducto: [],
-            datosVendedor: [],
-            login: '',
-			id: '',
-			esFavorito: "",
             fotos: [],
-            images: '',
-            image1:[],
-            image2:[],
-            image3:[],
-            i1:'',
-            i2:'',
-            i3:'',
-            oferta:'',
-            compradorProducto: '',
-            comprado: false
+            i1: '',
+            i2: '',
+            i3: '',
+            image1: '',
+            image2: '',
+            image3: ''
         }
     }
 
-    async hacerOferta(){
-        if(this.state.login === this.state.datosProducto[5]){
-            Alert.alert('','No puedes hacerte una oferta a ti mismo',[{text: 'OK'}],{cancelable: false});
-        }
-        else{
-            console.log(this.state.id)
-            console.log(this.state.oferta)
-            console.log(this.state.login)
-            await realizarOferta(this.state.login,this.state.id,this.state.oferta).then(data => {
-                this.setState({
-                    respuestaBD: data
-                })
-            })
-            console.log("respuestaBD: ")
-            console.log(this.state.respuestaBD)
-            if(this.state.respuestaBD != "Error"){
-                Alert.alert('','¡Se ha realizado la oferta correctamente!',[{text: 'OK'}],{cancelable: false});
-                this.props.navigation.goBack()
-            }
-            else if (this.state.respuestaBD === "Realizada"){
-                Alert.alert('','Ya tienes una oferta pendiente, por favor, espera a que el comprador la resuelva',[{text: 'OK'}],{cancelable: false});
-            }
-            else{
-                Alert.alert('','No se ha podido realizar la oferta',[{text: 'OK'}],{cancelable: false});
-            }
-        }
-    }
 
     async componentDidUpdate(){
-        if (this.state.id != this.props.navigation.state.params.id){
             const token = await AsyncStorage.getItem('userToken')
             if (token === undefined || token === null) {
                 console.log("no existe token")
@@ -70,28 +34,9 @@ class Venta extends Component {
                     login: decoded.identity.login
                 }
                 this.setState({
-                    id: this.props.navigation.state.params.id
+                    datosProducto: this.props.navigation.state.params.datosProducto
                 })
-                infoVenta(this.state.id).then(data => {
-                    this.setState({
-                        login: decoded.identity.login,
-                        datosProducto: data
-                    })
-                })
-                infoUsuario(this.state.datosProducto[5]).then(data => {
-                    this.setState({
-                        datosVendedor: data
-                    })
-				})
-				const producto = {
-					usuario: decoded.identity.login
-				}
-				consultarFavorito(producto,this.props.navigation.state.params.id).then(data => {
-					this.setState({
-						esFavorito: data
-					})
-				})
-                await getFotos(this.state.id).then(data => {
+                await getFotos(this.state.datosProducto[1]).then(data => {
                     this.setState({
                      fotos: data
                  })
@@ -117,7 +62,6 @@ class Venta extends Component {
                     this.setState({i3:'http://geodezja-elipsa.pl/ikony/picture.png'})
                 }
             }
-        }
     }
 
     async componentDidMount() {
@@ -131,28 +75,10 @@ class Venta extends Component {
                 login: decoded.identity.login
             }
             this.setState({
-                id: this.props.navigation.state.params.id
+                datosProducto: this.props.navigation.state.params.datosProducto
             })
-            infoVenta(this.state.id).then(data => {
-                this.setState({
-                    login: decoded.identity.login,
-                    datosProducto: data
-                })
-            })
-            infoUsuario(this.state.datosProducto[5]).then(data => {
-                this.setState({
-                    datosVendedor: data
-                })
-			})
-			const producto = {
-				usuario: decoded.identity.login
-			}
-			consultarFavorito(producto,this.props.navigation.state.params.id).then(data => {
-				this.setState({
-					esFavorito: data
-				})
-			})
-            await getFotos(this.state.id).then(data => {
+            console.log("ESKEREEEEEEEEEEEEEEEEE: "+this.state.datosProducto)
+            await getFotos(this.state.datosProducto[1]).then(data => {
                 this.setState({
                  fotos: data
              })
@@ -180,33 +106,6 @@ class Venta extends Component {
         }
 	}
 
-	botonFavorito(){
-		if (this.state.esFavorito == "Favorito existe"){
-			return <Text style={styles.añadido}>Añadido</Text>
-		}
-		else{
-			return <Text style={styles.favorito}>Favorito</Text>
-		}
-	}
-
-	cambiarFavorito(){
-		const producto = {
-			usuario: this.state.login
-		}
-		if(this.state.esFavorito == "Favorito existe"){
-			eliminarFavorito(producto,this.state.id)
-			this.setState({
-				esFavorito: "Favorito no existe"
-			})
-		}
-		else if(this.state.esFavorito == "Favorito no existe"){
-			crearFavorito(producto,this.state.id)
-			this.setState({
-				esFavorito: "Favorito existe"
-			})
-		}
-	}
-
     render(){
         return(
             <ScrollView>
@@ -214,56 +113,34 @@ class Venta extends Component {
 				<Gallery
 					style={styles.image}
 					images={[
-						{ source: { uri: this.state.datosProducto[4]}, },
+						{ source: { uri: this.state.datosProducto[5]}, },
 						{ source: { uri: this.state.i1 }, },
 						{ source: { uri: this.state.i2 }, },
 						{ source: { uri: this.state.i3 }, }
 					]}
 				/>
-					<View style={styles.horizontal}>
-                    	<Text style={styles.venta}>Venta</Text>
-						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
-							{ this.botonFavorito() }
-						</TouchableOpacity>
-					</View>
 					<View style={styles.itemsContainer}>
-                        <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
-                        <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
+                        <Text style={styles.title}>{this.state.datosProducto[0]}</Text>
+                        <Text style={styles.cuerpoVerde}>Categoría</Text>
+						<Text style={styles.cuerpo}>{this.state.datosProducto[4]}</Text>
 						<Text style={styles.cuerpoVerde}>Descripción</Text>
 						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
-						<Text style={styles.cuerpoVerde}>Ubicación</Text>
-						<Text style={styles.cuerpo}>{this.state.datosProducto[7]}</Text>
 						<Text style={styles.cuerpoVerde}>Vendedor</Text>
 						<TouchableOpacity style={styles.link} onPress={() => {
-                            if(this.state.login === this.state.datosProducto[5]){
+                            if(this.state.login === this.state.datosProducto[3]){
                                 this.props.navigation.navigate('Profile')
                             }
                             else{
-                                this.props.navigation.navigate('ProfileAjeno', {login:this.state.datosProducto[5],producto:this.state.id})
+                                this.props.navigation.navigate('ProfileAjeno', {login:this.state.datosProducto[3],producto:this.state.datosProducto[1]})
                             }
                         }}>
-							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
+							<Text style={styles.clickableText}>{this.state.datosProducto[3]}</Text>
 						</TouchableOpacity>
-						<Text style={styles.price}>{this.state.datosVendedor[6]}
-							<Image
-								style={styles.estrella}
-								source={require('../assets/images/estrella.png')}/>
-						</Text>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar') }>
+							<Text style={styles.buttonText}>Calificar publicación</Text>
+						</TouchableOpacity>
 						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
-						</TouchableOpacity>
-                        <TextInput style={styles.inputBox}
-                          underlineColorAndroid='rgba(0,0,0,0)'
-                          placeholder="Introduce aquí la cantidad(€)..."
-                          placeholderTextColor = "#BCC5D5"
-                      	  autoCorrect={false}
-                          keyboardType={'numeric'}
-                          type="number"
-                          value={this.state.precio}
-                          onChangeText={(oferta) => this.setState({oferta})}
-                        />
-                        <TouchableOpacity style={styles.button} onPress={() => this.hacerOferta() }>
-							<Text style={styles.buttonText}>Hacer Oferta</Text>
+							<Text style={styles.buttonText}>Enviar mensaje al vendedor</Text>
 						</TouchableOpacity>
             			<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 							<Text style={styles.buttonText}>Volver</Text>

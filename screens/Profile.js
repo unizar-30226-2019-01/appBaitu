@@ -106,6 +106,9 @@ async cerrarSesion(e){
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MisPublis', {login: this.state.login})}>
                             <Text style={styles.buttonText}>MIS PUBLICACIONES</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Comprados', {login: this.state.login})}>
+                            <Text style={styles.buttonText}>PRODUCTOS COMPRADOS</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MisPublis')}>
                             <Text style={styles.buttonText}>OFERTAS DE VENTAS</Text>
                         </TouchableOpacity>

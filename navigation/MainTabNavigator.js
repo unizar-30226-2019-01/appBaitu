@@ -24,6 +24,8 @@ import Favoritos from '../screens/Favoritos';
 import HomeButton from '../components/HomeButton';
 import NullComponent from '../components/NullComponent';
 import MisPublis from '../screens/MisPublisList';
+import Comprados from '../screens/Comprados';
+import CalificarProducto from '../screens/CalificarProducto';
 
 // Pantallas para la barra lateral
 const DrawerScreen = createDrawerNavigator({
@@ -41,6 +43,12 @@ const DrawerScreen = createDrawerNavigator({
 		drawerLabel: <NullComponent/>
 	}},
     MisPublis: {screen: MisPublis, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}},
+    Comprados: {screen: Comprados, navigationOptions: {
+		drawerLabel: <NullComponent/>
+	}},
+    CalificarProducto: {screen: CalificarProducto, navigationOptions: {
 		drawerLabel: <NullComponent/>
 	}},
     Profile: {screen: Profile, navigationOptions: {
