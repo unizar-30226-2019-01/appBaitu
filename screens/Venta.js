@@ -49,6 +49,9 @@ class Venta extends Component {
                 Alert.alert('','¡Se ha realizado la oferta correctamente!',[{text: 'OK'}],{cancelable: false});
                 this.props.navigation.goBack()
             }
+            else if (this.state.respuestaBD === "Realizada"){
+                Alert.alert('','Ya tienes una oferta pendiente, por favor, espera a que el comprador la resuelva',[{text: 'OK'}],{cancelable: false});
+            }
             else{
                 Alert.alert('','No se ha podido realizar la oferta',[{text: 'OK'}],{cancelable: false});
             }
