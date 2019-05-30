@@ -30,11 +30,6 @@ class Venta extends Component {
                 this.setState({
                     datosProducto: this.props.navigation.state.params.datosProducto
                 })
-                /*await getFotos(this.state.datosProducto[1]).then(data => {
-                    this.setState({
-                     fotos: data
-                 })
-             })*/
             }
     }
 
@@ -51,13 +46,10 @@ class Venta extends Component {
             this.setState({
                 datosProducto: this.props.navigation.state.params.datosProducto
             })
-            console.log("ESKEREEEEEEEEEEEEEEEEE: "+this.state.datosProducto)
-            /*await getFotos(this.state.datosProducto[1]).then(data => {
-                this.setState({
-                 fotos: data
-             })
-         })*/
-
+            console.log("Producto")
+            console.log(this.state.datosProducto)
+            console.log("foto")
+            console.log(this.state.datosProducto[5])
         }
 	}
 
@@ -65,18 +57,10 @@ class Venta extends Component {
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-            {/*<Image
+            <Image
                 style={styles.image}
-                source={this.state.datosProducto[5]}/>
-				 <Gallery
-					style={styles.image}
-					images={[
-						{ source: { uri: this.state.datosProducto[5]}, },
-						{ source: { uri: this.state.i1 }, },
-						{ source: { uri: this.state.i2 }, },
-						{ source: { uri: this.state.i3 }, }
-					]}
-				/> */}
+                source={{uri: this.state.datosProducto[5]}}/>
+
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[0]}</Text>
                         <Text style={styles.cuerpoVerde}>Categoría</Text>
