@@ -82,12 +82,6 @@ export const deleteUser = user => {
     .post(`http://52.151.88.18:5000/delete`, {
       login: user.login,
   })
-    .then((res) => {
-      console.log(res)
-  })
-    .catch(err => {
-      console.log(err)
-  })
 }
 
 export const infoUsuario = login => {
