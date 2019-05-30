@@ -279,9 +279,8 @@ class Venta extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        flex: 1,
-        backgroundColor: 'gray',
-        height: (Dimensions.get('window').width),
+		flex: 1,
+		height: (Dimensions.get('window').width),
 		alignItems: 'center',
     },
     buttonText: {
