@@ -286,6 +286,10 @@ export const infoSubasta = id => {
 			data[10]=res.data.Provincia
             return data
         })
+        .catch(err => {
+            console.log("errrrrorrr")
+          console.log(err)
+        })
 }
 
 export const estaValorado = (producto, valoracion) => {
@@ -328,13 +332,20 @@ export const getFotos = id => {
   export const actualizarProducto = producto => {
     return axios
         .post(`http://52.151.88.18:5000/modificarVenta`, {
-            idP: producto.id,
-            nombre: producto.nombre,
-            fecha: producto.fecha,
-            categoria: producto.categoria,
-            descripcion: producto.descripcion,
-            foto: producto.foto,
-            precio: producto.precio
+            idP: subastaEditada.id,
+            nombre: subastaEditada.nombre,
+            descripcion: subastaEditada.descripcion,
+            categoria: subastaEditada.categoria,
+            fotoP: subastaEditada.fotoP,
+            foto1: subastaEditada.foto1,
+            foto2: subastaEditada.foto2,
+            foto3: subastaEditada.foto3,
+            fotoPAntigua: subastaEditada.fotoPAntigua,
+            foto1Antigua: subastaEditada.foto1Antigua,
+            foto2Antigua: subastaEditada.foto2Antigua,
+            foto3Antigua: subastaEditada.foto3Antigua,
+            precio: subastaEditada.precio,
+            fecha: subastaEditada.fecha
         })
         .then(response => {
           return response.data
