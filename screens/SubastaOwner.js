@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
+import {Title,Share,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
@@ -228,6 +228,14 @@ class SubastaOwner extends Component {
 		}
 	}
 
+	compartir(){
+		const content={
+			message: 'Este enlace ha sido enviado desde la app móvil de Baitu\n¡Entra ya!\n\nhttp://52.151.88.18:8080/producto?id=' + this.state.id
+		}
+		const options={}
+		Share.share(content,options)
+	}
+
     render(){
         return(
             <ScrollView>
@@ -268,6 +276,9 @@ class SubastaOwner extends Component {
 					</Text>
 					<TouchableOpacity style={styles.button} onPress={() => this.editarPublicacion() }>
 						<Text style={styles.buttonText}>Editar publicación</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.button} onPress={() => this.compartir()}>
+						<Text style={styles.buttonText}>Compartir</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.redbutton} onPress={() => {
 						Alert.alert(

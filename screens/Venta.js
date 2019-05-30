@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,Alert,BackHandler,TextInput,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
+import {Title,Alert,BackHandler,TextInput,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions,Share} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
@@ -205,6 +205,14 @@ class Venta extends Component {
 		}
 	}
 
+	compartir(){
+		const content={
+			message: 'Este enlace ha sido enviado desde la app móvil de Baitu\n¡Entra ya!\n\nhttp://52.151.88.18:8080/producto?id=' + this.state.id
+		}
+		const options={}
+		Share.share(content,options)
+	}
+
     render(){
         return(
             <ScrollView>
@@ -262,6 +270,9 @@ class Venta extends Component {
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
 							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.button} onPress={() => this.compartir()}>
+							<Text style={styles.buttonText}>Compartir</Text>
 						</TouchableOpacity>
             			<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 							<Text style={styles.buttonText}>Volver</Text>
@@ -370,6 +381,20 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 10
+    },
+    compartir: {
+        fontSize: 17,
+        width: 80,
+        marginTop: 5,
+        marginRight: 10,
+        borderWidth: 3.5,
+        borderColor: '#ffc400',
+        borderRadius: 15,
+        backgroundColor: '#ffffff',
+        overflow: 'hidden',
+        textAlign: 'center',
+        alignItems: 'center',
+        color: '#ffc400'
     },
     favorito: {
         fontSize: 17,
