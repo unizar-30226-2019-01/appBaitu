@@ -107,7 +107,7 @@ class Profile extends Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Comprados', {login: this.state.login})}>
                             <Text style={styles.buttonText}>PRODUCTOS COMPRADOS</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MisPublis')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MisOfertas', {login: this.state.login})}>
                             <Text style={styles.buttonText}>OFERTAS DE VENTAS</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.redbutton} onPress={() => this.cerrarSesion()}>

@@ -34,18 +34,21 @@ class Venta extends Component {
         if(this.state.login === this.state.datosProducto[5]){
             Alert.alert('','No puedes hacerte una oferta a ti mismo',[{text: 'OK'}],{cancelable: false});
         }
+        else if(this.state.oferta <= 0){
+            Alert.alert('','Introduzca una cantidad mayor que 0',[{text: 'OK'}],{cancelable: false});
+        }
         else{
             await realizarOferta(this.state.login,this.state.id,this.state.oferta).then(data => {
                 this.setState({
                     respuestaBD: data
                 })
             })
-            if(this.state.respuestaBD != "Error"){
+            if (this.state.respuestaBD === "Realizada"){
+                Alert.alert('','Ya tienes una oferta pendiente, por favor, espera a que el comprador la resuelva',[{text: 'OK'}],{cancelable: false});
+            }
+            else if(this.state.respuestaBD != "Error"){
                 Alert.alert('','¡Se ha realizado la oferta correctamente!',[{text: 'OK'}],{cancelable: false});
                 this.props.navigation.goBack()
-            }
-            else if (this.state.respuestaBD === "Realizada"){
-                Alert.alert('','Ya tienes una oferta pendiente, por favor, espera a que el comprador la resuelva',[{text: 'OK'}],{cancelable: false});
             }
             else{
                 Alert.alert('','No se ha podido realizar la oferta',[{text: 'OK'}],{cancelable: false});
@@ -244,9 +247,6 @@ class Venta extends Component {
 								style={styles.estrella}
 								source={require('../assets/images/estrella.png')}/>
 						</Text>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
-						</TouchableOpacity>
                         <TextInput style={styles.inputBox}
                           underlineColorAndroid='rgba(0,0,0,0)'
                           placeholder="Introduce aquí la cantidad(€)..."
@@ -259,6 +259,9 @@ class Venta extends Component {
                         />
                         <TouchableOpacity style={styles.button} onPress={() => this.hacerOferta() }>
 							<Text style={styles.buttonText}>Hacer Oferta</Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
+							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
 						</TouchableOpacity>
             			<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 							<Text style={styles.buttonText}>Volver</Text>
