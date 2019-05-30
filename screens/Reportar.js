@@ -72,7 +72,7 @@ class Reportar extends Component {
 
     render(){
         return(
-            <View>
+            <View style={styles.itemsContainer}>
                 <KeyboardAvoidingView behavior="padding" enabled>
                     <Text style={styles.cuerpoVerde}>Usuario denunciado</Text>
                     <Text style={styles.cuerpo}>{this.state.vendedor}</Text>
@@ -115,6 +115,10 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         overflow: 'hidden',
         textAlign: 'center'
+    },
+    itemsContainer : {
+        flexGrow: 1,
+        margin: 15,
     },
     redbutton: {
         flex:1,

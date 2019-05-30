@@ -67,9 +67,6 @@ class Profile extends Component {
                         <Text style={styles.correo}>{this.state.datos[3]}</Text>
                         <Text style={styles.cuerpoVerde}>Teléfono</Text>
                         <Text style={styles.cuerpo}>{this.state.datos[7]}</Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {qualifiedUser: this.state.login})}>
-                            <Text style={styles.buttonText}>CALIFICAR USUARIO</Text>
-                        </TouchableOpacity>
                         <TouchableOpacity style={styles.redbutton} onPress={() => this.props.navigation.navigate('Reportar', {reportedUser: this.state.login, producto: this.state.producto})}>
                             <Text style={styles.buttonText}>REPORTAR USUARIO</Text>
                         </TouchableOpacity>

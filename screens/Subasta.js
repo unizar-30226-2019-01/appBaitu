@@ -266,7 +266,10 @@ class Subasta extends Component {
 						<TouchableOpacity style={styles.button} onPress={() => this.pujar() }>
 							<Text style={styles.buttonText}>Pujar</Text>
 						</TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.id,tipoPublicacion: "Subasta"})}>
+                            <Text style={styles.buttonText}>Calificar publicacion</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 							<Text style={styles.buttonText}>Volver</Text>
 						</TouchableOpacity>
 					</View>

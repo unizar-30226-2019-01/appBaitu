@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button} from 'react-native';
+import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
 import { getProductos, getSubastas, getTipoPublicacion, getPublicaciones, infoSubasta, infoVenta } from '../controlador/GestionPublicaciones';
+import { infoUsuario } from '../controlador/GestionUsuarios';
+import jwt_decode from 'jwt-decode';
 import { StackNavigator } from 'react-navigation';
 
 const numColumns = 2;
@@ -27,6 +29,7 @@ class ProductList extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			login:'',
 			refreshingV: false,
 			refreshingS: false,
 			ventas: [],
@@ -35,7 +38,17 @@ class ProductList extends Component {
 		};
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
+		const token = await AsyncStorage.getItem('userToken')
+		if (token === undefined || token === null) {
+			console.log("no existe token")
+		}
+		else{
+			const decoded = jwt_decode(token)
+    		this.setState({
+    			login: decoded.identity.login,
+    		})
+		}
 		this.onRefresh()
 	}
 
@@ -69,28 +82,56 @@ class ProductList extends Component {
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
 		if(this.state.estado){
-			return (
-				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
-					<Image
-						style={styles.image}
-						source={{uri: item[6]}}/>
-					<Text style={styles.venta}>Venta</Text>
-					<Text style={styles.price}>{item[4]}€</Text>
-					<Text style={styles.title}>{item[0]}</Text>
-				</TouchableOpacity>
-			)
+			if(item[3] != this.state.login){
+				return (
+					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Venta', {id: item[1]})}>
+						<Image
+							style={styles.image}
+							source={{uri: item[6]}}/>
+						<Text style={styles.venta}>Venta</Text>
+						<Text style={styles.price}>{item[4]}€</Text>
+						<Text style={styles.title}>{item[0]}</Text>
+					</TouchableOpacity>
+				)
+			}
+			else{
+				return (
+					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('VentaOwner', {id: item[1]})}>
+						<Image
+							style={styles.image}
+							source={{uri: item[6]}}/>
+						<Text style={styles.venta}>Venta</Text>
+						<Text style={styles.price}>{item[4]}€</Text>
+						<Text style={styles.title}>{item[0]}</Text>
+					</TouchableOpacity>
+				)
+			}
 		}
 		else {
-			return (
-				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
-					<Image
-						style={styles.image}
-						source={{uri: item[6]}}/>
-					<Text style={styles.subasta}>Subasta</Text>
-					<Text style={styles.price}>{item[4]}€</Text>
-					<Text style={styles.title}>{item[0]}</Text>
-				</TouchableOpacity>
-			)
+			if(item[3] != this.state.login){
+				return (
+					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Subasta', {id: item[1]})}>
+						<Image
+							style={styles.image}
+							source={{uri: item[6]}}/>
+						<Text style={styles.subasta}>Subasta</Text>
+						<Text style={styles.price}>{item[4]}€</Text>
+						<Text style={styles.title}>{item[0]}</Text>
+					</TouchableOpacity>
+				)
+			}
+			else{
+				return (
+					<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('SubastaOwner', {id: item[1]})}>
+						<Image
+							style={styles.image}
+							source={{uri: item[6]}}/>
+						<Text style={styles.subasta}>Subasta</Text>
+						<Text style={styles.price}>{item[4]}€</Text>
+						<Text style={styles.title}>{item[0]}</Text>
+					</TouchableOpacity>
+				)
+			}
 		}
     }
 

@@ -453,7 +453,6 @@ class Profile extends Component {
               <Text style={styles.cuerpoVerde}>Tipo de publicación</Text>
               <Picker
                 selectedValue={this.state.tipo}
-                              style={styles.picker}
                               onPress={() => Keyboard.dismiss()}
                               onValueChange={(itemValue) => this.ShowHideTextComponentView(itemValue)}>
                             <Picker.Item label="Producto" value="Producto" />
@@ -503,7 +502,6 @@ class Profile extends Component {
                         <Text style={styles.cuerpoVerde}>Categoría</Text>
                         <Picker
                               selectedValue={this.state.categoria}
-                              style={styles.picker}
                               onPress={() => Keyboard.dismiss()}
                               onValueChange={(itemValue, itemIndex) => this.setState({categoria: itemValue})
                         }>
