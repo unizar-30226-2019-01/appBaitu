@@ -6,7 +6,7 @@ export const anadirProducto = newProducto => {
       nombre: newProducto.nombre,
       fecha: newProducto.fecha,
       categoria: newProducto.categoria,
-      descripcion: newProducto.descripcion,
+	  descripcion: newProducto.descripcion,
       precio: newProducto.precio,
       vendedor: newProducto.vendedor,
       fotoPrincipal: newProducto.fotoPrincipal,
