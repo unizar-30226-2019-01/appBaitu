@@ -157,10 +157,10 @@ class SubastaOwner extends Component {
 	// fecha limite y la de hoy
 	compararFechas(fechaHoy,fechaLimite){
 		var modulo = 30
-		if (fechaLimite[1]=="02"){
+		if (fechaHoy[1]=="02"){
 			modulo = 28
 		}
-		else if (fechaLimite[1]=="01" || fechaLimite[1]=="03" || fechaLimite[1]=="05" || fechaLimite[1]=="07" || fechaLimite[1]=="08" || [1]=="10" || fechaLimite[1]=="12"){
+		else if (fechaHoy[1]=="01" || fechaHoy[1]=="03" || fechaHoy[1]=="05" || fechaHoy[1]=="07" || fechaHoy[1]=="08" || [1]=="10" || fechaHoy[1]=="12"){
 			modulo = 31
 		}
 		//Los + delante son para tratar las variables como enteros
@@ -286,6 +286,10 @@ class SubastaOwner extends Component {
 					<Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
 					<Text style={styles.cuerpoVerde}>Precio actual</Text>
 					<Text style={styles.title}>{this.state.datosProducto[7]}€</Text>
+					<Text style={styles.cuerpoVerde}>Fecha límite</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[8]}</Text>
+					<Text style={styles.cuerpoVerde}>Hora límite</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[9]}</Text>
 					<Text style={styles.cuerpoVerde}>Descripción</Text>
 					<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
 					<Text style={styles.cuerpoVerde}>Ubicación</Text>
