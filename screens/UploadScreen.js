@@ -14,6 +14,8 @@ class Profile extends Component {
   constructor() {
     super()
     this.state = {
+        fechaFinc:'',
+        fechac:'',
 		login: '',
 		nombre: '',
 		fecha: '',
@@ -56,7 +58,14 @@ class Profile extends Component {
            date: new Date()
          });
          month=month+1
+         if(month<10){
+             month="0"+month
+         }
+         if(day<10){
+             day="0"+day
+         }
          this.setState({fechaFin: year + "-" + month + "-" + day})
+         this.setState({fechaFinc: year+ month + day})
        } catch ({code, message}) {
          console.warn('Cannot open date picker', message);
        }
@@ -69,6 +78,12 @@ class Profile extends Component {
                 minute: 0,
                 is24Hour: true
             });
+            if(minute<10){
+                minute="0"+minute
+            }
+            if(hour<10){
+                hour="0"+hour
+            }
             this.setState({horaFin: hour+":"+minute})
           } catch ({code, message}) {
             console.warn('Cannot open time picker', message);
@@ -95,16 +110,14 @@ class Profile extends Component {
 		}
   }
 
-	componentDidMount() {
-		var date = new Date().getDate(); //Current Date
-		var month = new Date().getMonth() + 1; //Current Month
-		var year = new Date().getFullYear(); //Current Year
-		if (this.state.fecha != (year+"-"+month+"-"+date)) {
-			this.setState({fecha: year+"-"+month+"-"+date});
-		}
-	}
-
 	async componentDidMount() {
+        var date = new Date().getDate(); //Current Date
+        var month = new Date().getMonth() + 1; //Current Month
+        var year = new Date().getFullYear(); //Current Year
+        if (this.state.fecha != (year+"-"+month+"-"+date)) {
+            this.setState({fecha: year+"-"+month+"-"+date});
+            this.setState({fechac: ""+year+month+date});
+        }
 		const token = await AsyncStorage.getItem('userToken')
 		if (token === undefined || token === null) {
 			console.log("no existe token")
@@ -134,7 +147,13 @@ class Profile extends Component {
 	onSubmit(e) {
 		Keyboard.dismiss()
 		if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.image != '' ) {
-			exito = true
+            if(this.state.precio<1){
+                Alert.alert('','Introduce un precio inicial mayor',[{text: 'OK'}],{cancelable: false});
+            }
+            else{
+			    exito = true
+            }
+
 		}
 		else {
 			Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
@@ -159,9 +178,14 @@ class Profile extends Component {
 				exito=false
 			}
 			else{
+                console.log(this.state.fechaFinc)
+                console.log(this.state.fechac)
 				if(this.state.fechaFin === '' || this.state.horaFin === ''){
 					Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
 				}
+                else if(this.state.fechaFinc < this.state.fechac){
+                    Alert.alert('','Por favor, introduce una fecha válida',[{text: 'OK'}],{cancelable: false});
+                }
 				else{
 					const newProducto = {
 						nombre: this.state.nombre,
@@ -197,7 +221,6 @@ class Profile extends Component {
         allowsEditing: true,
         aspect: [4, 3],
       });
-      this.setState({image : pickerResult.uri})
       this._handleImagePicked(pickerResult);
     }
   };
@@ -242,7 +265,6 @@ class Profile extends Component {
 			allowsEditing: true,
 			aspect: [4, 3],
 		});
-		this.setState({foto1 : pickerResult.uri})
 		this._handleImagePicked1(pickerResult);
 		}
 	};
@@ -287,7 +309,6 @@ class Profile extends Component {
 				allowsEditing: true,
 				aspect: [4, 3],
 			});
-			this.setState({foto2 : pickerResult.uri})
 			this._handleImagePicked2(pickerResult);
 		}
 	};
@@ -332,7 +353,6 @@ class Profile extends Component {
 				allowsEditing: true,
 				aspect: [4, 3],
 			});
-			this.setState({foto3 : pickerResult.uri})
 			this._handleImagePicked3(pickerResult);
 		}
 	};
