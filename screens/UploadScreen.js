@@ -44,7 +44,7 @@ class Profile extends Component {
            date: new Date()
          });
          month=month+1
-         this.setState({fechaFin: day+"/"+month+"/"+year})
+         this.setState({fechaFin: year + "-" + month + "-" + day})
        } catch ({code, message}) {
          console.warn('Cannot open date picker', message);
        }
@@ -67,21 +67,20 @@ class Profile extends Component {
       this.setState({tipo: itemValue})
       if(this.state.tipo === 'Subasta'){
         this.setState({status: false})
-        console.log("lo pongo false")
       }
       else{
         this.setState({status: true})
-        console.log("lo pongo true")
       }
 
 }
 
   componentWillMount() {
-    if (Platform.OS === 'android' && !Constants.isDevice) {
-      console.log("error calling location")
-    } else {
-      this._getLocationAsync();
-    }
+		if (Platform.OS === 'android' && !Constants.isDevice) {
+			console.log("error calling location")
+		}
+		else {
+			this._getLocationAsync();
+		}
   }
 
 	async componentDidMount() {
@@ -120,65 +119,60 @@ class Profile extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onSubmit(e) {
-    Keyboard.dismiss()
-    if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.imagen != '' ) {
-      exito = true
-    }
-    else {
-      Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
-    }
-    if(exito) {
-        console.log(this.state.status)
-        if(this.state.status===false){
-            console.log('Soy un articulo normal')
-          const newProducto = {
-            nombre: this.state.nombre,
-            fecha: this.state.fecha,
-            categoria: this.state.categoria,
-            descripcion: this.state.descripcion,
-            precio: this.state.precio,
-            vendedor: this.state.vendedor,
-            fotoPrincipal: this.state.image,
-            foto1: this.state.foto1,
-            foto2: this.state.foto2,
-            foto3: this.state.foto3,
-            provincia: this.state.location
-          }
-          console.log(newProducto)
-          anadirProducto(newProducto).then(data => {this.setState({respuestaBD: data})})
-          this.setState({crear: true})
-          exito=false
-        }
-        else{
-            console.log('Soy una asubasta')
-            if(this.state.fechaFin === '' || this.state.horaFin === ''){
-                 Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
-            }
-            else{
-                const newProducto = {
-                  nombre: this.state.nombre,
-                  fecha: this.state.fecha,
-                  categoria: this.state.categoria,
-                  descripcion: this.state.descripcion,
-                  foto: this.state.image,
-                  foto1: this.state.foto1,
-                  foto2: this.state.foto2,
-                  foto3: this.state.foto3,
-                  precio: this.state.precio,
-                  vendedor: this.state.vendedor,
-                  fechaLimite: this.state.fechaFin,
-                  horaLimite:this.state.horaFin,
-                  provincia: this.state.location
-              }
-              console.log(newProducto)
-              anadirSubasta(newProducto).then(data => {this.setState({respuestaBD: data})})
-              this.setState({crear: true})
-              exito=false
-          }
-        }
-        }
-    }
+	onSubmit(e) {
+		Keyboard.dismiss()
+		if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.imagen != '' ) {
+			exito = true
+		}
+		else {
+			Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
+		}
+		if(exito) {
+			if(this.state.status===false){
+				const newProducto = {
+					nombre: this.state.nombre,
+					fecha: this.state.fecha,
+					categoria: this.state.categoria,
+					descripcion: this.state.descripcion,
+					precio: parseFloat(this.state.precio.replace(",", ".")),
+					vendedor: this.state.vendedor,
+					fotoPrincipal: this.state.image,
+					foto1: this.state.foto1,
+					foto2: this.state.foto2,
+					foto3: this.state.foto3,
+					provincia: this.state.location
+				}
+				anadirProducto(newProducto).then(data => {this.setState({respuestaBD: data})})
+				this.setState({crear: true})
+				exito=false
+			}
+			else{
+				if(this.state.fechaFin === '' || this.state.horaFin === ''){
+					Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
+				}
+				else{
+					const newProducto = {
+						nombre: this.state.nombre,
+						fecha: this.state.fecha,
+						categoria: this.state.categoria,
+						descripcion: this.state.descripcion,
+						foto: this.state.image,
+						foto1: this.state.foto1,
+						foto2: this.state.foto2,
+						foto3: this.state.foto3,
+						precio: this.state.precio,
+						vendedor: this.state.vendedor,
+						fechaLimite: this.state.fechaFin,
+						horaLimite:this.state.horaFin,
+						provincia: this.state.location
+					}
+					anadirSubasta(newProducto).then(data => {this.setState({respuestaBD: data})})
+					this.setState({crear: true})
+					exito=false
+				}
+			}
+		}
+	}
 
   _pickImage = async () => {
     const {
@@ -192,62 +186,58 @@ class Profile extends Component {
         aspect: [4, 3],
       });
       this.setState({image : pickerResult.uri})
-      console.log("Tiene la imagen: "+this.state.image)
       this._handleImagePicked(pickerResult);
     }
   };
 
 
-  _handleImagePicked = async pickerResult => {
-      let uploadResponse, uploadResult;
-      console.log("Entra en handle")
-      try {
-        this.setState({
-          uploading: true
-        });
+	_handleImagePicked = async pickerResult => {
+		let uploadResponse, uploadResult;
+		try {
+			this.setState({
+				uploading: true
+			});
+			if (!pickerResult.cancelled) {
+				uploadResponse = await uploadImageAsync(pickerResult.uri);
+				uploadResult = await uploadResponse.json();
+				this.setState({
+					image: uploadResult.location
+				});
+			}
+		}
+		catch (e) {
+			console.log("Error en handle")
+			console.log({ uploadResponse });
+			console.log({ uploadResult });
+			console.log({ e });
+			alert('Upload failed, sorry :(');
+		}
+		finally {
+			this.setState({
+				uploading: false
+			});
+		}
+	}
 
-        if (!pickerResult.cancelled) {
-          uploadResponse = await uploadImageAsync(pickerResult.uri);
-          uploadResult = await uploadResponse.json();
+	_pickImage1 = async () => {
+		const {
+		status: cameraRollPerm
+		} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-          this.setState({
-            image: uploadResult.location
-          });
-        }
-      } catch (e) {
-        console.log("Error en handle")
-        console.log({ uploadResponse });
-        console.log({ uploadResult });
-        console.log({ e });
-        alert('Upload failed, sorry :(');
-      } finally {
-        this.setState({
-          uploading: false
-        });
-      }
-  }
-
-  _pickImage1 = async () => {
-    const {
-      status: cameraRollPerm
-    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-    // only if user allows permission to camera roll
-    if (cameraRollPerm === 'granted') {
-      let pickerResult = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
-      });
-      this.setState({foto1 : pickerResult.uri})
-      console.log("Tiene la imagen: "+this.state.image)
-      this._handleImagePicked1(pickerResult);
-    }
-  };
+		// only if user allows permission to camera roll
+		if (cameraRollPerm === 'granted') {
+		let pickerResult = await ImagePicker.launchImageLibraryAsync({
+			allowsEditing: true,
+			aspect: [4, 3],
+		});
+		this.setState({foto1 : pickerResult.uri})
+		this._handleImagePicked1(pickerResult);
+		}
+	};
 
 
   _handleImagePicked1 = async pickerResult => {
       let uploadResponse, uploadResult;
-      console.log("Entra en handle")
       try {
         this.setState({
           uploading: true
@@ -274,272 +264,261 @@ class Profile extends Component {
       }
   }
 
-  _pickImage2 = async () => {
-    const {
-      status: cameraRollPerm
-    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+	_pickImage2 = async () => {
+		const {
+			status: cameraRollPerm
+			} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-    // only if user allows permission to camera roll
-    if (cameraRollPerm === 'granted') {
-      let pickerResult = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
-      });
-      this.setState({foto2 : pickerResult.uri})
-      console.log("Tiene la imagen: "+this.state.image)
-      this._handleImagePicked2(pickerResult);
-    }
-  };
-
-
-  _handleImagePicked2 = async pickerResult => {
-      let uploadResponse, uploadResult;
-      console.log("Entra en handle")
-      try {
-        this.setState({
-          uploading: true
-        });
-
-        if (!pickerResult.cancelled) {
-          uploadResponse = await uploadImageAsync(pickerResult.uri);
-          uploadResult = await uploadResponse.json();
-
-          this.setState({
-            foto2: uploadResult.location
-          });
-        }
-      } catch (e) {
-        console.log("Error en handle")
-        console.log({ uploadResponse });
-        console.log({ uploadResult });
-        console.log({ e });
-        alert('Upload failed, sorry :(');
-      } finally {
-        this.setState({
-          uploading: false
-        });
-      }
-  }
-
-  _pickImage3 = async () => {
-    const {
-      status: cameraRollPerm
-    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-    // only if user allows permission to camera roll
-    if (cameraRollPerm === 'granted') {
-      let pickerResult = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
-      });
-      this.setState({foto3 : pickerResult.uri})
-      console.log("Tiene la imagen: "+this.state.image)
-      this._handleImagePicked3(pickerResult);
-    }
-  };
+			// only if user allows permission to camera roll
+			if (cameraRollPerm === 'granted') {
+			let pickerResult = await ImagePicker.launchImageLibraryAsync({
+				allowsEditing: true,
+				aspect: [4, 3],
+			});
+			this.setState({foto2 : pickerResult.uri})
+			this._handleImagePicked2(pickerResult);
+		}
+	};
 
 
-  _handleImagePicked3 = async pickerResult => {
-      let uploadResponse, uploadResult;
-      console.log("Entra en handle")
-      try {
-        this.setState({
-          uploading: true
-        });
+	_handleImagePicked2 = async pickerResult => {
+		let uploadResponse, uploadResult;
+		try {
+			this.setState({
+				uploading: true
+			});
+			if (!pickerResult.cancelled) {
+				uploadResponse = await uploadImageAsync(pickerResult.uri);
+				uploadResult = await uploadResponse.json();
+				this.setState({
+					foto2: uploadResult.location
+				});
+			}
+		}
+		catch (e) {
+			console.log("Error en handle")
+			console.log({ uploadResponse });
+			console.log({ uploadResult });
+			console.log({ e });
+			alert('Upload failed, sorry :(');
+		}
+		finally {
+			this.setState({
+				uploading: false
+			});
+		}
+	}
 
-        if (!pickerResult.cancelled) {
-          uploadResponse = await uploadImageAsync(pickerResult.uri);
-          uploadResult = await uploadResponse.json();
+	_pickImage3 = async () => {
+		const {
+			status: cameraRollPerm
+		} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-          this.setState({
-            foto3: uploadResult.location
-          });
-        }
-      } catch (e) {
-        console.log("Error en handle")
-        console.log({ uploadResponse });
-        console.log({ uploadResult });
-        console.log({ e });
-        alert('Upload failed, sorry :(');
-      } finally {
-        this.setState({
-          uploading: false
-        });
-      }
-  }
+			// only if user allows permission to camera roll
+		if (cameraRollPerm === 'granted') {
+			let pickerResult = await ImagePicker.launchImageLibraryAsync({
+				allowsEditing: true,
+				aspect: [4, 3],
+			});
+			this.setState({foto3 : pickerResult.uri})
+			this._handleImagePicked3(pickerResult);
+		}
+	};
 
-  _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      console.log("error location")
-    }
-    let location = await Location.getCurrentPositionAsync({});
-    let loc = await {latitude: location.coords.latitude, longitude: location.coords.longitude};
-    let city = await Location.reverseGeocodeAsync(loc)
-    let aux = await city[0]
-    location = await aux.city
-    this.setState({ location });
-  };
+
+	_handleImagePicked3 = async pickerResult => {
+		let uploadResponse, uploadResult;
+		try {
+			this.setState({
+				uploading: true
+			});
+			if (!pickerResult.cancelled) {
+				uploadResponse = await uploadImageAsync(pickerResult.uri);
+				uploadResult = await uploadResponse.json();
+				this.setState({
+					foto3: uploadResult.location
+				});
+			}
+		}
+		catch (e) {
+			console.log("Error en handle")
+			console.log({ uploadResponse });
+			console.log({ uploadResult });
+			console.log({ e });
+			alert('Upload failed, sorry :(');
+		}
+		finally {
+			this.setState({
+				uploading: false
+			});
+		}
+	}
+
+	_getLocationAsync = async () => {
+		let { status } = await Permissions.askAsync(Permissions.LOCATION);
+		if (status !== 'granted') {
+			console.log("error location")
+		}
+		let location = await Location.getCurrentPositionAsync({});
+		let loc = await {latitude: location.coords.latitude, longitude: location.coords.longitude};
+		let city = await Location.reverseGeocodeAsync(loc)
+		let aux = await city[0]
+		location = await aux.city
+		this.setState({ location });
+	};
 
 
     render(){
-      const { navigation } = this.props;
-      let { image } = this.state;
-      let text = 'Localizando..';
-      if (this.state.image === undefined || this.state.image === "") {
-        foto = 'http://geodezja-elipsa.pl/ikony/picture.png'
-      }
-      else {
-        foto = this.state.image
-      }
+		const { navigation } = this.props;
+		let { image } = this.state;
+		let text = 'Localizando..';
+		if (this.state.image === undefined || this.state.image === "") {
+			foto = 'http://geodezja-elipsa.pl/ikony/picture.png'
+		}
+		else {
+			foto = this.state.image
+		}
 
-      if (this.state.foto1 === undefined || this.state.foto1 === "") {
-        foto1 = 'http://geodezja-elipsa.pl/ikony/picture.png'
-      }
-      else {
-        foto1 = this.state.foto1
-      }
+		if (this.state.foto1 === undefined || this.state.foto1 === "") {
+			foto1 = 'http://geodezja-elipsa.pl/ikony/picture.png'
+		}
+		else {
+			foto1 = this.state.foto1
+		}
 
-      if (this.state.foto2 === undefined || this.state.foto2 === "") {
-        foto2 = 'http://geodezja-elipsa.pl/ikony/picture.png'
-      }
-      else {
-        foto2 = this.state.foto2
-      }
+		if (this.state.foto2 === undefined || this.state.foto2 === "") {
+			foto2 = 'http://geodezja-elipsa.pl/ikony/picture.png'
+		}
+		else {
+			foto2 = this.state.foto2
+		}
 
-      if (this.state.foto3 === undefined || this.state.foto3 === "") {
-        foto3 = 'http://geodezja-elipsa.pl/ikony/picture.png'
-      }
-      else {
-        foto3 = this.state.foto3
-      }
+		if (this.state.foto3 === undefined || this.state.foto3 === "") {
+			foto3 = 'http://geodezja-elipsa.pl/ikony/picture.png'
+		}
+		else {
+			foto3 = this.state.foto3
+		}
 
-      if (this.state.errorMessage) {
-        text = this.state.errorMessage;
-      } else if (this.state.location) {
-        text = JSON.stringify(this.state.location);
-      }
-      if(this.state.crear) {
-        console.log("RespuestaBD: "+this.state.respuestaBD)
-        if(this.state.respuestaBD=="Error") {
-          Alert.alert('','Fallo al crear',[{text: 'OK'}],{cancelable: false});
-          this.setState({respuestaBD:""})
-          this.setState({registrar:false})
-        }
-        else if(this.state.respuestaBD=="Exito") {
-          Alert.alert('','Creado correctamente',[{text: 'OK'}],{cancelable: false});
-          this.props.navigation.goBack()
-        }
-      }
-      return(
-            <KeyboardAvoidingView style={{ flex: 1 }}
-                keyboardVerticalOffset={100} behavior={"position"}>
-            <LinearGradient colors={['#ffffff', '#eeeeee']}>
-            <View style={styles.itemsContainer} showsVerticalScrollIndicator={false}>
-            <ScrollView  showsVerticalScrollIndicator={false}>
-              <Button style={styles.botonSelec} onPress={this._pickImage} title="Selecciona una foto"/>
-              <Image style={styles.imagenProducto} source={{uri: foto}}/>
-
-              <Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage1} />
-              <Image style={styles.imagenProducto} source={{uri: foto1}}/>
-
-              <Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage2} />
-              <Image style={styles.imagenProducto} source={{uri: foto2}}/>
-
-              <Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage3} />
-              <Image style={styles.imagenProducto} source={{uri: foto3}}/>
-
-
-              <Text style={styles.cuerpoVerde}>Tipo de publicación</Text>
-              <Picker
-                selectedValue={this.state.tipo}
-                              onPress={() => Keyboard.dismiss()}
-                              onValueChange={(itemValue) => this.ShowHideTextComponentView(itemValue)}>
-                            <Picker.Item label="Producto" value="Producto" />
-                            <Picker.Item label="Subasta" value="Subasta" />
-                        </Picker>
-                        { this.state.status ? (<Text style={styles.cuerpoVerde}>Fecha finalizacion </Text>) : null }
-                        { this.state.status ? (  <TouchableOpacity style={styles.button} onPress={() => this.abrirCalendario()}>
-                            <Text style={styles.buttonText}>Seleccionar Fecha</Text>
-                        </TouchableOpacity>) : null }
-                          { this.state.status ? (<Text>Fecha de finalización: {this.state.fechaFin}</Text>) : null }
-                          { this.state.status ? (<Text style={styles.cuerpoVerde}>Hora finalizacion </Text>) : null }
-                          { this.state.status ? (  <TouchableOpacity style={styles.button} onPress={() => this.abrirReloj()}>
-                              <Text style={styles.buttonText}>Seleccionar hora</Text>
-                          </TouchableOpacity>) : null }
-                            { this.state.status ? (<Text>Hora de finalización: {this.state.horaFin}</Text>) : null }
-
-                        <Text style={styles.cuerpoVerde}>Título</Text>
-                        <TextInput style={styles.inputBox}
-                          underlineColorAndroid='rgba(0,0,0,0)'
-                          placeholder="Introduce aquí tu título..."
-                          placeholderTextColor = "#BCC5D5"
-                      	  autoCorrect={false}
-                          value={this.state.nombre}
-                          onChangeText={(nombre) => this.setState({nombre})}
-                        />
-                        <Text style={styles.cuerpoVerde}>Precio (€)</Text>
-                        <TextInput style={styles.inputBox}
-                          underlineColorAndroid='rgba(0,0,0,0)'
-                          placeholder="Introduce aquí el precio..."
-                          placeholderTextColor = "#BCC5D5"
-                      	  autoCorrect={false}
-                          keyboardType={'numeric'}
-                          type="number"
-                          value={this.state.precio}
-                          onChangeText={(precio) => this.setState({precio})}
-                        />
-                        <Text style={styles.cuerpoVerde}>Descripción</Text>
-                        <TextInput style={styles.inputBoxDescription}
-                          underlineColorAndroid='rgba(0,0,0,0)'
-                          placeholder="Introduce aquí tu descripción..."
-                          placeholderTextColor = "#BCC5D5"
-                      	  autoCorrect={false}
-                          value={this.state.descripcion}
-                          onChangeText={(descripcion) => this.setState({descripcion})}
-                        />
-                        <Text style={styles.paragraph}>Ciudad: {text}</Text>
-                        <Text style={styles.cuerpoVerde}>Categoría</Text>
-                        <Picker
-                              selectedValue={this.state.categoria}
-                              onPress={() => Keyboard.dismiss()}
-                              onValueChange={(itemValue, itemIndex) => this.setState({categoria: itemValue})
-                        }>
-                            <Picker.Item label="Coches" value="Coches" />
-                            <Picker.Item label="Electrónica" value="Electrónica" />
-                            <Picker.Item label="Telefonía" value="Telefonía" />
-                            <Picker.Item label="Deporte" value="Deporte" />
-                            <Picker.Item label="Inmobiliaria" value="Inmobiliaria" />
-                            <Picker.Item label="Motos" value="Motos" />
-                            <Picker.Item label="Bicicletas" value="Bicicletas" />
-                            <Picker.Item label="Videojuegos" value="Videojuegos" />
-                            <Picker.Item label="Hogar" value="Hogar" />
-                            <Picker.Item label="Moda" value="Moda" />
-                            <Picker.Item label="Electrodomésticos" value="Electrodomésticos" />
-                            <Picker.Item label="Libros y Música" value="Libros y Música" />
-                            <Picker.Item label="Niños" value="Niños" />
-                            <Picker.Item label="Empleo" value="Empleo" />
-                            <Picker.Item label="Construcción" value="Construcción" />
-                            <Picker.Item label="Coleccionismo" value="Coleccionismo" />
-                        </Picker>
-                        <Text></Text>
-                        <Text></Text>
-                        <TouchableOpacity style={styles.button} onPress={() => this.onSubmit() }>
-                            <Text style={styles.buttonText}>SUBIR ARTÍCULO</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack()}>
-                            <Text style={styles.buttonText}>CANCELAR</Text>
-                        </TouchableOpacity>
-
-
-          </ScrollView>
-          </View>
-        </LinearGradient>
-        </KeyboardAvoidingView>
-
-
-        )
-    }
+		if (this.state.errorMessage) {
+			text = this.state.errorMessage;
+		} else if (this.state.location) {
+			text = JSON.stringify(this.state.location);
+		}
+		if(this.state.crear) {
+			if(this.state.respuestaBD=="Error") {
+			Alert.alert('','Fallo al crear',[{text: 'OK'}],{cancelable: false});
+			this.setState({respuestaBD:""})
+			this.setState({registrar:false})
+			}
+			else if(this.state.respuestaBD=="Exito") {
+			Alert.alert('','Creado correctamente',[{text: 'OK'}],{cancelable: false});
+			this.props.navigation.navigate('ProductList')
+			}
+		}
+		return(
+			<KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={100} behavior={"position"}>
+				<LinearGradient colors={['#ffffff', '#eeeeee']}>
+					<View style={styles.itemsContainer} showsVerticalScrollIndicator={false}>
+						<ScrollView  showsVerticalScrollIndicator={false}>
+							<Button style={styles.botonSelec} onPress={this._pickImage} title="Selecciona una foto"/>
+							<Image style={styles.imagenProducto} source={{uri: foto}}/>
+							<Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage1} />
+							<Image style={styles.imagenProducto} source={{uri: foto1}}/>
+							<Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage2} />
+							<Image style={styles.imagenProducto} source={{uri: foto2}}/>
+							<Button style={styles.botonPeq} title="+Foto" onPress={this._pickImage3} />
+							<Image style={styles.imagenProducto} source={{uri: foto3}}/>
+							<Text style={styles.cuerpoVerde}>Tipo de publicación</Text>
+							<Picker selectedValue={this.state.tipo}
+								onPress={() => Keyboard.dismiss()}
+								onValueChange={(itemValue) => this.ShowHideTextComponentView(itemValue)}
+							>
+								<Picker.Item label="Producto" value="Producto" />
+								<Picker.Item label="Subasta" value="Subasta" />
+							</Picker>
+							{ this.state.status ? (<Text style={styles.cuerpoVerde}>Fecha finalizacion </Text>) : null }
+							{ this.state.status ? (<TouchableOpacity style={styles.button} onPress={() => this.abrirCalendario()}>
+								<Text style={styles.buttonText}>Seleccionar Fecha</Text>
+							</TouchableOpacity>) : null }
+							{ this.state.status ? (<Text>Fecha de finalización: {this.state.fechaFin}</Text>) : null }
+							{ this.state.status ? (<Text style={styles.cuerpoVerde}>Hora finalizacion </Text>) : null }
+							{ this.state.status ? (<TouchableOpacity style={styles.button} onPress={() => this.abrirReloj()}>
+								<Text style={styles.buttonText}>Seleccionar hora</Text>
+							</TouchableOpacity>) : null }
+							{ this.state.status ? (<Text>Hora de finalización: {this.state.horaFin}</Text>) : null }
+							<Text style={styles.cuerpoVerde}>Título</Text>
+							<TextInput style={styles.inputBox}
+								underlineColorAndroid='rgba(0,0,0,0)'
+								placeholder="Introduce aquí tu título..."
+								placeholderTextColor = "#BCC5D5"
+								autoCorrect={false}
+								value={this.state.nombre}
+								onChangeText={(nombre) => this.setState({nombre})}
+							/>
+							<Text style={styles.cuerpoVerde}>Precio (€)</Text>
+							<TextInput style={styles.inputBox}
+								underlineColorAndroid='rgba(0,0,0,0)'
+								placeholder="Introduce aquí el precio..."
+								placeholderTextColor = "#BCC5D5"
+								autoCorrect={false}
+								keyboardType={'decimal-pad'}
+								value={this.state.precio}
+								onChangeText={(precio) => this.setState({precio})}
+							/>
+							<Text style={styles.cuerpoVerde}>Descripción</Text>
+							<TextInput style={styles.inputBoxDescription}
+								underlineColorAndroid='rgba(0,0,0,0)'
+								placeholder="Introduce aquí tu descripción..."
+								placeholderTextColor = "#BCC5D5"
+								autoCorrect={false}
+								value={this.state.descripcion}
+								onChangeText={(descripcion) => this.setState({descripcion})}
+							/>
+							<Text style={styles.cuerpoVerde}>Ubicación</Text>
+							<TextInput style={styles.inputBox}
+								underlineColorAndroid='transparent'
+								underlineColorAndroid='rgba(0,0,0,0)'
+								defaultValue = {this.state.location}
+								placeholderTextColor = "#BCC5D5"
+								autoCorrect={false}
+								onChangeText={(location) => this.setState({location})}
+							/>
+							<Text style={styles.cuerpoVerde}>Categoría</Text>
+							<Picker
+								selectedValue={this.state.categoria}
+								onPress={() => Keyboard.dismiss()}
+								onValueChange={(itemValue, itemIndex) => this.setState({categoria: itemValue})}
+							>
+								<Picker.Item label="Coches" value="Coches" />
+								<Picker.Item label="Electrónica" value="Electrónica" />
+								<Picker.Item label="Telefonía" value="Telefonía" />
+								<Picker.Item label="Deporte" value="Deporte" />
+								<Picker.Item label="Inmobiliaria" value="Inmobiliaria" />
+								<Picker.Item label="Motos" value="Motos" />
+								<Picker.Item label="Bicicletas" value="Bicicletas" />
+								<Picker.Item label="Videojuegos" value="Videojuegos" />
+								<Picker.Item label="Hogar" value="Hogar" />
+								<Picker.Item label="Moda" value="Moda" />
+								<Picker.Item label="Electrodomésticos" value="Electrodomésticos" />
+								<Picker.Item label="Libros y Música" value="Libros y Música" />
+								<Picker.Item label="Niños" value="Niños" />
+								<Picker.Item label="Empleo" value="Empleo" />
+								<Picker.Item label="Construcción" value="Construcción" />
+								<Picker.Item label="Coleccionismo" value="Coleccionismo" />
+							</Picker>
+							<TouchableOpacity style={styles.button} onPress={() => this.onSubmit() }>
+								<Text style={styles.buttonText}>SUBIR ARTÍCULO</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack()}>
+								<Text style={styles.buttonText}>CANCELAR</Text>
+							</TouchableOpacity>
+						</ScrollView>
+					</View>
+				</LinearGradient>
+			</KeyboardAvoidingView>
+		)
+	}
 }
 
 

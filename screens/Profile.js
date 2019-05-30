@@ -48,29 +48,27 @@ class Profile extends Component {
         this.setState({refreshing : false})
     }
 
-onDelete(e) {
-    console.log("xdxd")
-  const user = {
-    login: this.state.login
-  }
-  console.log(user.login)
- deleteUser(user)
- this.props.navigation.navigate('Login')
-}
+	onDelete(e) {
+		const user = {
+			login: this.state.login
+		}
+		deleteUser(user)
+		this.props.navigation.navigate('Login')
+	}
 
-async cerrarSesion(e){
-    const token = await AsyncStorage.removeItem('userToken')
-    this.props.navigation.navigate('Login')
-  }
+	async cerrarSesion(e){
+		const token = await AsyncStorage.removeItem('userToken')
+		this.props.navigation.navigate('Login')
+	}
 
 
     render(){
-      if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
-        foto= 'https://image.flaticon.com/icons/png/512/64/64572.png'
-      }
-      else {
-        foto = this.state.datos[4]
-      }
+		if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
+			foto= 'https://image.flaticon.com/icons/png/512/64/64572.png'
+		}
+		else {
+			foto = this.state.datos[4]
+		}
         return(
             <ScrollView refreshControl={
                 <RefreshControl
@@ -106,7 +104,10 @@ async cerrarSesion(e){
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MisPublis', {login: this.state.login})}>
                             <Text style={styles.buttonText}>MIS PUBLICACIONES</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MisPublis')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Comprados', {login: this.state.login})}>
+                            <Text style={styles.buttonText}>PRODUCTOS COMPRADOS</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MisOfertas', {login: this.state.login})}>
                             <Text style={styles.buttonText}>OFERTAS DE VENTAS</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.redbutton} onPress={() => this.cerrarSesion()}>

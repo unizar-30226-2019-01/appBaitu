@@ -73,7 +73,7 @@ class ProductList extends Component {
 			this.onRefreshV()
 		}
 		else{
-			this.state.onRefreshS()
+			this.onRefreshS()
 		}
 	}
 

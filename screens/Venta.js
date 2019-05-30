@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import {Title,Alert,BackHandler,TextInput,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
+import {Title,Alert,BackHandler,TextInput,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions,Share} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoVenta, consultarFavorito, crearFavorito, eliminarFavorito, getFotos, realizarOferta } from '../controlador/GestionPublicaciones';
-import * as firebase from 'firebase';
+import { infoVenta, consultarFavorito, crearFavorito, eliminarFavorito, getFotos, realizarOferta, comprador } from '../controlador/GestionPublicaciones';
 import Gallery from 'react-native-image-gallery';
 
-let foto=''
 
 class Venta extends Component {
     constructor(props) {
@@ -26,7 +24,9 @@ class Venta extends Component {
             i1:'',
             i2:'',
             i3:'',
-            oferta:''
+            oferta:'',
+            compradorProducto: '',
+            comprado: false
         }
     }
 
@@ -34,18 +34,19 @@ class Venta extends Component {
         if(this.state.login === this.state.datosProducto[5]){
             Alert.alert('','No puedes hacerte una oferta a ti mismo',[{text: 'OK'}],{cancelable: false});
         }
+        else if(this.state.oferta <= 0){
+            Alert.alert('','Introduzca una cantidad mayor que 0',[{text: 'OK'}],{cancelable: false});
+        }
         else{
-            console.log(this.state.id)
-            console.log(this.state.oferta)
-            console.log(this.state.login)
             await realizarOferta(this.state.login,this.state.id,this.state.oferta).then(data => {
                 this.setState({
                     respuestaBD: data
                 })
             })
-            console.log("respuestaBD: ")
-            console.log(this.state.respuestaBD)
-            if(this.state.respuestaBD != "Error"){
+            if (this.state.respuestaBD === "Realizada"){
+                Alert.alert('','Ya tienes una oferta pendiente, por favor, espera a que el comprador la resuelva',[{text: 'OK'}],{cancelable: false});
+            }
+            else if(this.state.respuestaBD != "Error"){
                 Alert.alert('','¡Se ha realizado la oferta correctamente!',[{text: 'OK'}],{cancelable: false});
                 this.props.navigation.goBack()
             }
@@ -204,26 +205,33 @@ class Venta extends Component {
 		}
 	}
 
+	compartir(){
+		const content={
+			message: 'Este enlace ha sido enviado desde la app móvil de Baitu\n¡Entra ya!\n\nhttp://52.151.88.18:8080/producto?id=' + this.state.id
+		}
+		const options={}
+		Share.share(content,options)
+	}
+
     render(){
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-            <Gallery
-                style={styles.image}
-                images={[
-                  { source: { uri: this.state.datosProducto[4]}, },
-                  { source: { uri: this.state.i1 }, },
-                  { source: { uri: this.state.i2 }, },
-                  { source: { uri: this.state.i3 }, }
-                ]}
-              />
+				<Gallery
+					style={styles.image}
+					images={[
+						{ source: { uri: this.state.datosProducto[4]}, },
+						{ source: { uri: this.state.i1 }, },
+						{ source: { uri: this.state.i2 }, },
+						{ source: { uri: this.state.i3 }, }
+					]}
+				/>
 					<View style={styles.horizontal}>
                     	<Text style={styles.venta}>Venta</Text>
 						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
 							{ this.botonFavorito() }
 						</TouchableOpacity>
 					</View>
-
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
                         <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
@@ -247,9 +255,6 @@ class Venta extends Component {
 								style={styles.estrella}
 								source={require('../assets/images/estrella.png')}/>
 						</Text>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
-						</TouchableOpacity>
                         <TextInput style={styles.inputBox}
                           underlineColorAndroid='rgba(0,0,0,0)'
                           placeholder="Introduce aquí la cantidad(€)..."
@@ -263,10 +268,13 @@ class Venta extends Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.hacerOferta() }>
 							<Text style={styles.buttonText}>Hacer Oferta</Text>
 						</TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.id,tipoPublicacion: "Venta"})}>
-                            <Text style={styles.buttonText}>Calificar publicacion</Text>
-                        </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
+						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
+							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.button} onPress={() => this.compartir()}>
+							<Text style={styles.buttonText}>Compartir</Text>
+						</TouchableOpacity>
+            			<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 							<Text style={styles.buttonText}>Volver</Text>
 						</TouchableOpacity>
 					</View>
@@ -279,9 +287,7 @@ class Venta extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        flex: 1,
-        backgroundColor: 'gray',
-        height: (Dimensions.get('window').width),
+		height: (Dimensions.get('window').width)*0.75,
 		alignItems: 'center',
     },
     buttonText: {
@@ -375,6 +381,20 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: -1, height: 1},
         textShadowRadius: 10
+    },
+    compartir: {
+        fontSize: 17,
+        width: 80,
+        marginTop: 5,
+        marginRight: 10,
+        borderWidth: 3.5,
+        borderColor: '#ffc400',
+        borderRadius: 15,
+        backgroundColor: '#ffffff',
+        overflow: 'hidden',
+        textAlign: 'center',
+        alignItems: 'center',
+        color: '#ffc400'
     },
     favorito: {
         fontSize: 17,

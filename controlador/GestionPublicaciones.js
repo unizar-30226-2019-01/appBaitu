@@ -6,7 +6,7 @@ export const anadirProducto = newProducto => {
       nombre: newProducto.nombre,
       fecha: newProducto.fecha,
       categoria: newProducto.categoria,
-      descripcion: newProducto.descripcion,
+	  descripcion: newProducto.descripcion,
       precio: newProducto.precio,
       vendedor: newProducto.vendedor,
       fotoPrincipal: newProducto.fotoPrincipal,
@@ -220,7 +220,21 @@ export const getSubastasMenorMayor = () => {
         })
   }
 
+  export const getProductosComprados = (usuario) => {
+      return axios
+          .get(`http://52.151.88.18:5000/listarProductosComprados/${usuario.login}`, {
+              headers: { "Content-type": "application/json" }
+          })
+          .then(res => {
+              var data = []
+              Object.keys(res.data).forEach((key) => {
+                  var val = res.data[key]
+                  data.push([val.Nombre, val.id, val.Descripcion, val.Vendedor, val.Categoria, val.FotoPrincipal])
+              })
 
+              return data
+          })
+      }
 
 
 export const tipoProducto = id => {
@@ -278,6 +292,17 @@ export const infoSubasta = id => {
         })
 }
 
+export const estaValorado = (producto, valoracion) => {
+
+    return axios.post(`http://52.151.88.18:5000/estaValorado/${producto}`, {
+        headers: { "Content-type": "application/json" },
+      })
+      .then(res => {
+          return res.data
+      }).catch(err => {
+        return err})
+  }
+
 
 export const valorarProducto = (producto, valoracion) => {
     return axios.post(`http://52.151.88.18:5000/calcularValoracion/${producto}/${valoracion}`, {
@@ -329,6 +354,8 @@ export const getFotos = id => {
           console.log(err)
         })
   }
+
+
 
   export const actualizarSubasta = subastaEditada => {
   return axios

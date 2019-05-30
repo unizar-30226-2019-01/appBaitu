@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableOpacity,Title,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,FlatList,RefreshControl,Dimensions,Button,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo';
-import { getEnVentaUsuario, getSubastasEnCurso, getTipoPublicacion } from '../controlador/GestionPublicaciones';
+import { getProductosComprados } from '../controlador/GestionPublicaciones';
 import { StackNavigator } from 'react-navigation';
 import { infoUsuario } from '../controlador/GestionUsuarios.js'
 import jwt_decode from 'jwt-decode';
@@ -31,8 +31,7 @@ class MisPublisList extends Component {
 		this.state = {
 			refreshingV: false,
 			refreshingS: false,
-			ventas: [],
-			subastas: [],
+			productos: [],
 			estado: true,		//Venta true, subasta false
             login: ''
 		};
@@ -45,121 +44,57 @@ class MisPublisList extends Component {
 	}
 
 	componentDidMount() {
-		this.onRefreshV()
+		this.onRefresh()
 	}
 
-	onRefreshV(){
-		this.setState({refreshingV:true, estado:true})
-		getEnVentaUsuario(this.state.login).then(data => {
-            this.setState({ventas: data})
+	async onRefresh(){
+		this.setState({refreshingV:true})
+		const user = {
+			login:this.state.login
+		}
+		await getProductosComprados(user).then(data => {
+            this.setState({productos: data})
         })
+		console.log(this.state.productos)
 		this.setState({refreshingV:false})
-	}
-
-	onRefreshS(){
-		this.setState({refreshingS:true, estado:false})
-		getSubastasEnCurso(this.state.login).then(data => {
-            this.setState({subastas: data})
-		})
-		this.setState({refreshingS:false})
-	}
-
-	onRefresh(){
-		if(this.state.estado){
-			this.onRefreshV()
-		}
-		else{
-			this.state.onRefreshS()
-		}
 	}
 
 	renderItem = ({ item, index }) => {
 		if (item.empty === true) {
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
-		if(this.state.estado){
+		else{
 			return (
-				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('VentaOwner', {id: item[1]})}>
+				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('CalificarProducto', {datosProducto: item})}>
 					<Image
 						style={styles.image}
-						source={{uri: item[6]}}/>
-					<Text style={styles.venta}>Venta</Text>
-					<Text style={styles.price}>{item[4]}€</Text>
+						source={{uri: item[5]}}/>
+					<Text style={styles.price}>{item[3]}</Text>
 					<Text style={styles.title}>{item[0]}</Text>
 				</TouchableOpacity>
 			)
 		}
-		else {
-			return (
-				<TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('SubastaOwner', {id: item[1]})}>
-					<Image
-						style={styles.image}
-						source={{uri: item[8]}}/>
-					<Text style={styles.subasta}>Subasta</Text>
-					<Text style={styles.price}>{item[4]}€</Text>
-					<Text style={styles.title}>{item[0]}</Text>
-				</TouchableOpacity>
-			)
-		}
-	}
-
-	botones(){
-		return(
-			<View>
-				<View style={styles.horizontal}>
-					<TouchableOpacity onPress={this.onRefreshV.bind(this)}>
-						<Text style={styles.botonVentaSubasta}>Ventas</Text>
-					</TouchableOpacity>
-					<TouchableOpacity onPress={this.onRefreshS.bind(this)}>
-						<Text style={styles.botonVentaSubasta}>Subastas</Text>
-					</TouchableOpacity>
-				</View>
-			</View>
-		)
 	}
 
     render(){
-		if(this.state.estado) {
-			return(
-				<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
-					<FlatList
-						refreshControl={
-						<RefreshControl
-							refreshing={this.state.refreshingV}
-							onRefresh={this.onRefreshV.bind(this)}
-						/>
-						}
-						ListHeaderComponent={this.botones()}
-						data={formatData(this.state.ventas, numColumns)}
-						style={styles.containerItem}
-						renderItem={this.renderItem}
-						numColumns={numColumns}
-						keyExtractor={(item, index) => index.toString()}
+		return(
+			<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
+				<FlatList
+					refreshControl={
+					<RefreshControl
+						refreshing={this.state.refreshing}
+						onRefresh={this.onRefresh.bind(this)}
 					/>
-				</LinearGradient>
-			)
-		}
-		else {
-			return(
-				<LinearGradient colors={['#dddddd', '#dddddd']} style={styles.colorContainer} >
-					<FlatList
-						refreshControl={
-						<RefreshControl
-							refreshing={this.state.refreshingS}
-							onRefresh={this.onRefreshS.bind(this)}
-						/>
-						}
-						ListHeaderComponent={this.botones()}
-						data={formatData(this.state.subastas, numColumns)}
-						style={styles.containerItem}
-						renderItem={this.renderItem}
-						numColumns={numColumns}
-						keyExtractor={(item, index) => index.toString()}
-					/>
-				</LinearGradient>
-	        )
-		}
-    }
+					}
+					data={formatData(this.state.productos, numColumns)}
+					style={styles.containerItem}
+					renderItem={this.renderItem}
+					numColumns={numColumns}
+					keyExtractor={(item, index) => index.toString()}
+				/>
+			</LinearGradient>
+		)
+	}
 }
 
 

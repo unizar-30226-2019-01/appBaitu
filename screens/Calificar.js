@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Text,View,Picker,Alert,TextInput,StyleSheet,LinearGradient,KeyboardAvoidingView,AsyncStorage,TouchableOpacity} from 'react-native';
-import {reportar, infoUsuario} from '../controlador/GestionUsuarios'
-import {infoSubasta, infoVenta} from '../controlador/GestionPublicaciones'
+import {estaValorado, valorarProducto} from '../controlador/GestionPublicaciones'
 import jwt_decode from 'jwt-decode';
 
 
@@ -12,10 +11,8 @@ class Reportar extends Component {
             login: '',
             producto: '',
             valoracion: '',
-            datosProducto: [],
-            tipoPublicacion: ''
+            datosProducto: []
         }
-        this.onSubmit = this.onSubmit.bind(this)
     }
 
     async componentDidMount (){
@@ -28,51 +25,32 @@ class Reportar extends Component {
             this.setState({
                 login: decoded.identity.login,
             })
-        }
-
-        await this.setState({
-            producto: this.props.navigation.state.params.producto,
-            tipoPublicacion: this.props.navigation.state.params.tipoPublicacion
-        })
-        console.log(this.state.producto)
-        console.log(this.state.tipoPublicacion)
-        if(this.state.tipoPublicacion === "Subasta"){
-            await infoSubasta(this.state.producto).then(data => {
-                this.setState({
-                    datosProducto: data
-                })
+            await this.setState({
+                producto: this.props.navigation.state.params.producto,
+                datosProducto: this.props.navigation.state.params.datosProducto
             })
+            console.log(this.state.producto)
+            console.log(this.state.datosProducto)
         }
-        else{
-            await infoVenta(this.state.producto).then(data => {
-                this.setState({
-                    datosProducto: data
-                })
-            })
-        }
-        console.log(this.state.datosProducto)
     }
 
-    async onSubmit() {
+    async valorar() {
         if(this.state.valoracion != ''){
-            if(false/*this.state.login === this.state.datosProducto[]AQUI HAY QUE COMPRAR EL USUARIO QUE INTENTA VALORAR CON EL USUARIO QUE HA COMPRADO EL ARTICULO*/){
-                await reportar(infoReport).then(res => {
-                  this.setState({
-                    respuestaBD: res
-                  })
-                })
-                console.log(this.state.respuestaBD)
-                if(this.state.respuestaBD === "Reportado"){
+            console.log("antes estaValorado")
+            await estaValorado(this.state.producto,this.state.valoracion).then(res => {
+                console.log(res)
+                if(res!="SI"){
+                    console.log("antes valorarProducto")
+                    console.log(this.state.producto)
+                    console.log(this.state.valoracion)
+                    valorarProducto(this.state.producto,this.state.valoracion)
                     Alert.alert('','Valoracion enviada con éxito',[{text: 'OK'}],{cancelable: false});
                     this.props.navigation.goBack()
                 }
                 else{
-                    Alert.alert('','No se ha podido enviar la valoracion',[{text: 'OK'}],{cancelable: false});
+                    Alert.alert('','Ya has valorado este producto',[{text: 'OK'}],{cancelable: false});
                 }
-            }
-            else{
-                Alert.alert('','Solo puedes valorar un producto si lo has comprado o si has ganado una subasta',[{text: 'OK'}],{cancelable: false});
-            }
+            })
         }
         else{
              Alert.alert('','Por favor, introduce tu valoración',[{text: 'OK'}],{cancelable: false});
@@ -84,7 +62,7 @@ class Reportar extends Component {
             <View style={styles.itemsContainer}>
                 <KeyboardAvoidingView behavior="padding" enabled>
                     <Text style={styles.cuerpoVerde}>Producto calificado</Text>
-                    <Text style={styles.cuerpo}>{this.state.datosProducto[1]}</Text>
+                    <Text style={styles.cuerpo}>{this.state.datosProducto[0]}</Text>
                     <Text style={styles.cuerpoVerde}>Calificación del producto</Text>
                     <Picker
                         selectedValue={this.state.valoracion}
@@ -96,7 +74,7 @@ class Reportar extends Component {
                       <Picker.Item label="4" value="4" />
                       <Picker.Item label="5" value="5" />
                     </Picker>
-                    <TouchableOpacity style={styles.button} onPress={() => this.onSubmit()}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.valorar()}>
                         <Text style={styles.buttonText}>Enviar calificacion</Text>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
