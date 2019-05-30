@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
+import {Title,Alert,BackHandler,TextInput,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoVenta, consultarFavorito, crearFavorito, eliminarFavorito, getFotos } from '../controlador/GestionPublicaciones';
+import { infoVenta, consultarFavorito, crearFavorito, eliminarFavorito, getFotos, realizarOferta } from '../controlador/GestionPublicaciones';
 import * as firebase from 'firebase';
 import Gallery from 'react-native-image-gallery';
 
@@ -25,7 +25,33 @@ class Venta extends Component {
             image3:[],
             i1:'',
             i2:'',
-            i3:''
+            i3:'',
+            oferta:''
+        }
+    }
+
+    async hacerOferta(){
+        if(this.state.login === this.state.datosProducto[5]){
+            Alert.alert('','No puedes hacerte una oferta a ti mismo',[{text: 'OK'}],{cancelable: false});
+        }
+        else{
+            console.log(this.state.id)
+            console.log(this.state.oferta)
+            console.log(this.state.login)
+            await realizarOferta(this.state.login,this.state.id,this.state.oferta).then(data => {
+                this.setState({
+                    respuestaBD: data
+                })
+            })
+            console.log("respuestaBD: ")
+            console.log(this.state.respuestaBD)
+            if(this.state.respuestaBD != "Error"){
+                Alert.alert('','¡Se ha realizado la oferta correctamente!',[{text: 'OK'}],{cancelable: false});
+                this.props.navigation.goBack()
+            }
+            else{
+                Alert.alert('','No se ha podido realizar la oferta',[{text: 'OK'}],{cancelable: false});
+            }
         }
     }
 
@@ -224,8 +250,18 @@ class Venta extends Component {
 						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
 							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-							<Text style={styles.buttonText}>Hacer oferta </Text>
+                        <TextInput style={styles.inputBox}
+                          underlineColorAndroid='rgba(0,0,0,0)'
+                          placeholder="Introduce aquí la cantidad(€)..."
+                          placeholderTextColor = "#BCC5D5"
+                      	  autoCorrect={false}
+                          keyboardType={'numeric'}
+                          type="number"
+                          value={this.state.precio}
+                          onChangeText={(oferta) => this.setState({oferta})}
+                        />
+                        <TouchableOpacity style={styles.button} onPress={() => this.hacerOferta() }>
+							<Text style={styles.buttonText}>Hacer Oferta</Text>
 						</TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.id,tipoPublicacion: "Venta"})}>
                             <Text style={styles.buttonText}>Calificar publicacion</Text>
