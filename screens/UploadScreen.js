@@ -134,7 +134,7 @@ class Profile extends Component {
 					fecha: this.state.fecha,
 					categoria: this.state.categoria,
 					descripcion: this.state.descripcion,
-					precio: this.state.precio,
+					precio: parseFloat(this.state.precio.replace(",", ".")),
 					vendedor: this.state.vendedor,
 					fotoPrincipal: this.state.image,
 					foto1: this.state.foto1,
@@ -462,8 +462,7 @@ class Profile extends Component {
 								placeholder="Introduce aquí el precio..."
 								placeholderTextColor = "#BCC5D5"
 								autoCorrect={false}
-								keyboardType={'numeric'}
-								type="number"
+								keyboardType={'decimal-pad'}
 								value={this.state.precio}
 								onChangeText={(precio) => this.setState({precio})}
 							/>
