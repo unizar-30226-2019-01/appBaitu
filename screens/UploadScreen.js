@@ -14,6 +14,8 @@ class Profile extends Component {
   constructor() {
     super()
     this.state = {
+        fechaFinc:'',
+        fechac:'',
 		login: '',
 		nombre: '',
 		fecha: '',
@@ -51,6 +53,7 @@ class Profile extends Component {
              day="0"+day
          }
          this.setState({fechaFin: year + "-" + month + "-" + day})
+         this.setState({fechaFinc: year+ month + day})
        } catch ({code, message}) {
          console.warn('Cannot open date picker', message);
        }
@@ -99,8 +102,9 @@ class Profile extends Component {
         var date = new Date().getDate(); //Current Date
         var month = new Date().getMonth() + 1; //Current Month
         var year = new Date().getFullYear(); //Current Year
-        if (this.state.fecha != (date+"/"+month+"/"+year)) {
-            this.setState({fecha: date+"/"+month+"/"+year});
+        if (this.state.fecha != (year+"-"+month+"-"+date)) {
+            this.setState({fecha: year+"-"+month+"-"+date});
+            this.setState({fechac: ""+year+month+date});
         }
 		const token = await AsyncStorage.getItem('userToken')
 		if (token === undefined || token === null) {
@@ -135,7 +139,7 @@ class Profile extends Component {
                 Alert.alert('','Introduce un precio inicial mayor',[{text: 'OK'}],{cancelable: false});
             }
             else{
-			    exito = true    
+			    exito = true
             }
 
 		}
@@ -162,9 +166,14 @@ class Profile extends Component {
 				exito=false
 			}
 			else{
+                console.log(this.state.fechaFinc)
+                console.log(this.state.fechac)
 				if(this.state.fechaFin === '' || this.state.horaFin === ''){
 					Alert.alert('','Por favor, introduce todos los datos',[{text: 'OK'}],{cancelable: false});
 				}
+                else if(this.state.fechaFinc < this.state.fechac){
+                    Alert.alert('','Por favor, introduce una fecha válida',[{text: 'OK'}],{cancelable: false});
+                }
 				else{
 					const newProducto = {
 						nombre: this.state.nombre,
