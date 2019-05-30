@@ -32,7 +32,7 @@ class MisOfertasList extends Component {
 			refreshingOfertas:false,
 			ofertas: [],
 			datosVenta: [],
-			fotos:[],
+			foto: '',
 			id: '',
             login: ''
 		};
@@ -68,7 +68,7 @@ class MisOfertasList extends Component {
 		await infoVenta(this.state.id).then(data => {
 	    	this.setState({
 	            datosVenta: data,
-	            fotos: data[4]
+	            foto: data[4]
 	        })
 	    })
 		this.setState({refreshingOfertas:false})
@@ -123,7 +123,7 @@ class MisOfertasList extends Component {
 					<View>
 						<Image
 							style={styles.image}
-							source={{uri: this.state.fotos}}/>
+							source={{uri: this.state.foto}}/>
 						<Text style={styles.venta}>Venta</Text>
 						<Text style={styles.price}>{this.state.datosVenta[6]}€</Text>
 						<Text style={styles.title}>{this.state.datosVenta[1]}</Text>
