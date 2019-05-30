@@ -153,30 +153,30 @@ class SubastaOwner extends Component {
         }
 	}
 
+	// Devuelve true si hay una diferencia de mas de 2 dias entre la
+	// fecha limite y la de hoy
 	compararFechas(fechaHoy,fechaLimite){
-		if (fechaLimite[1]=="02"){
-			var modulo = 28
+		var modulo = 30
+		if (fechaHoy[1]=="02"){
+			modulo = 28
 		}
-		else if (fechaLimite[1]=="01" || fechaLimite[1]=="03" || fechaLimite[1]=="05" || fechaLimite[1]=="07" || fechaLimite[1]=="08" || [1]=="10" || fechaLimite[1]=="12"){
-			var modulo = 31
-		}
-		else{
-			var modulo = 30
+		else if (fechaHoy[1]=="01" || fechaHoy[1]=="03" || fechaHoy[1]=="05" || fechaHoy[1]=="07" || fechaHoy[1]=="08" || [1]=="10" || fechaHoy[1]=="12"){
+			modulo = 31
 		}
 		//Los + delante son para tratar las variables como enteros
-		var diaH = +fechaHoy[2]
+		var diaH = +fechaHoy[2] + 2
 		var mesH = +fechaHoy[1]
 		var anyoH = +fechaHoy[0]
-		var diaL = +fechaLimite[2] + 2
+		var diaL = +fechaLimite[2]
 		var mesL = +fechaLimite[1]
 		var anyoL = +fechaLimite[0]
-		if (diaL>modulo){
-			mesL = mesL + 1
-			diaL = diaL - modulo
+		if (diaH>modulo){
+			mesH = mesH + 1
+			diaH = diaH - modulo
 		}
-		if (mesL==13){
-			mesL = 1
-			anyoL = anyoL + 1
+		if (mesH==13){
+			mesH = 1
+			anyoH = anyoH + 1
 		}
 		var hoy = anyoH*10000 + mesH*100 + diaH
 		var limite = anyoL*10000 + mesL*100 + diaL
@@ -286,6 +286,10 @@ class SubastaOwner extends Component {
 					<Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
 					<Text style={styles.cuerpoVerde}>Precio actual</Text>
 					<Text style={styles.title}>{this.state.datosProducto[7]}€</Text>
+					<Text style={styles.cuerpoVerde}>Fecha límite</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[8]}</Text>
+					<Text style={styles.cuerpoVerde}>Hora límite</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[9]}</Text>
 					<Text style={styles.cuerpoVerde}>Descripción</Text>
 					<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
 					<Text style={styles.cuerpoVerde}>Ubicación</Text>

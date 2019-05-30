@@ -33,14 +33,26 @@ class Profile extends Component {
         tipo: '',
         status: false,
         fechaFin: '',
-        horaFin: ''
+        horaFin: '',
+        sale: false
     }
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  async abrirCalendario() {
+    componentDidUpdate() {
+        if(this.state.sale) {
+            var date = new Date().getDate(); //Current Date
+    		var month = new Date().getMonth() + 1; //Current Month
+    		var year = new Date().getFullYear(); //Current Year
+    		if (this.state.fecha != (year+"-"+month+"-"+date)) {
+    			this.setState({fecha: year+"-"+month+"-"+date});
+    		}
+        }
+    }
+
+    async abrirCalendario() {
        try {
          var {action, year, month, day} = await DatePickerAndroid.open({
            date: new Date()
