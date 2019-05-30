@@ -180,7 +180,7 @@ class SubastaOwner extends Component {
 		}
 		var hoy = anyoH*10000 + mesH*100 + diaH
 		var limite = anyoL*10000 + mesL*100 + diaL
-		return (limite-hoy)>2
+		return limite<hoy
 	}
 
 	puedeEditar(){
