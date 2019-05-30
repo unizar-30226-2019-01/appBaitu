@@ -498,7 +498,15 @@ class Profile extends Component {
                           value={this.state.descripcion}
                           onChangeText={(descripcion) => this.setState({descripcion})}
                         />
-                        <Text style={styles.paragraph}>Ciudad: {text}</Text>
+                        <Text style={styles.cuerpoVerde}>Ubicación</Text>
+						<TextInput style={styles.inputBox}
+							underlineColorAndroid='transparent'
+							underlineColorAndroid='rgba(0,0,0,0)'
+							defaultValue = {this.state.location}
+							placeholderTextColor = "#BCC5D5"
+							autoCorrect={false}
+							onChangeText={(location) => this.setState({location})}
+						/>
                         <Text style={styles.cuerpoVerde}>Categoría</Text>
                         <Picker
                               selectedValue={this.state.categoria}
