@@ -153,6 +153,8 @@ class SubastaOwner extends Component {
         }
 	}
 
+	// Devuelve true si hay una diferencia de mas de 2 dias entre la
+	// fecha limite y la de hoy
 	compararFechas(fechaHoy,fechaLimite){
 		var modulo = 30
 		if (fechaLimite[1]=="02"){
