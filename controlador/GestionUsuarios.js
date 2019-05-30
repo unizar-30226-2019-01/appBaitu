@@ -91,7 +91,6 @@ export const deleteUser = user => {
 }
 
 export const infoUsuario = login => {
-    console.log("login: "+ login)
   return axios
       .post(`http://52.151.88.18:5000/infoUsuario`, {
           usuario: login

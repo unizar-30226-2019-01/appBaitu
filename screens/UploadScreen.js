@@ -428,14 +428,14 @@ class Profile extends Component {
         }
         else if(this.state.respuestaBD=="Exito") {
           Alert.alert('','Creado correctamente',[{text: 'OK'}],{cancelable: false});
-          this.props.navigation.navigate('ProductList')
+          this.props.navigation.goBack()
         }
       }
       return(
-          <KeyboardAvoidingView style={{ flex: 1 }}
+            <KeyboardAvoidingView style={{ flex: 1 }}
                 keyboardVerticalOffset={100} behavior={"position"}>
-        <LinearGradient colors={['#ffffff', '#eeeeee']}>
-          <View style={styles.itemsContainer} showsVerticalScrollIndicator={false}>
+            <LinearGradient colors={['#ffffff', '#eeeeee']}>
+            <View style={styles.itemsContainer} showsVerticalScrollIndicator={false}>
             <ScrollView  showsVerticalScrollIndicator={false}>
               <Button style={styles.botonSelec} onPress={this._pickImage} title="Selecciona una foto"/>
               <Image style={styles.imagenProducto} source={{uri: foto}}/>
