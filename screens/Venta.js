@@ -208,22 +208,21 @@ class Venta extends Component {
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-            <Gallery
-                style={styles.image}
-                images={[
-                  { source: { uri: this.state.datosProducto[4]}, },
-                  { source: { uri: this.state.i1 }, },
-                  { source: { uri: this.state.i2 }, },
-                  { source: { uri: this.state.i3 }, }
-                ]}
-              />
+				<Gallery
+					style={styles.image}
+					images={[
+						{ source: { uri: this.state.datosProducto[4]}, },
+						{ source: { uri: this.state.i1 }, },
+						{ source: { uri: this.state.i2 }, },
+						{ source: { uri: this.state.i3 }, }
+					]}
+				/>
 					<View style={styles.horizontal}>
                     	<Text style={styles.venta}>Venta</Text>
 						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
 							{ this.botonFavorito() }
 						</TouchableOpacity>
 					</View>
-
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
                         <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
@@ -266,7 +265,7 @@ class Venta extends Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.id,tipoPublicacion: "Venta"})}>
                             <Text style={styles.buttonText}>Calificar publicacion</Text>
                         </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
+            			<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 							<Text style={styles.buttonText}>Volver</Text>
 						</TouchableOpacity>
 					</View>

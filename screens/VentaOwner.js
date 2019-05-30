@@ -3,8 +3,9 @@ import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
-import { infoVenta, consultarFavorito, crearFavorito, eliminarFavorito, eliminarProducto, eliminarSubasta, getTipoPublicacion } from '../controlador/GestionPublicaciones';
+import { infoVenta, getFotos, consultarFavorito, crearFavorito, eliminarFavorito, eliminarProducto, eliminarSubasta, getTipoPublicacion } from '../controlador/GestionPublicaciones';
 import * as firebase from 'firebase'
+import Gallery from 'react-native-image-gallery';
 
 let foto=''
 
@@ -16,7 +17,15 @@ class Venta extends Component {
             datosVendedor: [],
             login: '',
 			id: '',
-			esFavorito: ""
+			esFavorito: "",
+            fotos: [],
+            images: '',
+            image1:[],
+            image2:[],
+            image3:[],
+            i1:'',
+            i2:'',
+            i3:''
         }
     }
 
@@ -53,6 +62,31 @@ class Venta extends Component {
 						esFavorito: data
 					})
 				})
+				await getFotos(this.state.id).then(data => {
+					this.setState({
+						fotos: data
+					})
+				})
+				this.setState({i1:undefined})
+				this.setState({i2:undefined})
+				this.setState({i3:undefined})
+				this.setState({image1: this.state.fotos[0]})
+				this.setState({image2: this.state.fotos[1]})
+				this.setState({image3: this.state.fotos[2]})
+	
+				this.setState({i1: this.state.image1[0]})
+				this.setState({i2: this.state.image2[0]})
+				this.setState({i3: this.state.image3[0]})
+	
+				if(this.state.i1 === undefined || this.state.i1 === '') {
+					this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
+				}
+				if(this.state.i2 === undefined || this.state.i2 === '') {
+					this.setState({i2:'http://geodezja-elipsa.pl/ikony/picture.png'})
+				}
+				if(this.state.i3 === undefined || this.state.i3 === '') {
+					this.setState({i3:'http://geodezja-elipsa.pl/ikony/picture.png'})
+				}
             }
         }
     }
@@ -89,6 +123,31 @@ class Venta extends Component {
 					esFavorito: data
 				})
 			})
+			await getFotos(this.state.id).then(data => {
+				this.setState({
+					fotos: data
+				})
+			})
+			this.setState({i1:undefined})
+			this.setState({i2:undefined})
+			this.setState({i3:undefined})
+			this.setState({image1: this.state.fotos[0]})
+			this.setState({image2: this.state.fotos[1]})
+			this.setState({image3: this.state.fotos[2]})
+
+			this.setState({i1: this.state.image1[0]})
+			this.setState({i2: this.state.image2[0]})
+			this.setState({i3: this.state.image3[0]})
+
+			if(this.state.i1 === undefined || this.state.i1 === '') {
+				this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
+			}
+			if(this.state.i2 === undefined || this.state.i2 === '') {
+				this.setState({i2:'http://geodezja-elipsa.pl/ikony/picture.png'})
+			}
+			if(this.state.i3 === undefined || this.state.i3 === '') {
+				this.setState({i3:'http://geodezja-elipsa.pl/ikony/picture.png'})
+			}
         }
 	}
 
@@ -132,54 +191,60 @@ class Venta extends Component {
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-                <KeyboardAvoidingView behavior="padding" enabled>
-                    <Image
-						style={styles.image}
-						source={{uri: this.state.datosProducto[4]}}/>
-					<View style={styles.horizontal}>
-                    	<Text style={styles.venta}>Venta</Text>
-						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
-							{ this.botonFavorito() }
-						</TouchableOpacity>
-					</View>
-					<View style={styles.itemsContainer}>
-                        <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
-                        <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
-						<Text style={styles.cuerpoVerde}>Descripciónnnnnnnnnnnnnnnnnnnn</Text>
-						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
-						<Text style={styles.cuerpoVerde}>Vendedor</Text>
-						<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('Profile')}>
-							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
-						</TouchableOpacity>
-						<Text style={styles.price}>{this.state.datosVendedor[6]}
-							<Image
-								style={styles.estrella}
-								source={require('../assets/images/estrella.png')}/>
-						</Text>
-						<TouchableOpacity style={styles.button} onPress={() => this.editarPublicacion() }>
-							<Text style={styles.buttonText}>Editar publicación</Text>
-						</TouchableOpacity>
-                        <TouchableOpacity style={styles.redbutton} onPress={() => {
-                           Alert.alert(
-                           "Borrar publicación",
-                           "¿Seguro que desea borrar su publicación? La publicación no podrá ser recuperada.",
-                           [
-                             {
-                               text: "No"
-                             },
-                             { text: "Si", onPress: () =>{this.eliminarPublicacion()} }
-                           ],
-                           { cancelable: false }
-                           );
-                           return true;
-                            }}>
-                            <Text style={styles.buttonText}>ELIMINAR PUBLICACIÓN</Text>
-						</TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
-							<Text style={styles.buttonText}>Volver</Text>
-						</TouchableOpacity>
-					</View>
-                </KeyboardAvoidingView>
+				<Gallery
+					style={styles.image}
+					images={[
+						{ source: { uri: this.state.datosProducto[4]}, },
+						{ source: { uri: this.state.i1 }, },
+						{ source: { uri: this.state.i2 }, },
+						{ source: { uri: this.state.i3 }, }
+					]}
+				/>
+				<View style={styles.horizontal}>
+					<Text style={styles.venta}>Venta</Text>
+					<TouchableOpacity onPress={() => this.cambiarFavorito()}>
+						{ this.botonFavorito() }
+					</TouchableOpacity>
+				</View>
+				<View style={styles.itemsContainer}>
+					<Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
+					<Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
+					<Text style={styles.cuerpoVerde}>Descripción</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
+					<Text style={styles.cuerpoVerde}>Ubicación</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[7]}</Text>
+					<Text style={styles.cuerpoVerde}>Vendedor</Text>
+					<TouchableOpacity style={styles.link} onPress={() => this.props.navigation.navigate('Profile')}>
+						<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
+					</TouchableOpacity>
+					<Text style={styles.price}>{this.state.datosVendedor[6]}
+						<Image
+							style={styles.estrella}
+							source={require('../assets/images/estrella.png')}/>
+					</Text>
+					<TouchableOpacity style={styles.button} onPress={() => this.editarPublicacion() }>
+						<Text style={styles.buttonText}>Editar publicación</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.redbutton} onPress={() => {
+						Alert.alert(
+						"Borrar publicación",
+						"¿Seguro que desea borrar su publicación? La publicación no podrá ser recuperada.",
+						[
+							{
+							text: "No"
+							},
+							{ text: "Si", onPress: () =>{this.eliminarPublicacion()} }
+						],
+						{ cancelable: false }
+						);
+						return true;
+						}}>
+						<Text style={styles.buttonText}>ELIMINAR PUBLICACIÓN</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
+						<Text style={styles.buttonText}>Volver</Text>
+					</TouchableOpacity>
+				</View>
       	  </LinearGradient>
         </ScrollView>
         )
