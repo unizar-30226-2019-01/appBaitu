@@ -7,7 +7,7 @@ import { infoSubasta, getFotos, consultarFavorito, crearFavorito, eliminarFavori
 import * as firebase from 'firebase'
 import Gallery from 'react-native-image-gallery';
 
-class Venta extends Component {
+class SubastaOwner extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -24,7 +24,9 @@ class Venta extends Component {
 			image3:[],
 			i1:'',
 			i2:'',
-			i3:''
+			i3:'',
+			fechaLimite: '',
+			puedeEditar: false
 		}
 	}
 
@@ -40,7 +42,8 @@ class Venta extends Component {
                     login: decoded.identity.login
                 }
                 this.setState({
-                    id: this.props.navigation.state.params.id
+					id: this.props.navigation.state.params.id,
+					puedeEditar: false
                 })
                 await infoSubasta(this.state.id).then(data => {
                     this.setState({
@@ -150,15 +153,52 @@ class Venta extends Component {
         }
 	}
 
+	puedeEditar(){
+		var day = new Date()
+		var dd = day.getDate()
+		var mm = day.getMonth()+1
+		var yy = day.getFullYear()
+		var fecha = yy+'-'+mm+'-'+dd
+		var fechaHoy=fecha.split("-")
+		var fechaL=(this.state.datosProducto[8]).split("/")
+		if(fechaHoy[1].length==1){
+			fechaHoy[1]= "0"+fechaHoy[1]
+		}
+		if(fechaHoy[2].length==1){
+			fechaHoy[2]= "0"+fechaHoy[2]
+		}
+		if(fechaL[1].length==1){
+			fechaL[1]= "0"+fechaL[1]
+		}
+		if(fechaL[0].length==1){
+			fechaL[0]= "0"+fechaL[0]
+		}
+		var fechaHoyD=fechaHoy[0]+fechaHoy[1]+fechaHoy[2]
+		var fechaLD=fechaL[2]+fechaL[1]+fechaL[0]
+		console.log(fechaHoyD)
+		console.log(fechaLD)
+		//Los + delante son para tratar las variables como enteros
+		if((+fechaHoyD+2)>(+fechaLD)){
+			Alert.alert('','La subasta termina en un plazo inferior a dos días. Ya no puede editarla ni eliminarla. Póngase en contacto con el ganador cuando finalice el plazo',[{text: 'OK'}],{cancelable: false});
+		}
+		else{
+			this.setState({puedeEditar: true})
+		}
+	}
+
     eliminarPublicacion(){
-        if(true){       /*AQUI HAY QUE PONER LA RESTRICCION DE QUE NO DEJE BORRAR UNA SUBASTA SI QUEDAN MENOS DE 48 HORAS PARA QUE ACABE */
+		this.puedeEditar()
+        if(this.state.puedeEditar){
             eliminarSubasta(this.state.id)
             this.props.navigation.goBack()
-        }
+		}
     }
 
     editarPublicacion(){
-        this.props.navigation.navigate('EditSubasta', {id: this.state.id})
+		this.puedeEditar()
+		if(this.state.puedeEditar){
+			this.props.navigation.navigate('EditSubasta', {id: this.state.id})
+		}
     }
 
 	botonFavorito(){
@@ -396,4 +436,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default Venta;
+export default SubastaOwner;
