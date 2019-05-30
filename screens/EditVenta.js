@@ -221,7 +221,9 @@ class EditVenta extends Component {
         console.log(this.state.categoria)
         if (this.state.categoria === '' || this.state.precio === ''){
             Alert.alert('','Por favor, selecciona la categoría y/o el precio',[{text: 'OK'}],{cancelable: false});
-
+        }
+        else if(this.state.precio<1){
+            Alert.alert('','Introduce un precio inicial mayor',[{text: 'OK'}],{cancelable: false});
         }
         else {
             const producto = {
@@ -467,7 +469,7 @@ class EditVenta extends Component {
                             />
                         <Text style={styles.cuerpoVerde}>Precio (€)</Text>
 						<TextInput style={styles.inputBox}
-							
+
 							clearButtonMode='while-editing'
 							autoCorrect={false}
 							keyboardType={'decimal-pad'}
