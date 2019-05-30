@@ -15,12 +15,10 @@ class Profile extends Component {
     }
 
 	async componentDidMount() {
-        console.log(this.state.login)
         await this.setState({
             login: this.props.navigation.state.params.login,
             producto: this.props.navigation.state.params.producto
         })
-        console.log(this.state.login)
 		infoUsuario(this.state.login).then(data => {
         	this.setState({
         		datos: data
@@ -33,9 +31,6 @@ class Profile extends Component {
         getProductos().then(data => {
             this.setState({
                 products: data
-            },
-            () => {
-                console.log("Perfil actualizado")
             })
         })
         this.setState({refreshing:false})

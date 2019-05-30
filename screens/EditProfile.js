@@ -37,14 +37,10 @@ class Profile extends Component {
           const usuario = {
               login: decoded.identity.login
           }
-          console.log(usuario.login)
          await infoUsuario(decoded.identity.login).then(data => {
           this.setState({
               login: decoded.identity.login,
               datos: data
-          },
-          () => {
-              console.log("devuelvo")
           })
         })
           //this.getAll(usuario)
@@ -69,7 +65,6 @@ class Profile extends Component {
           aspect: [4, 3],
         });
         this.setState({foto : pickerResult.uri})
-        console.log("Tiene la imagen: "+this.state.foto)
         this._handleImagePicked(pickerResult);
       }
     };
@@ -77,7 +72,6 @@ class Profile extends Component {
 
     _handleImagePicked = async pickerResult => {
         let uploadResponse, uploadResult;
-        console.log("Entra en handle")
         try {
           this.setState({
             uploading: true
@@ -117,9 +111,7 @@ class Profile extends Component {
             telefono: this.state.telefono,
             foto: this.state.foto
         }
-        console.log(user)
         actualizarInfo(user)
-        console.log('Estoy actualizando cositas')
         this.props.navigation.navigate('DrawerStack')
     }
 

@@ -35,16 +35,11 @@ class Venta extends Component {
             Alert.alert('','No puedes hacerte una oferta a ti mismo',[{text: 'OK'}],{cancelable: false});
         }
         else{
-            console.log(this.state.id)
-            console.log(this.state.oferta)
-            console.log(this.state.login)
             await realizarOferta(this.state.login,this.state.id,this.state.oferta).then(data => {
                 this.setState({
                     respuestaBD: data
                 })
             })
-            console.log("respuestaBD: ")
-            console.log(this.state.respuestaBD)
             if(this.state.respuestaBD != "Error"){
                 Alert.alert('','¡Se ha realizado la oferta correctamente!',[{text: 'OK'}],{cancelable: false});
                 this.props.navigation.goBack()

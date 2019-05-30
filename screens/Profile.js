@@ -48,29 +48,27 @@ class Profile extends Component {
         this.setState({refreshing : false})
     }
 
-onDelete(e) {
-    console.log("xdxd")
-  const user = {
-    login: this.state.login
-  }
-  console.log(user.login)
- deleteUser(user)
- this.props.navigation.navigate('Login')
-}
+	onDelete(e) {
+		const user = {
+			login: this.state.login
+		}
+		deleteUser(user)
+		this.props.navigation.navigate('Login')
+	}
 
-async cerrarSesion(e){
-    const token = await AsyncStorage.removeItem('userToken')
-    this.props.navigation.navigate('Login')
-  }
+	async cerrarSesion(e){
+		const token = await AsyncStorage.removeItem('userToken')
+		this.props.navigation.navigate('Login')
+	}
 
 
     render(){
-      if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
-        foto= 'https://image.flaticon.com/icons/png/512/64/64572.png'
-      }
-      else {
-        foto = this.state.datos[4]
-      }
+		if (this.state.datos[4] === undefined || this.state.datos[4] === "") {
+			foto= 'https://image.flaticon.com/icons/png/512/64/64572.png'
+		}
+		else {
+			foto = this.state.datos[4]
+		}
         return(
             <ScrollView refreshControl={
                 <RefreshControl

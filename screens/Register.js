@@ -63,16 +63,15 @@ class Register extends Component {
        render(){
         const { navigation } = this.props;
         if(this.state.registrar) {
-          console.log("vale: "+this.state.respuestaBD)
-          if(this.state.respuestaBD=="error") {
-            Alert.alert('','El nombre de login ya esta en uso',[{text: 'OK'}],{cancelable: false});
-            this.setState({respuestaBD:""})
-            this.setState({registrar:false})
-          }
-          else if(this.state.respuestaBD != undefined){
-            AsyncStorage.setItem('userToken', this.state.respuestaBD)
-            this.props.navigation.navigate('Sidebar')
-          }
+			if(this.state.respuestaBD=="error") {
+				Alert.alert('','El nombre de login ya esta en uso',[{text: 'OK'}],{cancelable: false});
+				this.setState({respuestaBD:""})
+				this.setState({registrar:false})
+			}
+			else if(this.state.respuestaBD != undefined){
+				AsyncStorage.setItem('userToken', this.state.respuestaBD)
+				this.props.navigation.navigate('Sidebar')
+			}
         }
         return(
         <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>

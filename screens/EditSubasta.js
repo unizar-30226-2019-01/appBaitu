@@ -19,7 +19,6 @@ class Subasta extends Component {
     }
 
     editarPublicacion(){
-        console.log(this.state.categoria)
         if (this.state.categoria == ''){
             Alert.alert('','Por favor, selecciona la categoría',[{text: 'OK'}],{cancelable: false});
 
@@ -81,11 +80,6 @@ class Subasta extends Component {
              fechaFin: this.state.datosProducto[8],
              horaFin: this.state.datosProducto[9]
          })
-         console.log(this.state.nombre)
-         console.log(this.state.descripcion)
-         console.log(this.state.caregoria)
-         console.log(this.state.fechaFin)
-         console.log(this.state.horaFin)
 	}
 
 
