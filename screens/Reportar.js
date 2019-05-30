@@ -21,8 +21,6 @@ class Reportar extends Component {
             vendedor: this.props.navigation.state.params.reportedUser,
             producto: this.props.navigation.state.params.producto
         })
-        console.log(this.state.vendedor)
-        console.log(this.state.producto)
         const token = await AsyncStorage.getItem('userToken')
 		if (token === undefined || token === null) {
 			console.log("no existe token")
@@ -44,19 +42,17 @@ class Reportar extends Component {
 
     async onSubmit() {
         const infoReport = {
-          denunciante: this.state.login,
-          vendedor: this.state.vendedor,
-          producto: this.state.producto,
-          texto: this.state.texto
+			denunciante: this.state.login,
+			vendedor: this.state.vendedor,
+			producto: this.state.producto,
+			texto: this.state.texto
         }
-        console.log(infoReport)
         if(this.state.texto != ''){
             await reportar(infoReport).then(res => {
               this.setState({
                 respuestaBD: res
               })
             })
-            console.log(this.state.respuestaBD)
             if(this.state.respuestaBD === "Reportado"){
                 Alert.alert('','Reporte enviado con éxito',[{text: 'OK'}],{cancelable: false});
                 this.props.navigation.goBack()

@@ -34,13 +34,7 @@ class Subasta extends Component {
         if(this.state.puja <= this.state.datosProducto[7]){
             Alert.alert('','Por favor, introduce un valor mayor al precio actual antes de pujar',[{text: 'OK'}],{cancelable: false});
         }
-        else if(this.state.login===this.state.datosProducto[5]){
-            Alert.alert('','No puedes pujar en una subasta tuya',[{text: 'OK'}],{cancelable: false});
-        }
         else{
-            console.log(this.state.id)
-            console.log(this.state.puja)
-            console.log(this.state.login)
             await realizarOfertaSubasta(this.state.login,this.state.id,this.state.puja).then(data => {
                 this.setState({
                     respuestaBD: data
@@ -208,71 +202,71 @@ class Subasta extends Component {
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-            <Gallery
-                style={styles.image}
-                images={[
-                  { source: { uri: this.state.datosProducto[4]}, },
-                  { source: { uri: this.state.i1 }, },
-                  { source: { uri: this.state.i2 }, },
-                  { source: { uri: this.state.i3 }, }
-                ]}
-              />
-					<View style={styles.horizontal}>
-                    	<Text style={styles.subasta}>Subasta</Text>
-						<TouchableOpacity onPress={() => this.cambiarFavorito()}>
-							{ this.botonFavorito() }
-						</TouchableOpacity>
-					</View>
-					<View style={styles.itemsContainer}>
-                        <Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
-                        <Text style={styles.cuerpoVerde}>Precio salida</Text>
-                        <Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
-                        <Text style={styles.cuerpoVerde}>Precio actual</Text>
-                        <Text style={styles.title}>{this.state.datosProducto[7]}€</Text>
-						<Text style={styles.cuerpoVerde}>Ubicación</Text>
-						<Text style={styles.cuerpo}>{this.state.datosProducto[10]}</Text>
-						<Text style={styles.cuerpoVerde}>Descripción</Text>
-						<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
-						<Text style={styles.cuerpoVerde}>Vendedor</Text>
-                        <TouchableOpacity style={styles.link} onPress={() => {
-                            if(this.state.login === this.state.datosProducto[5]){
-                                this.props.navigation.navigate('Profile')
-                            }
-                            else{
-                                this.props.navigation.navigate('ProfileAjeno', {login:this.state.datosProducto[5],producto:this.state.id})
-                            }
-                        }}>
-							<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
-						</TouchableOpacity>
-						<Text style={styles.price}>{this.state.datosVendedor[6]}
-							<Image
-								style={styles.estrella}
-								source={require('../assets/images/estrella.png')}/>
-						</Text>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
-						</TouchableOpacity>
-                        <Text style={styles.cuerpoVerde}>Haz tu puja aqui</Text>
-                        <TextInput style={styles.inputBox}
-                          underlineColorAndroid='rgba(0,0,0,0)'
-                          placeholder="Introduce aquí la cantidad(€)..."
-                          placeholderTextColor = "#BCC5D5"
-                      	  autoCorrect={false}
-                          keyboardType={'numeric'}
-                          type="number"
-                          value={this.state.precio}
-                          onChangeText={(puja) => this.setState({puja})}
-                        />
-						<TouchableOpacity style={styles.button} onPress={() => this.pujar() }>
-							<Text style={styles.buttonText}>Pujar</Text>
-						</TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.id,tipoPublicacion: "Subasta"})}>
-                            <Text style={styles.buttonText}>Calificar publicacion</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
-							<Text style={styles.buttonText}>Volver</Text>
-						</TouchableOpacity>
-					</View>
+				<Gallery
+					style={styles.image}
+					images={[
+						{ source: { uri: this.state.datosProducto[4]}, },
+						{ source: { uri: this.state.i1 }, },
+						{ source: { uri: this.state.i2 }, },
+						{ source: { uri: this.state.i3 }, }
+					]}
+				/>
+				<View style={styles.horizontal}>
+					<Text style={styles.subasta}>Subasta</Text>
+					<TouchableOpacity onPress={() => this.cambiarFavorito()}>
+						{ this.botonFavorito() }
+					</TouchableOpacity>
+				</View>
+				<View style={styles.itemsContainer}>
+					<Text style={styles.subtitle}>{this.state.datosProducto[1]}</Text>
+					<Text style={styles.cuerpoVerde}>Precio salida</Text>
+					<Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
+					<Text style={styles.cuerpoVerde}>Precio actual</Text>
+					<Text style={styles.title}>{this.state.datosProducto[7]}€</Text>
+					<Text style={styles.cuerpoVerde}>Descripción</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
+					<Text style={styles.cuerpoVerde}>Ubicación</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[10]}</Text>
+					<Text style={styles.cuerpoVerde}>Vendedor</Text>
+					<TouchableOpacity style={styles.link} onPress={() => {
+						if(this.state.login === this.state.datosProducto[5]){
+							this.props.navigation.navigate('Profile')
+						}
+						else{
+							this.props.navigation.navigate('ProfileAjeno', {login:this.state.datosProducto[5],producto:this.state.id})
+						}
+					}}>
+						<Text style={styles.clickableText}>{this.state.datosProducto[5]}</Text>
+					</TouchableOpacity>
+					<Text style={styles.price}>{this.state.datosVendedor[6]}
+						<Image
+							style={styles.estrella}
+							source={require('../assets/images/estrella.png')}/>
+					</Text>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
+						<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
+					</TouchableOpacity>
+					<Text style={styles.cuerpoVerde}>Haz tu puja aqui</Text>
+					<TextInput style={styles.inputBox}
+						underlineColorAndroid='rgba(0,0,0,0)'
+						placeholder="Introduce aquí la cantidad(€)..."
+						placeholderTextColor = "#BCC5D5"
+						autoCorrect={false}
+						keyboardType={'numeric'}
+						type="number"
+						value={this.state.precio}
+						onChangeText={(puja) => this.setState({puja})}
+					/>
+					<TouchableOpacity style={styles.button} onPress={() => this.pujar() }>
+						<Text style={styles.buttonText}>Pujar</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.id,tipoPublicacion: "Subasta"})}>
+						<Text style={styles.buttonText}>Calificar publicacion</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
+						<Text style={styles.buttonText}>Volver</Text>
+					</TouchableOpacity>
+				</View>
       	  </LinearGradient>
         </ScrollView>
         )
@@ -357,10 +351,10 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
 	subasta: {
-		fontSize: 15,
-		width: 70,
+		fontSize: 17,
+		width: 80,
 		marginTop: 5,
-		marginLeft: 5,
+		marginLeft: 10,
 		borderWidth: 3.5,
 		borderColor: '#fea041',
 		borderRadius: 15,
