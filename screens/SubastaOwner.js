@@ -153,6 +153,36 @@ class SubastaOwner extends Component {
         }
 	}
 
+	compararFechas(fechaHoy,fechaLimite){
+		if (fechaLimite[1]=="02"){
+			var modulo = 28
+		}
+		else if (fechaLimite[1]=="01" || fechaLimite[1]=="03" || fechaLimite[1]=="05" || fechaLimite[1]=="07" || fechaLimite[1]=="08" || [1]=="10" || fechaLimite[1]=="12"){
+			var modulo = 31
+		}
+		else{
+			var modulo = 30
+		}
+		//Los + delante son para tratar las variables como enteros
+		var diaH = +fechaHoy[2]
+		var mesH = +fechaHoy[1]
+		var anyoH = +fechaHoy[0]
+		var diaL = +fechaLimite[2] + 2
+		var mesL = +fechaLimite[1]
+		var anyoL = +fechaLimite[0]
+		if (diaL>modulo){
+			mesL = mesL + 1
+			diaL = diaL - modulo
+		}
+		if (mesL==13){
+			mesL = 1
+			anyoL = anyoL + 1
+		}
+		var hoy = anyoH*10000 + mesH*100 + diaH
+		var limite = anyoL*10000 + mesL*100 + diaL
+		return (limite-hoy)>2
+	}
+
 	puedeEditar(){
 		var day = new Date()
 		var dd = day.getDate()
@@ -160,7 +190,7 @@ class SubastaOwner extends Component {
 		var yy = day.getFullYear()
 		var fecha = yy+'-'+mm+'-'+dd
 		var fechaHoy=fecha.split("-")
-		var fechaL=(this.state.datosProducto[8]).split("/")
+		var fechaL=(this.state.datosProducto[8]).split("-")
 		if(fechaHoy[1].length==1){
 			fechaHoy[1]= "0"+fechaHoy[1]
 		}
@@ -173,12 +203,7 @@ class SubastaOwner extends Component {
 		if(fechaL[2].length==1){
 			fechaL[2]= "0"+fechaL[2]
 		}
-		var fechaHoyD=fechaHoy[0]+fechaHoy[1]+fechaHoy[2]
-		var fechaLD=fechaL[0]+fechaL[1]+fechaL[2]
-		console.log(fechaHoyD)
-		console.log(fechaLD)
-		//Los + delante son para tratar las variables como enteros
-		if((+fechaHoyD+2)>(+fechaLD)){
+		if(this.compararFechas(fechaHoy,fechaL)){
 			Alert.alert('','La subasta termina en un plazo inferior a dos días. Ya no puede editarla ni eliminarla. Póngase en contacto con el ganador cuando finalice el plazo',[{text: 'OK'}],{cancelable: false});
 		}
 		else{
