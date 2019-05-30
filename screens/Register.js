@@ -120,7 +120,8 @@ class Register extends Component {
               placeholderTextColor = "#BCC5D5"
               autoCapitalize={'none'}
               autoCorrect={false}
-              value={this.state.email}
+			  value={this.state.email}
+			  keyboardType='email-address'
               onChangeText={(email) => this.setState({email})}
               />
           	<TouchableOpacity style={styles.button}>
