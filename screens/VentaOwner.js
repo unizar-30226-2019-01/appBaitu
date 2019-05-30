@@ -238,7 +238,7 @@ class Venta extends Component {
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.button} onPress={() => this.compartir()}>
 							<Text style={styles.buttonText}>Compartir</Text>
-						</TouchableOpacity>
+					</TouchableOpacity>
 					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 						<Text style={styles.buttonText}>Volver</Text>
 					</TouchableOpacity>
