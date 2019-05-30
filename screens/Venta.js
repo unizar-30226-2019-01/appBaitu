@@ -227,6 +227,9 @@ class Venta extends Component {
 						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
 							<Text style={styles.buttonText}>Hacer oferta </Text>
 						</TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.id,tipoPublicacion: "Venta"})}>
+                            <Text style={styles.buttonText}>Calificar publicacion</Text>
+                        </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 							<Text style={styles.buttonText}>Volver</Text>
 						</TouchableOpacity>
