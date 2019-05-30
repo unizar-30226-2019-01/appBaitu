@@ -83,7 +83,7 @@ class Profile extends Component {
 		}
   }
 
-	async componentDidMount() {
+	componentDidMount() {
 		var date = new Date().getDate(); //Current Date
 		var month = new Date().getMonth() + 1; //Current Month
 		var year = new Date().getFullYear(); //Current Year
@@ -121,7 +121,7 @@ class Profile extends Component {
 
 	onSubmit(e) {
 		Keyboard.dismiss()
-		if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.imagen != '' ) {
+		if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.image != '' ) {
 			exito = true
 		}
 		else {

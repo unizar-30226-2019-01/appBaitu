@@ -160,7 +160,7 @@ class SubastaOwner extends Component {
 		var yy = day.getFullYear()
 		var fecha = yy+'-'+mm+'-'+dd
 		var fechaHoy=fecha.split("-")
-		var fechaL=(this.state.datosProducto[8]).split("/")
+		var fechaL=(this.state.datosProducto[8]).split("-")
 		if(fechaHoy[1].length==1){
 			fechaHoy[1]= "0"+fechaHoy[1]
 		}
