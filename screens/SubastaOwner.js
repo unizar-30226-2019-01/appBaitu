@@ -92,8 +92,10 @@ class Venta extends Component {
 	}
 
     eliminarPublicacion(){
+        if(true){       /*AQUI HAY QUE PONER LA RESTRICCION DE QUE NO DEJE BORRAR UNA SUBASTA SI QUEDAN MENOS DE 48 HORAS PARA QUE ACABE */
             eliminarSubasta(this.state.id)
             this.props.navigation.goBack()
+        }
     }
 
     editarPublicacion(){
