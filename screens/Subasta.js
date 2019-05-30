@@ -231,6 +231,10 @@ class Subasta extends Component {
 					<Text style={styles.title}>{this.state.datosProducto[6]}€</Text>
 					<Text style={styles.cuerpoVerde}>Precio actual</Text>
 					<Text style={styles.title}>{this.state.datosProducto[7]}€</Text>
+					<Text style={styles.cuerpoVerde}>Fecha límite</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[8]}</Text>
+					<Text style={styles.cuerpoVerde}>Hora límite</Text>
+					<Text style={styles.cuerpo}>{this.state.datosProducto[9]}</Text>
 					<Text style={styles.cuerpoVerde}>Descripción</Text>
 					<Text style={styles.cuerpo}>{this.state.datosProducto[2]}</Text>
 					<Text style={styles.cuerpoVerde}>Ubicación</Text>
@@ -415,6 +419,14 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between'
 	},
+	inputBox: {
+		backgroundColor: '#F5FCFF',
+		borderRadius: 25,
+		paddingHorizontal:16,
+		fontSize:20,
+		color:'black',
+		marginVertical: 10,
+	}
 })
 
 export default Subasta;

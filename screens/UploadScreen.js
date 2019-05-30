@@ -106,17 +106,19 @@ class Profile extends Component {
         var year = new Date().getFullYear(); //Current Year
         if (this.state.fecha != (year+"-"+month+"-"+date)) {
             this.setState({fecha: year+"-"+month+"-"+date});
-            this.setState({fechac: ""+year+month+date});
+            if(month<10){
+                month="0"+month
+            }
+            if(date<10){
+                date="0"+date
+            }
+            this.setState({fechac: ''+year+month+date});
         }
 		const token = await AsyncStorage.getItem('userToken')
 		if (token === undefined || token === null) {
 			console.log("no existe token")
 		}
 		else{
-			var date = new Date().getDate(); //Current Date
-			var month = new Date().getMonth() + 1; //Current Month
-			var year = new Date().getFullYear(); //Current Year
-			this.setState({fecha: date+"/"+month+"/"+year});
 			const decoded = jwt_decode(token)
 			const usuario = {
 				login: decoded.identity.login,
@@ -672,13 +674,12 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     inputBox: {
-      width:345,
-      backgroundColor: '#F5FCFF',
-      borderRadius: 25,
-      paddingHorizontal:16,
-      fontSize:20,
-      color:'black',
-      marginVertical: 10
+		backgroundColor: '#F5FCFF',
+		borderRadius: 25,
+		paddingHorizontal:16,
+		fontSize:20,
+		color:'black',
+		marginVertical: 10,
   },
   inputBoxDescription: {
       height: 200,

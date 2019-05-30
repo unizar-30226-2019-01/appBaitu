@@ -429,6 +429,14 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between'
 	},
+	inputBox: {
+		backgroundColor: '#F5FCFF',
+		borderRadius: 25,
+		paddingHorizontal:16,
+		fontSize:20,
+		color:'black',
+		marginVertical: 10,
+	}
 })
 
 export default Venta;

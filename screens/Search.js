@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
 			justifyContent: 'space-between'
 	},
 	inputBox: {
-		width:300,
 		backgroundColor: '#F5FCFF',
 		borderRadius: 25,
 		paddingHorizontal:16,

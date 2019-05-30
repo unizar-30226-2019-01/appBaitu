@@ -332,20 +332,20 @@ export const getFotos = id => {
   export const actualizarProducto = producto => {
     return axios
         .post(`http://52.151.88.18:5000/modificarVenta`, {
-            idP: subastaEditada.id,
-            nombre: subastaEditada.nombre,
-            descripcion: subastaEditada.descripcion,
-            categoria: subastaEditada.categoria,
-            fotoP: subastaEditada.fotoP,
-            foto1: subastaEditada.foto1,
-            foto2: subastaEditada.foto2,
-            foto3: subastaEditada.foto3,
-            fotoPAntigua: subastaEditada.fotoPAntigua,
-            foto1Antigua: subastaEditada.foto1Antigua,
-            foto2Antigua: subastaEditada.foto2Antigua,
-            foto3Antigua: subastaEditada.foto3Antigua,
-            precio: subastaEditada.precio,
-            fecha: subastaEditada.fecha
+            idP: producto.id,
+            nombre: producto.nombre,
+            descripcion: producto.descripcion,
+            categoria: producto.categoria,
+            fotoP: producto.fotoP,
+            foto1: producto.foto1,
+            foto2: producto.foto2,
+            foto3: producto.foto3,
+            fotoPAntigua: producto.fotoPAntigua,
+            foto1Antigua: producto.foto1Antigua,
+            foto2Antigua: producto.foto2Antigua,
+            foto3Antigua: producto.foto3Antigua,
+            precio: producto.precio,
+            fecha: producto.fecha
         })
         .then(response => {
           return response.data
