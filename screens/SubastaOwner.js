@@ -154,29 +154,27 @@ class SubastaOwner extends Component {
 	}
 
 	compararFechas(fechaHoy,fechaLimite){
+		var modulo = 30
 		if (fechaLimite[1]=="02"){
-			var modulo = 28
+			modulo = 28
 		}
 		else if (fechaLimite[1]=="01" || fechaLimite[1]=="03" || fechaLimite[1]=="05" || fechaLimite[1]=="07" || fechaLimite[1]=="08" || [1]=="10" || fechaLimite[1]=="12"){
-			var modulo = 31
-		}
-		else{
-			var modulo = 30
+			modulo = 31
 		}
 		//Los + delante son para tratar las variables como enteros
-		var diaH = +fechaHoy[2]
+		var diaH = +fechaHoy[2] + 2
 		var mesH = +fechaHoy[1]
 		var anyoH = +fechaHoy[0]
-		var diaL = +fechaLimite[2] + 2
+		var diaL = +fechaLimite[2]
 		var mesL = +fechaLimite[1]
 		var anyoL = +fechaLimite[0]
-		if (diaL>modulo){
-			mesL = mesL + 1
-			diaL = diaL - modulo
+		if (diaH>modulo){
+			mesH = mesH + 1
+			diaH = diaH - modulo
 		}
-		if (mesL==13){
-			mesL = 1
-			anyoL = anyoL + 1
+		if (mesH==13){
+			mesH = 1
+			anyoH = anyoH + 1
 		}
 		var hoy = anyoH*10000 + mesH*100 + diaH
 		var limite = anyoL*10000 + mesL*100 + diaL
