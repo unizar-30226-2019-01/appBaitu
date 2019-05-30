@@ -3,7 +3,7 @@ import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser } from '../controlador/GestionUsuarios';
-import { infoUsuario } from '../controlador/GestionUsuarios.js'
+import { infoUsuario, tieneSubastas } from '../controlador/GestionUsuarios.js'
 import EditarPerfil from './EditProfile.js';
 
 
@@ -52,8 +52,15 @@ class Profile extends Component {
 		const user = {
 			login: this.state.login
 		}
-		deleteUser(user)
-		this.props.navigation.navigate('Login')
+        tieneSubastas(user).then(data => {
+            if(data=="SI"){
+                Alert.alert('','No se puede eliminar la cuenta, tienes subastas en curso',[{text: 'OK'}],{cancelable: false});
+            }
+            else{
+                deleteUser(user)
+                this.props.navigation.navigate('Login')
+            }
+        })
 	}
 
 	async cerrarSesion(e){

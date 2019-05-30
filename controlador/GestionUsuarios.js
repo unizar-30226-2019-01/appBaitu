@@ -82,16 +82,20 @@ export const deleteUser = user => {
     .post(`http://52.151.88.18:5000/delete`, {
       login: user.login,
   })
-    .then((res) => {
-      console.log(res)
-  })
-    .catch(err => {
-      console.log(err)
-  })
+}
+
+export const tieneSubastas = user => {
+
+  return axios
+      .post(`http://52.151.88.18:5000/tieneSub`, {
+            login: user.login
+      })
+      .then((res) => {
+        return res.data
+      })
 }
 
 export const infoUsuario = login => {
-    console.log("login: "+ login)
   return axios
       .post(`http://52.151.88.18:5000/infoUsuario`, {
           usuario: login

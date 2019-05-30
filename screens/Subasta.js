@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
+import {Title,Share,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
@@ -198,6 +198,14 @@ class Subasta extends Component {
 		}
 	}
 
+	compartir(){
+		const content={
+			message: 'Este enlace ha sido enviado desde la app móvil de Baitu\n¡Entra ya!\n\nhttp://52.151.88.18:8080/producto?id=' + this.state.id
+		}
+		const options={}
+		Share.share(content,options)
+	}
+
     render(){
         return(
             <ScrollView>
@@ -243,9 +251,6 @@ class Subasta extends Component {
 							style={styles.estrella}
 							source={require('../assets/images/estrella.png')}/>
 					</Text>
-					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-						<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
-					</TouchableOpacity>
 					<Text style={styles.cuerpoVerde}>Haz tu puja aqui</Text>
 					<TextInput style={styles.inputBox}
 						underlineColorAndroid='rgba(0,0,0,0)'
@@ -259,6 +264,12 @@ class Subasta extends Component {
 					/>
 					<TouchableOpacity style={styles.button} onPress={() => this.pujar() }>
 						<Text style={styles.buttonText}>Pujar</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
+						<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.button} onPress={() => this.compartir()}>
+						<Text style={styles.buttonText}>Compartir</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.id,tipoPublicacion: "Subasta"})}>
 						<Text style={styles.buttonText}>Calificar publicacion</Text>
@@ -276,8 +287,7 @@ class Subasta extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        flex: 1,
-        height: (Dimensions.get('window').width),
+        height: (Dimensions.get('window').width)*0.75,
 		alignItems: 'center',
     },
     buttonText: {

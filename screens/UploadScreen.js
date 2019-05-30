@@ -44,7 +44,7 @@ class Profile extends Component {
            date: new Date()
          });
          month=month+1
-         this.setState({fechaFin: day+"/"+month+"/"+year})
+         this.setState({fechaFin: year + "-" + month + "-" + day})
        } catch ({code, message}) {
          console.warn('Cannot open date picker', message);
        }
@@ -83,7 +83,7 @@ class Profile extends Component {
 		}
   }
 
-	async componentDidMount() {
+	componentDidMount() {
 		var date = new Date().getDate(); //Current Date
 		var month = new Date().getMonth() + 1; //Current Month
 		var year = new Date().getFullYear(); //Current Year
@@ -121,7 +121,7 @@ class Profile extends Component {
 
 	onSubmit(e) {
 		Keyboard.dismiss()
-		if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.imagen != '' ) {
+		if(this.state.nombre != '' && this.state.precio != '' && this.state.descripcion != '' && this.state.image != '' ) {
 			exito = true
 		}
 		else {
@@ -134,7 +134,7 @@ class Profile extends Component {
 					fecha: this.state.fecha,
 					categoria: this.state.categoria,
 					descripcion: this.state.descripcion,
-					precio: this.state.precio,
+					precio: parseFloat(this.state.precio.replace(",", ".")),
 					vendedor: this.state.vendedor,
 					fotoPrincipal: this.state.image,
 					foto1: this.state.foto1,
@@ -462,8 +462,7 @@ class Profile extends Component {
 								placeholder="Introduce aquí el precio..."
 								placeholderTextColor = "#BCC5D5"
 								autoCorrect={false}
-								keyboardType={'numeric'}
-								type="number"
+								keyboardType={'decimal-pad'}
 								value={this.state.precio}
 								onChangeText={(precio) => this.setState({precio})}
 							/>

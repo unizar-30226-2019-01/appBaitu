@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
+import {Title,Share,TextInput,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
@@ -75,11 +75,11 @@ class SubastaOwner extends Component {
 				this.setState({image1: this.state.fotos[0]})
 				this.setState({image2: this.state.fotos[1]})
 				this.setState({image3: this.state.fotos[2]})
-	
+
 				this.setState({i1: this.state.image1[0]})
 				this.setState({i2: this.state.image2[0]})
 				this.setState({i3: this.state.image3[0]})
-	
+
 				if(this.state.i1 === undefined || this.state.i1 === '') {
 					this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
 				}
@@ -153,6 +153,36 @@ class SubastaOwner extends Component {
         }
 	}
 
+	compararFechas(fechaHoy,fechaLimite){
+		if (fechaLimite[1]=="02"){
+			var modulo = 28
+		}
+		else if (fechaLimite[1]=="01" || fechaLimite[1]=="03" || fechaLimite[1]=="05" || fechaLimite[1]=="07" || fechaLimite[1]=="08" || [1]=="10" || fechaLimite[1]=="12"){
+			var modulo = 31
+		}
+		else{
+			var modulo = 30
+		}
+		//Los + delante son para tratar las variables como enteros
+		var diaH = +fechaHoy[2]
+		var mesH = +fechaHoy[1]
+		var anyoH = +fechaHoy[0]
+		var diaL = +fechaLimite[2] + 2
+		var mesL = +fechaLimite[1]
+		var anyoL = +fechaLimite[0]
+		if (diaL>modulo){
+			mesL = mesL + 1
+			diaL = diaL - modulo
+		}
+		if (mesL==13){
+			mesL = 1
+			anyoL = anyoL + 1
+		}
+		var hoy = anyoH*10000 + mesH*100 + diaH
+		var limite = anyoL*10000 + mesL*100 + diaL
+		return (limite-hoy)>2
+	}
+
 	puedeEditar(){
 		var day = new Date()
 		var dd = day.getDate()
@@ -160,7 +190,7 @@ class SubastaOwner extends Component {
 		var yy = day.getFullYear()
 		var fecha = yy+'-'+mm+'-'+dd
 		var fechaHoy=fecha.split("-")
-		var fechaL=(this.state.datosProducto[8]).split("/")
+		var fechaL=(this.state.datosProducto[8]).split("-")
 		if(fechaHoy[1].length==1){
 			fechaHoy[1]= "0"+fechaHoy[1]
 		}
@@ -170,15 +200,10 @@ class SubastaOwner extends Component {
 		if(fechaL[1].length==1){
 			fechaL[1]= "0"+fechaL[1]
 		}
-		if(fechaL[0].length==1){
-			fechaL[0]= "0"+fechaL[0]
+		if(fechaL[2].length==1){
+			fechaL[2]= "0"+fechaL[2]
 		}
-		var fechaHoyD=fechaHoy[0]+fechaHoy[1]+fechaHoy[2]
-		var fechaLD=fechaL[2]+fechaL[1]+fechaL[0]
-		console.log(fechaHoyD)
-		console.log(fechaLD)
-		//Los + delante son para tratar las variables como enteros
-		if((+fechaHoyD+2)>(+fechaLD)){
+		if(this.compararFechas(fechaHoy,fechaL)){
 			Alert.alert('','La subasta termina en un plazo inferior a dos días. Ya no puede editarla ni eliminarla. Póngase en contacto con el ganador cuando finalice el plazo',[{text: 'OK'}],{cancelable: false});
 		}
 		else{
@@ -228,6 +253,14 @@ class SubastaOwner extends Component {
 		}
 	}
 
+	compartir(){
+		const content={
+			message: 'Este enlace ha sido enviado desde la app móvil de Baitu\n¡Entra ya!\n\nhttp://52.151.88.18:8080/producto?id=' + this.state.id
+		}
+		const options={}
+		Share.share(content,options)
+	}
+
     render(){
         return(
             <ScrollView>
@@ -269,6 +302,9 @@ class SubastaOwner extends Component {
 					<TouchableOpacity style={styles.button} onPress={() => this.editarPublicacion() }>
 						<Text style={styles.buttonText}>Editar publicación</Text>
 					</TouchableOpacity>
+					<TouchableOpacity style={styles.button} onPress={() => this.compartir()}>
+						<Text style={styles.buttonText}>Compartir</Text>
+					</TouchableOpacity>
 					<TouchableOpacity style={styles.redbutton} onPress={() => {
 						Alert.alert(
 						"Borrar publicación",
@@ -298,7 +334,7 @@ class SubastaOwner extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        height: Dimensions.get('window').width,
+        height: Dimensions.get('window').width*0.75,
 		alignItems: 'center',
     },
     buttonText: {

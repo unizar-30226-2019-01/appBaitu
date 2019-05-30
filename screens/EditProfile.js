@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,AsyncStorage,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight} from 'react-native';
+import {Alert,Title,AsyncStorage,Text,View,Image,TextInput,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight} from 'react-native';
 import { LinearGradient, ImagePicker, Permissions } from 'expo';
 import { actualizarInfo, infoUsuario } from '../controlador/GestionUsuarios';
 import jwt_decode from 'jwt-decode';
@@ -103,16 +103,21 @@ class Profile extends Component {
     }
 
     onSubmit(e) {
-        const user = {
-            login: this.state.datos[0], // No se permite cambiar
-            nombre: this.state.nombre,
-            apellidos: this.state.apellidos,
-            email: this.state.datos[3],   // No se permite cambiar
-            telefono: this.state.telefono,
-            foto: this.state.foto
+        if(this.state.nombre != '' && this.state.apellidos != '' && this.state.telefono != ''){
+            const user = {
+                login: this.state.datos[0], // No se permite cambiar
+                nombre: this.state.nombre,
+                apellidos: this.state.apellidos,
+                email: this.state.datos[3],   // No se permite cambiar
+                telefono: this.state.telefono,
+                foto: this.state.foto
+            }
+            actualizarInfo(user)
+            this.props.navigation.navigate('DrawerStack')
         }
-        actualizarInfo(user)
-        this.props.navigation.navigate('DrawerStack')
+        else{
+            Alert.alert('','No puede haber ningún campo vacío, rellenalo para poder continuar o descarta los cambios',[{text: 'OK'}],{cancelable: false});
+        }
     }
 
     render(){
@@ -151,14 +156,6 @@ class Profile extends Component {
                             clearButtonMode='while-editing'
                             editable={true}
                             onChangeText={(apellidos) => this.setState({apellidos})}
-                            onChange={this.onChange}
-                            />
-                        <Text style={styles.cuerpoVerde}>Correo</Text>
-                        <TextInput style={styles.inputBox}
-                            keyboardType="email-address"
-                            defaultValue={this.state.datos[3]}
-                            clearButtonMode='while-editing'
-                            onChangeText={(email) => this.setState({email})}
                             onChange={this.onChange}
                             />
                         <Text style={styles.cuerpoVerde}>Teléfono</Text>

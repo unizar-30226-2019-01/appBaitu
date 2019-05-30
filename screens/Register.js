@@ -30,7 +30,7 @@ class Register extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onSubmit(e) {
+  async onSubmit(e) {
     Keyboard.dismiss()
 		if(this.state.login != '' && this.state.password != '' && this.state.Nombre != '' &&
 			 this.state.apellidos != '' && this.state.email != '' ) {
@@ -47,32 +47,28 @@ class Register extends Component {
 	      apellidos: this.state.apellidos,
 	      telefono: this.state.telefono,
 	      email: this.state.email,
-		  	foto: this.state.foto
+		  foto: this.state.foto
 	    }
-      register(newUser).then(data => {
+      await register(newUser).then(data => {
         this.setState({
           respuestaBD: data
         })
       })
-			this.setState({registrar: true});
-      exito = false
-		}
-  }
+	  console.log("respuestaBD: "+this.state.respuestaBD)
+	  if(this.state.respuestaBD==="Error") {
+		Alert.alert('','El nombre de login o el correo ya esta en uso',[{text: 'OK'}],{cancelable: false});
+		this.setState({respuestaBD:""})
+      	exito = false
+	  }
+	  else if(this.state.respuestaBD != undefined && this.state.respuestaBD != "Error"){
+		  AsyncStorage.setItem('userToken', this.state.respuestaBD)
+		  this.props.navigation.navigate('Sidebar')
+	  }
+  	}
+}
 
 
        render(){
-        const { navigation } = this.props;
-        if(this.state.registrar) {
-			if(this.state.respuestaBD=="error") {
-				Alert.alert('','El nombre de login ya esta en uso',[{text: 'OK'}],{cancelable: false});
-				this.setState({respuestaBD:""})
-				this.setState({registrar:false})
-			}
-			else if(this.state.respuestaBD != undefined){
-				AsyncStorage.setItem('userToken', this.state.respuestaBD)
-				this.props.navigation.navigate('Sidebar')
-			}
-        }
         return(
         <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <LinearGradient colors={['#B4FFAB', '#12FFF7']} style={styles.container}>
@@ -120,7 +116,8 @@ class Register extends Component {
               placeholderTextColor = "#BCC5D5"
               autoCapitalize={'none'}
               autoCorrect={false}
-              value={this.state.email}
+			  value={this.state.email}
+			  keyboardType='email-address'
               onChangeText={(email) => this.setState({email})}
               />
           	<TouchableOpacity style={styles.button}>

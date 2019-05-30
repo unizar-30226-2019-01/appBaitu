@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Title,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
+import {Title,Share,Alert,BackHandler,Text,View,Image,StyleSheet,KeyboardAvoidingView,ScrollView,TouchableOpacity,TouchableHighlight,AsyncStorage,Dimensions} from 'react-native';
 import { LinearGradient } from 'expo';
 import jwt_decode from 'jwt-decode';
 import { deleteUser, infoUsuario } from '../controlador/GestionUsuarios';
@@ -187,6 +187,14 @@ class Venta extends Component {
 		}
 	}
 
+	compartir(){
+		const content={
+			message: 'Este enlace ha sido enviado desde la app móvil de Baitu\n¡Entra ya!\n\nhttp://52.151.88.18:8080/producto?id=' + this.state.id
+		}
+		const options={}
+		Share.share(content,options)
+	}
+
     render(){
         return(
             <ScrollView>
@@ -257,7 +265,7 @@ class Venta extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        height: Dimensions.get('window').width,
+        height: Dimensions.get('window').width*0.75,
 		alignItems: 'center',
     },
     buttonText: {
