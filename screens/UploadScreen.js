@@ -663,13 +663,12 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     inputBox: {
-      width:345,
-      backgroundColor: '#F5FCFF',
-      borderRadius: 25,
-      paddingHorizontal:16,
-      fontSize:20,
-      color:'black',
-      marginVertical: 10
+		backgroundColor: '#F5FCFF',
+		borderRadius: 25,
+		paddingHorizontal:16,
+		fontSize:20,
+		color:'black',
+		marginVertical: 10,
   },
   inputBoxDescription: {
       height: 200,
