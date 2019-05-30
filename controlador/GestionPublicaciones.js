@@ -288,6 +288,17 @@ export const infoSubasta = id => {
         })
 }
 
+export const estaValorado = (producto, valoracion) => {
+
+    return axios.post(`http://52.151.88.18:5000/estaValorado/${producto}`, {
+        headers: { "Content-type": "application/json" },
+      })
+      .then(res => {
+          return res.data
+      }).catch(err => {
+        return err})
+  }
+
 
 export const valorarProducto = (producto, valoracion) => {
     return axios.post(`http://52.151.88.18:5000/calcularValoracion/${producto}/${valoracion}`, {

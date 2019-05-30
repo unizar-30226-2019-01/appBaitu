@@ -13,12 +13,6 @@ class Venta extends Component {
         this.state = {
             datosProducto: [],
             fotos: [],
-            i1: '',
-            i2: '',
-            i3: '',
-            image1: '',
-            image2: '',
-            image3: ''
         }
     }
 
@@ -36,31 +30,11 @@ class Venta extends Component {
                 this.setState({
                     datosProducto: this.props.navigation.state.params.datosProducto
                 })
-                await getFotos(this.state.datosProducto[1]).then(data => {
+                /*await getFotos(this.state.datosProducto[1]).then(data => {
                     this.setState({
                      fotos: data
                  })
-                })
-                this.setState({i1:undefined})
-                this.setState({i2:undefined})
-                this.setState({i3:undefined})
-                this.setState({image1: this.state.fotos[0]})
-                this.setState({image2: this.state.fotos[1]})
-                this.setState({image3: this.state.fotos[2]})
-
-                this.setState({i1: this.state.image1[0]})
-                this.setState({i2: this.state.image2[0]})
-                this.setState({i3: this.state.image3[0]})
-
-                if(this.state.i1 === undefined || this.state.i1 === '') {
-                    this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
-                }
-                if(this.state.i2 === undefined || this.state.i2 === '') {
-                    this.setState({i2:'http://geodezja-elipsa.pl/ikony/picture.png'})
-                }
-                if(this.state.i3 === undefined || this.state.i3 === '') {
-                    this.setState({i3:'http://geodezja-elipsa.pl/ikony/picture.png'})
-                }
+             })*/
             }
     }
 
@@ -78,31 +52,12 @@ class Venta extends Component {
                 datosProducto: this.props.navigation.state.params.datosProducto
             })
             console.log("ESKEREEEEEEEEEEEEEEEEE: "+this.state.datosProducto)
-            await getFotos(this.state.datosProducto[1]).then(data => {
+            /*await getFotos(this.state.datosProducto[1]).then(data => {
                 this.setState({
                  fotos: data
              })
-            })
-            this.setState({i1:undefined})
-            this.setState({i2:undefined})
-            this.setState({i3:undefined})
-            this.setState({image1: this.state.fotos[0]})
-            this.setState({image2: this.state.fotos[1]})
-            this.setState({image3: this.state.fotos[2]})
+         })*/
 
-            this.setState({i1: this.state.image1[0]})
-            this.setState({i2: this.state.image2[0]})
-            this.setState({i3: this.state.image3[0]})
-
-            if(this.state.i1 === undefined || this.state.i1 === '') {
-                this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
-            }
-            if(this.state.i2 === undefined || this.state.i2 === '') {
-                this.setState({i2:'http://geodezja-elipsa.pl/ikony/picture.png'})
-            }
-            if(this.state.i3 === undefined || this.state.i3 === '') {
-                this.setState({i3:'http://geodezja-elipsa.pl/ikony/picture.png'})
-            }
         }
 	}
 
@@ -110,7 +65,10 @@ class Venta extends Component {
         return(
             <ScrollView>
             <LinearGradient colors={['#ffffff', '#eeeeee']}>
-				<Gallery
+            {/*<Image
+                style={styles.image}
+                source={this.state.datosProducto[5]}/>
+				 <Gallery
 					style={styles.image}
 					images={[
 						{ source: { uri: this.state.datosProducto[5]}, },
@@ -118,7 +76,7 @@ class Venta extends Component {
 						{ source: { uri: this.state.i2 }, },
 						{ source: { uri: this.state.i3 }, }
 					]}
-				/>
+				/> */}
 					<View style={styles.itemsContainer}>
                         <Text style={styles.title}>{this.state.datosProducto[0]}</Text>
                         <Text style={styles.cuerpoVerde}>Categoría</Text>
@@ -136,7 +94,7 @@ class Venta extends Component {
                         }}>
 							<Text style={styles.clickableText}>{this.state.datosProducto[3]}</Text>
 						</TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar') }>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Calificar', {producto: this.state.datosProducto[1], datosProducto: this.state.datosProducto}) }>
 							<Text style={styles.buttonText}>Calificar publicación</Text>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
