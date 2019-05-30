@@ -498,6 +498,68 @@ export const filtrarSubastas = (categoria,orden,precio,nombre,ubicacion) => {
         })
   }
 
+  export const listarOfertas = (id) => {
+      return axios
+          .get(`http://52.151.88.18:5000/listarOfertas/${id}`, {
+              headers: { "Content-type": "application/json" }
+          })
+          .then(res => {
+              var data = []
+              Object.keys(res.data).forEach((key) => {
+                  var val = res.data[key]
+                  data.push([val.precio, val.usuario])
+              })
+
+              return data
+          })
+    }
+
+    export const aceptarOferta = (usuario, id) => {
+      return axios
+          .post(
+              `http://52.151.88.18:5000/aceptarOfertaVenta/${id}`, {
+                  usuario: usuario
+              })
+          .then((res) => {
+              console.log(res.data)
+              return res.data
+          })
+          .catch((res) => {
+              console.log(res)
+          })
+    }
+
+    export const eliminarOferta = (usuario, id) => {
+        console.log(usuario)
+        console.log(id)
+      return axios
+          .post(
+              `http://52.151.88.18:5000/eliminarOfertaVenta/${id}`, {
+                  usuario: usuario
+              })
+          .then((res) => {
+              console.log(res.data)
+              return res.data
+          })
+          .catch((res) => {
+              console.log(res)
+          })
+    }
+
+    export const eliminarTodasOfertas = (id) => {
+      return axios
+          .post(
+              `http://52.151.88.18:5000/eliminartodasOfertasVenta/${id}`, {
+              })
+          .then((res) => {
+              console.log(res.data)
+              return res.data
+          })
+          .catch((res) => {
+              console.log(res)
+          })
+    }
+
   export const consultarFavorito = (producto, id) => {
     return axios
         .post(

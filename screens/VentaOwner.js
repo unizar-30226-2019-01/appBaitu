@@ -73,11 +73,11 @@ class Venta extends Component {
 				this.setState({image1: this.state.fotos[0]})
 				this.setState({image2: this.state.fotos[1]})
 				this.setState({image3: this.state.fotos[2]})
-	
+
 				this.setState({i1: this.state.image1[0]})
 				this.setState({i2: this.state.image2[0]})
 				this.setState({i3: this.state.image3[0]})
-	
+
 				if(this.state.i1 === undefined || this.state.i1 === '') {
 					this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
 				}
@@ -222,28 +222,31 @@ class Venta extends Component {
 							style={styles.estrella}
 							source={require('../assets/images/estrella.png')}/>
 					</Text>
+                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MisOfertas', {login: this.state.login, id: this.state.id})}>
+                        <Text style={styles.buttonText}>VER OFERTAS</Text>
+                    </TouchableOpacity>
 					<TouchableOpacity style={styles.button} onPress={() => this.editarPublicacion() }>
 						<Text style={styles.buttonText}>Editar publicación</Text>
-					</TouchableOpacity>
-					<TouchableOpacity style={styles.redbutton} onPress={() => {
-						Alert.alert(
-						"Borrar publicación",
-						"¿Seguro que desea borrar su publicación? La publicación no podrá ser recuperada.",
-						[
-							{
-							text: "No"
-							},
-							{ text: "Si", onPress: () =>{this.eliminarPublicacion()} }
-						],
-						{ cancelable: false }
-						);
-						return true;
-						}}>
-						<Text style={styles.buttonText}>ELIMINAR PUBLICACIÓN</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack() }>
 						<Text style={styles.buttonText}>Volver</Text>
 					</TouchableOpacity>
+                    <TouchableOpacity style={styles.redbutton} onPress={() => {
+                        Alert.alert(
+                        "Borrar publicación",
+                        "¿Seguro que desea borrar su publicación? La publicación no podrá ser recuperada.",
+                        [
+                            {
+                            text: "No"
+                            },
+                            { text: "Si", onPress: () =>{this.eliminarPublicacion()} }
+                        ],
+                        { cancelable: false }
+                        );
+                        return true;
+                        }}>
+                        <Text style={styles.buttonText}>ELIMINAR PUBLICACIÓN</Text>
+                    </TouchableOpacity>
 				</View>
       	  </LinearGradient>
         </ScrollView>

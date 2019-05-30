@@ -24,6 +24,7 @@ import Favoritos from '../screens/Favoritos';
 import HomeButton from '../components/HomeButton';
 import NullComponent from '../components/NullComponent';
 import MisPublis from '../screens/MisPublisList';
+import MisOfertas from '../screens/MisOfertasList';
 import Comprados from '../screens/Comprados';
 import CalificarProducto from '../screens/CalificarProducto';
 
@@ -45,6 +46,9 @@ const DrawerScreen = createDrawerNavigator({
     MisPublis: {screen: MisPublis, navigationOptions: {
 		drawerLabel: <NullComponent/>
 	}},
+    MisOfertas: {screen: MisOfertas, navigationOptions: {
+        drawerLabel: <NullComponent/>
+    }},
     Comprados: {screen: Comprados, navigationOptions: {
 		drawerLabel: <NullComponent/>
 	}},
