@@ -75,11 +75,11 @@ class SubastaOwner extends Component {
 				this.setState({image1: this.state.fotos[0]})
 				this.setState({image2: this.state.fotos[1]})
 				this.setState({image3: this.state.fotos[2]})
-	
+
 				this.setState({i1: this.state.image1[0]})
 				this.setState({i2: this.state.image2[0]})
 				this.setState({i3: this.state.image3[0]})
-	
+
 				if(this.state.i1 === undefined || this.state.i1 === '') {
 					this.setState({i1:'http://geodezja-elipsa.pl/ikony/picture.png'})
 				}
@@ -170,11 +170,11 @@ class SubastaOwner extends Component {
 		if(fechaL[1].length==1){
 			fechaL[1]= "0"+fechaL[1]
 		}
-		if(fechaL[0].length==1){
-			fechaL[0]= "0"+fechaL[0]
+		if(fechaL[2].length==1){
+			fechaL[2]= "0"+fechaL[2]
 		}
 		var fechaHoyD=fechaHoy[0]+fechaHoy[1]+fechaHoy[2]
-		var fechaLD=fechaL[2]+fechaL[1]+fechaL[0]
+		var fechaLD=fechaL[0]+fechaL[1]+fechaL[2]
 		console.log(fechaHoyD)
 		console.log(fechaLD)
 		//Los + delante son para tratar las variables como enteros

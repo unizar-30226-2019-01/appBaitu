@@ -44,7 +44,7 @@ class Profile extends Component {
            date: new Date()
          });
          month=month+1
-         this.setState({fechaFin: day+"/"+month+"/"+year})
+         this.setState({fechaFin: year + "-" + month + "-" + day})
        } catch ({code, message}) {
          console.warn('Cannot open date picker', message);
        }
