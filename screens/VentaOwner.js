@@ -254,7 +254,7 @@ class Venta extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        height: Dimensions.get('window').width,
+        height: Dimensions.get('window').width*0.75,
 		alignItems: 'center',
     },
     buttonText: {
