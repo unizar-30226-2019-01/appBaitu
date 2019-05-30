@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { StyleSheet,Text, AsyncStorage, View,Keyboard,TextInput,TouchableWithoutFeedback,TouchableOpacity,TouchableHighlight,ScrollView,KeyboardAvoidingView,Alert} from 'react-native';
 import { LinearGradient } from 'expo';
 import { StackNavigator} from 'react-navigation';
-import { register} from '../controlador/GestionUsuarios';
+import { register, registerTemporal } from '../controlador/GestionUsuarios';
 
 import Login from './Login.js';
 
@@ -18,8 +18,8 @@ class Register extends Component {
       nombre: '',
       apellidos: '',
       email: '',
-	  	telefono: '',
-	  	foto: ''
+	  telefono: '',
+	  foto: ''
     }
 
     this.onChange = this.onChange.bind(this)
@@ -49,7 +49,7 @@ class Register extends Component {
 	      email: this.state.email,
 		  foto: this.state.foto
 	    }
-      await register(newUser).then(data => {
+      await registerTemporal(newUser).then(data => {
         this.setState({
           respuestaBD: data
         })
@@ -61,8 +61,9 @@ class Register extends Component {
       	exito = false
 	  }
 	  else if(this.state.respuestaBD != undefined && this.state.respuestaBD != "Error"){
-		  AsyncStorage.setItem('userToken', this.state.respuestaBD)
-		  this.props.navigation.navigate('Sidebar')
+		  Alert.alert('','Se le ha enviado un correo. Confirme la cuenta por favor',[{text: 'OK'}],{cancelable: false});
+		  this.props.navigation.navigate('Login')
+
 	  }
   	}
 }
