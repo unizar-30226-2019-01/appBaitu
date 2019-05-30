@@ -153,14 +153,6 @@ class Profile extends Component {
                             onChangeText={(apellidos) => this.setState({apellidos})}
                             onChange={this.onChange}
                             />
-                        <Text style={styles.cuerpoVerde}>Correo</Text>
-                        <TextInput style={styles.inputBox}
-                            keyboardType="email-address"
-                            defaultValue={this.state.datos[3]}
-                            clearButtonMode='while-editing'
-                            onChangeText={(email) => this.setState({email})}
-                            onChange={this.onChange}
-                            />
                         <Text style={styles.cuerpoVerde}>Teléfono</Text>
                         <TextInput style={styles.inputBox}
                             keyboardType={'numeric'}
