@@ -96,25 +96,26 @@ class MisOfertasList extends Component {
 			console.log('locoo')
 			return <View style={[styles.item, styles.itemInvisible]} />;
 		}
-			return (
-				<View
-        			style={{
-          			flexDirection: 'row',
-          			height: 100,
-          			padding: 20,
-					backgroundColor: '#ffffff',
-					marginBottom:2,
-        			}}>
-					<Text style={styles.price}>{item[0]}€</Text>
-					<Text style={styles.title}>{item[1]}</Text>
-					<TouchableOpacity onPress={() => this.aceptarOferta(item[1]) }>
-						<Text style={styles.editar}>ACEPTAR</Text>
-					</TouchableOpacity>
-					<TouchableOpacity onPress={() => this.rechazarOferta(item[1]) }>
-						<Text style={styles.editar}>RECHAZAR</Text>
-					</TouchableOpacity>
-      			</View>
-			)
+		return (
+			<View
+				style={{
+				flexDirection: 'row',
+				height: 100,
+				padding: 20,
+				backgroundColor: '#ffffff',
+				marginBottom:2,
+				alignItems: 'center'
+				}}>
+				<Text style={styles.price}>{item[0]}€</Text>
+				<Text style={styles.title}>{item[1]}</Text>
+				<TouchableOpacity onPress={() => this.aceptarOferta(item[1]) }>
+					<Text style={styles.aceptar}>ACEPTAR</Text>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={() => this.rechazarOferta(item[1]) }>
+					<Text style={styles.rechazar}>RECHAZAR</Text>
+				</TouchableOpacity>
+			</View>
+		)
 	}
 
     render(){
@@ -224,14 +225,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: 'white'
 	},
-	editar: {
+	aceptar: {
 		fontSize: 17,
 		width: 110,
 		margin: 10,
 		borderWidth: 3.5,
-		borderColor: '#1c313a',
+		borderColor: 'green',
 		borderRadius: 15,
-		backgroundColor: '#1c313a',
+		backgroundColor: 'green',
+		overflow: 'hidden',
+		textAlign: 'center',
+		alignItems: 'center',
+		color: 'white'
+	},
+	rechazar: {
+		fontSize: 17,
+		width: 110,
+		margin: 10,
+		borderWidth: 3.5,
+		borderColor: 'red',
+		borderRadius: 15,
+		backgroundColor: 'red',
 		overflow: 'hidden',
 		textAlign: 'center',
 		alignItems: 'center',
