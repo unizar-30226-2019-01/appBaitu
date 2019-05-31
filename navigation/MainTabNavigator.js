@@ -11,7 +11,6 @@ import Calificar from '../screens/Calificar';
 import Reportar from '../screens/Reportar';
 import Upload from '../screens/UploadScreen';
 import EditProfile from '../screens/EditProfile';
-import Chats from '../screens/ChatsList';
 import Search from '../screens/Search';
 import SearchList from '../screens/SearchList';
 import Venta from '../screens/Venta';
@@ -32,7 +31,6 @@ import CalificarProducto from '../screens/CalificarProducto';
 const DrawerScreen = createDrawerNavigator({
     Inicio: {screen: ProductList},
     Buscar: {screen: Search},
-    Chats: {screen: Chats},
     "Subir producto":{screen: Upload},
     "Venta": {screen: Venta, navigationOptions: {
       drawerLabel: <NullComponent/>
