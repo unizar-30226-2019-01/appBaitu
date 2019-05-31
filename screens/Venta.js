@@ -268,9 +268,6 @@ class Venta extends Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.hacerOferta() }>
 							<Text style={styles.buttonText}>Hacer Oferta</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ProductList') }>
-							<Text style={styles.buttonText}>Enviar mensaje al vendedor </Text>
-						</TouchableOpacity>
 						<TouchableOpacity style={styles.button} onPress={() => this.compartir()}>
 							<Text style={styles.buttonText}>Compartir</Text>
 						</TouchableOpacity>
