@@ -34,23 +34,13 @@ class Profile extends Component {
         status: false,
         fechaFin: '',
         horaFin: '',
-        sale: false
+        sale: true
     }
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-    componentDidUpdate() {
-        if(this.state.sale) {
-            var date = new Date().getDate(); //Current Date
-    		var month = new Date().getMonth() + 1; //Current Month
-    		var year = new Date().getFullYear(); //Current Year
-    		if (this.state.fecha != (year+"-"+month+"-"+date)) {
-    			this.setState({fecha: year+"-"+month+"-"+date});
-    		}
-        }
-    }
 
     async abrirCalendario() {
        try {
@@ -447,6 +437,27 @@ class Profile extends Component {
 			}
 			else if(this.state.respuestaBD=="Exito") {
 			Alert.alert('','Creado correctamente',[{text: 'OK'}],{cancelable: false});
+            this.setState({sale:false})
+            // if(this.state.sale) {
+            //     this.setState({
+            //         fechaFinc:'',
+            // 		nombre: '',
+            // 		categoria: '',
+            // 		descripcion: '',
+            // 		precio: '',
+            // 		provincia: '',
+            // 		image: '',
+            // 		foto1: 'vacio',
+            // 		foto2: 'vacio',
+            // 		foto3: 'vacio',
+            //         uploading: false,
+            //         location: '',
+            //         tipo: '',
+            //         status: false,
+            //         fechaFin: '',
+            //         horaFin: '',
+            //         sale: false
+            //     })
 			this.props.navigation.navigate('ProductList')
 			}
 		}
